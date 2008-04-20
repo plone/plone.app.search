@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="plone.app.search">
+
+    <include package="archetypes.schemaextender" />
+
+    <adapter factory=".extender.FolderExtender" />
+
+    <browser:page
+        for="*"
+        name="search"
+        class=".search.CategorySearchView"
+        permission="zope2.View"
+        layer=".interfaces.ISearchProductLayer"
+        />
+
+    <browser:viewlet
+        name="plone.searchbox"
+        manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+        allowed_interface=".interfaces.ISearchViewlet"
+        class=".viewlet.SearchViewlet"
+        permission="zope2.View"
+        layer=".interfaces.ISearchProductLayer"
+        />
+
+    <genericsetup:registerProfile
+        name="default"
+        title="Enhanced search features for Plone"
+        description="This package extends the Plone search features with 
+                     group based searches. Groups can be based on site 
+                     categories or groups of portal types."
+        directory="profiles/default"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>
+

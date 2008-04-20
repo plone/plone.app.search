@@ -1,0 +1,6 @@
+<layers>
+ <layer
+     name="plone.app.search"
+     interface="plone.app.search.interfaces.ISearchProductLayer"
+     />
+</layers>

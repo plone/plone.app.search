@@ -1,0 +1,19 @@
+<form xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      id="portal-searchbox" i18n:domain="plone.app.search"
+      tal:attributes="action string:${context/absolute_url}/search">
+    <label for="query" i18n:translate="label_search">
+        Search Site
+        <input name="query" type="text" value="" title="Search Site"
+               i18n:attributes="title title_search_site"
+               tal:attributes="value request/searchString|nothing"/>
+    </label>
+
+    <label for="category" i18n:translate="label_category"
+           tal:condition="view/category_id">
+       <input type="checkbox" name="category" value="/Plone/category" i18n:name="input"
+              tal:attributes="value view/category_id"/>Only in this category
+    </label>
+
+    <button type="submit"><strong>Search</strong></button>
+</form>

@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xml:lang="en" lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+<head>
+  <metal:block fill-slot="top_slot"
+               tal:define="dummy python:request.set('disable_border',1)" />
+</head>
+<body>
+  <div metal:fill-slot="main">
+
+    <form action="search" class="searchPage">
+      <input class="searchPage" name="query" type="text" size="25"
+             title="Search Site"
+             i18n:attributes="title title_search_title"
+             tal:attributes="value view/query"/>
+
+      <label for="category" i18n:translate="label_category"
+             tal:condition="view/category_id">
+         <input type="checkbox" name="category" value="/Plone/category" i18n:name="input"
+                checked="checked" tal:attributes="value view/category_id"/>Only in this category
+      </label>
+
+      <button type="submit"><strong i18n:translate="label_search">Search</strong></button>
+    </form>
+
+    <h1 tal:condition="view/category_id" class="documentFirstHeading" i18n:translate="heading_category_search_results">Search results for <span tal:replace="python:view.results[0]['title']" i18n:name="title">category</span></h1>
+    <h1 tal:condition="not:view/category_id" class="documentFirstHeading" i18n:translate="heading_search_results">Search results</h1>
+
+    <tal:block repeat="category view/results">
+      <tal:block condition="category/results">
+        <h2 tal:condition="not:view/category_id"><a tal:attributes="href category/search_url;"
+               title="Show more results from this category"
+               i18n:attributes="title label_category_search"
+               tal:content="category/title">Category title</a></h2>
+
+        <dl class="searchresults">
+          <tal:block repeat="result category/results">
+            <dt tal:attributes="class string:contenttype-${result/portal_type}">
+              <img tal:condition="result/icon_url" tal:attributes="src result/icon_url" alt=""/>
+              <a tal:attributes="href result/url;
+                                 title result/title;
+                                 class string:state-${result/review_state};"
+                 tal:content="result/title">Item title</a>
+              </dt>
+
+              <dd>
+                <span tal:replace="result/description">Description (cropped)</span>
+
+                <span class="documentByLine">
+                  <span class="documentAuthor"
+                    i18n:translate="label_by_author">
+                    by <a href="#"
+                      tal:attributes="href string:${portal_url}/author/${result/author}"
+                      tal:content="result/author"
+                      tal:omit-tag="not:result/author"
+                      i18n:name="author">Bob Dobalina</a>
+                    &mdash;
+                  </span>
+                  <tal:relevance i18n:translate="label_relevance_percentage">
+                    Relevance:
+                    <span tal:replace="result/relevance">13</span>%</tal:relevance>
+                </span>
+              </dd>
+            </tal:block>
+          </dl>
+      </tal:block>
+    </tal:block>
+  </div>
+</body>
+</html>
+

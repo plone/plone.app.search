@@ -1,0 +1,29 @@
+Introduction
+============
+
+This package implements alternative search behaviours for Plone 3.1.
+
+Category based search
+---------------------
+
+After installing this package all folders in the site can be marked as
+a 'category'. You can do this when editing a folder via a new option in
+the *edit* tab.
+
+All site searches, both normal search and live-search, will show the first five
+results for each category. To get more search results for a specific category
+just click on its title.
+
+In addition when you are in a category you can select to only search within
+that category through a toggle next to the search box.
+
+
+Still to do
+-----------
+
+* Search using type groups (downloads / documents / etc.)
+
+* determine how we handle the navigation root. Should we only show categories
+  under the current navigation root? I suspect it will fairly common to use
+  a category as a navigation root so this seem undesirable.
+
