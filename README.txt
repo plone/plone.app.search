@@ -39,3 +39,11 @@ Still to do
   under the current navigation root? I suspect it will fairly common to use
   a category as a navigation root so this seem undesirable.
 
+* Replace the standard search portlet.
+
+* Implement live search
+
+* Add styling for the new UI bits (see
+  http://www.cornae.com/articles/form-follows-function/ for an explanation
+  of the markup style used)
+
