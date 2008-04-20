@@ -23,7 +23,7 @@ Still to do
 
 * Search using type groups (downloads / documents / etc.)
 
-* determine how we handle the navigation root. Should we only show categories
+* determine how to handle the navigation root. Should we only show categories
   under the current navigation root? I suspect it will fairly common to use
   a category as a navigation root so this seem undesirable.
 
