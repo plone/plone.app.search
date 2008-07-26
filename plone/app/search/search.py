@@ -1,5 +1,6 @@
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.app.schema.vocabulary import IVocabularyFactory
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -80,6 +81,7 @@ class CategorySearchView(BrowserView):
 
     @memoize
     def categories(self):
+        vocab=getUtility(IVocabularyFactory, name="plone.app.search.Categories")
         return self._catalog(
                 object_provides="plone.app.search.interfaces.ICategory",
                 order_by="sortable_title")
