@@ -24,6 +24,7 @@ setup(name='plone.app.search',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'archetypes.markerfield',
           'archetypes.schemaextender',
           'plone.browserlayer',
           'plone.memoize',
