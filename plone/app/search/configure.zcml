@@ -8,6 +8,11 @@
 
     <adapter factory=".extender.FolderExtender" />
 
+    <utility
+        component=".vocabulary.CategoryVocabularyFactory"
+        name="plone.app.search.Categories"
+        />
+
     <browser:page
         for="*"
         name="search"

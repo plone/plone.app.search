@@ -1,6 +1,7 @@
 from zope.interface import Interface
 from zope.interface import Attribute
 from zope.viewlet.interfaces import IViewlet
+from zope.publisher.interfaces.browser import IBrowserView
 
 class ISearchProductLayer(Interface):
     """A skin layer specific for plone.app.search.
@@ -21,4 +22,12 @@ class ISearchViewlet(IViewlet):
 
     category = Attribute("(string) id for the current category, or None "
                          "if not in a category.")
+
+
+class ISearchView(IBrowserView):
+    """Site search logic.
+    """
+
+    def search(query, category=None, limit=10):
+        pass
 

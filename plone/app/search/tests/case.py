@@ -39,20 +39,24 @@ class IntegrationTestCase(ptc.PloneTestCase):
         self.loginAsPortalOwner()
         ct=self.portal.portal_catalog
 
-        self.portal.invokeFactory("Folder", "recipes")
-        self.portal.recipes.Schema()["category"].set(self.portal.recipes, True)
-        ct.indexObject(self.portal.recipes)
+        self.portal.invokeFactory("Folder", "recipes", title="Recipes")
+        self.setCategory(self.portal.recipes)
         self.portal.recipes.invokeFactory("Document", "pizza",
                 title="The best recipe site on this site!")
 
-        self.portal.invokeFactory("Folder", "tours")
-        self.portal.tours.Schema()["category"].set(self.portal.tours, True)
-        ct.indexObject(self.portal.tours)
+        self.portal.invokeFactory("Folder", "tours", title="Tours")
+        self.setCategory(self.portal.tours)
         self.portal.tours.invokeFactory("Document", "leiden",
                                         title="The best site in the country: Leiden")
+
         # We can't set description through invokeFactory
         self.portal.tours.leiden.setDescription("one two "*30)
         self.portal.portal_catalog.indexObject(self.portal.tours.leiden)
+
+
+    def setCategory(self, obj, enabled=True):
+        obj.Schema()["category"].set(obj, enabled)
+        self.portal.portal_catalog.indexObject(obj)
 
 
     def createMemberarea(self, name):
