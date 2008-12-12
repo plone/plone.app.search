@@ -19,15 +19,15 @@ class ICategory(Interface):
 
 class ISearchViewlet(IViewlet):
     """Category-aware search viewlet."""
-
-    category = Attribute("(string) id for the current category, or None "
-                         "if not in a category.")
+    # 
+    # category = Attribute("(string) id for the current category, or None "
+    #                      "if not in a category.")
 
 
 class ISearchView(IBrowserView):
     """Site search logic.
     """
 
-    def search(query, category=None, limit=10):
-        pass
+    # def search(query, category=None, limit=10):
+    #     pass
 

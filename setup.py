@@ -5,7 +5,7 @@ version = '1.0'
 
 setup(name='plone.app.search',
       version=version,
-      description="Search functionality for Plone 3",
+      description="UI improvements for search functionality for Plone 3",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
@@ -24,8 +24,8 @@ setup(name='plone.app.search',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'archetypes.markerfield',
-          'archetypes.schemaextender',
+#          'archetypes.markerfield',
+#          'archetypes.schemaextender',
           'plone.browserlayer',
           'plone.memoize',
           'plone.i18n',

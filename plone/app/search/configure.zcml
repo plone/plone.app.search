@@ -4,31 +4,40 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="plone.app.search">
 
-    <include package="archetypes.schemaextender" />
+    <!-- <include package="archetypes.schemaextender" />
 
-    <adapter factory=".extender.FolderExtender" />
+    <adapter factory=".extender.FolderExtender" /> -->
 
-    <utility
+    <!-- <utility
         component=".vocabulary.CategoryVocabularyFactory"
         name="plone.app.search.Categories"
-        />
+        /> -->
 
-    <browser:page
+    <!-- <browser:page
         for="*"
         name="search"
         class=".search.CategorySearchView"
+        template="search.pt"
         permission="zope2.View"
         layer=".interfaces.ISearchProductLayer"
-        />
+        /> -->
+        
+    <browser:page
+        for="*"
+        name="search"
+        class=".search.SearchView"
+        permission="zope2.View"
+        layer=".interfaces.ISearchProductLayer"        
+        />        
 
-    <browser:viewlet
+    <!-- <browser:viewlet
         name="plone.searchbox"
         manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
         allowed_interface=".interfaces.ISearchViewlet"
         class=".viewlet.SearchViewlet"
         permission="zope2.View"
         layer=".interfaces.ISearchProductLayer"
-        />
+        /> -->
 
     <genericsetup:registerProfile
         name="default"

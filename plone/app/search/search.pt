@@ -18,27 +18,24 @@
              i18n:attributes="title title_search_title"
              tal:attributes="value view/query"/>
 
-      <label for="category" i18n:translate="label_category"
+      <!-- <label for="category" i18n:translate="label_category"
              tal:condition="view/category_id">
          <input type="checkbox" name="category" value="/Plone/category" i18n:name="input"
                 checked="checked" tal:attributes="value view/category_id"/>Only in this category
-      </label>
+      </label> -->
 
       <button type="submit"><strong i18n:translate="label_search">Search</strong></button>
     </form>
 
-    <h1 tal:condition="view/category_id" class="documentFirstHeading" i18n:translate="heading_category_search_results">Search results for <span tal:replace="python:view.results[0]['title']" i18n:name="title">category</span></h1>
-    <h1 tal:condition="not:view/category_id" class="documentFirstHeading" i18n:translate="heading_search_results">Search results</h1>
+    <h1 tal:condition="view/portal_types" class="documentFirstHeading" i18n:translate="heading_category_search_results">Search results for <span tal:replace="python:view.results[0]['title']" i18n:name="title">content type</span></h1>
+    <h1 tal:condition="not:view/portal_types" class="documentFirstHeading" i18n:translate="heading_search_results">Search results</h1>
 
-    <tal:block repeat="category view/results">
-      <tal:block condition="category/results">
-        <h2 tal:condition="not:view/category_id"><a tal:attributes="href category/search_url;"
-               title="Show more results from this category"
-               i18n:attributes="title label_category_search"
-               tal:content="category/title">Category title</a></h2>
+    <tal:block repeat="cttype view/results">
+      <tal:block condition="cttype/results">
+        <h2 tal:content="cttype/title">Content type title</h2>
 
         <dl class="searchresults">
-          <tal:block repeat="result category/results">
+          <tal:block repeat="result cttype/results">
             <dt tal:attributes="class string:contenttype-${result/portal_type}">
               <img tal:condition="result/icon_url" tal:attributes="src result/icon_url" alt=""/>
               <a tal:attributes="href result/url;
