@@ -5,6 +5,6 @@ from Products.CMFCore.utils import getToolByName
 
 class Search(BrowserView):
     
-    def results():
+    def results(self):
         catalog = getToolByName(self.context, 'portal_catalog')
-        return IContentListing(catalog(query))
+        return IContentListing(catalog())
