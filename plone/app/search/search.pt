@@ -7,11 +7,13 @@
       i18n:domain="plone">
 
 <body>
-
     <div metal:fill-slot="main">
    
-        <tal:results repeat="item view/results">
-        
+      
+      <div tal:content="structure context/REQUEST/form"></div>
+      
+      
+        <tal:results repeat="item view/results">  
         <dt>
             <span class="summary">
                 <img tal:replace="structure item/getIcon" />
@@ -50,6 +52,9 @@
         </dl>
         </tal:results>
         
+         <div tal:content="structure view/query"></div>
+
+   
    
     </div>
 
