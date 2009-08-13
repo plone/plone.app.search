@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+    <div metal:fill-slot="main">
+   
+        <tal:results repeat="item view/results">
+        
+        <dt>
+            <span class="summary">
+                <img tal:replace="structure item/getIcon" />
+                <a href="#"
+                   tal:attributes="href item/getURL"
+                   tal:content="item/Title">
+                    Item Title
+                </a>
+            </span>
+            <span class="documentByLine">
+                <tal:byline>
+                    &mdash;
+                    <tal:name tal:condition="item/Creator"
+                        tal:define="author item/Creator">
+                      <span i18n:translate="label_by_author">
+                        by
+                      <a href="#"
+                         tal:attributes="href author/home_page"
+                         tal:content="python: path('author/fullname') or path('author/username')"
+                         i18n:name="author">
+                        Bob Dobalina
+                      </a>
+                      </span>
+                    </tal:name>
+                        &mdash;
+                        <tal:mod i18n:translate="box_last_modified">
+                          last modified
+                        </tal:mod>
+                        <span tal:replace="item/ModificationDate">
+                          August 16, 2001 at 23:35:59
+                        </span>
+                </tal:byline>
+            </span>
+        </dt>
+        <dl>
+        </dl>
+        </tal:results>
+        
+   
+    </div>
+
+</body>
+</html>
