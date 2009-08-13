@@ -48,13 +48,18 @@
                 <option value="does_not_contain">is not</option>
             </select>
             
-            <select name="query.v:records" id="value2" multiple="multiple">
-                <option value="Page">Page</option>
-                <option value="Event" selected="1">Event</option>
-                <option value="File">File</option>
-                <option value="Folder">Folder</option>  
-            </select>
-            
+            <dl class="actionMenu activated">
+              <dt class="actionMenuHeader">
+                <span>Page, File</span> <span class="arrowDownAlternative">▼</span>
+              </dt>
+              <dd class="actionMenuContent">
+                <select name="query.v:records" id="value2" multiple="multiple">
+                  <option selected="1" value="Page">Page</option>
+                  <option value="Event">Event</option>
+                  <option selected="1" value="File">File</option>
+                  <option value="Folder">Folder</option>  
+                </select>
+              </dd>
             <a href="" class="More fields"><strong>+</strong></a>
                         
         </div>
