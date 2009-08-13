@@ -57,18 +57,34 @@ form fieldset {
     margin: 0;
 }
 .field {
-    margin-bottom: 1em;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
     display: table;
 }
 .field select,
 .field input,
-.field dl.actionMenu {
+div.dropDownMenu {
     width:15em;
     display: table-cell;
     margin: 0 0.5em;
+}
+dl.actionMenu {
+    position:relative;
+    margin: 0;
 }
 dl.actionMenu dt {
     margin-left:0.5em;
     margin-right:0.5em;
     padding:1px 10px 0 20px;
+}
+dl.actionMenu dd {
+    position:absolute;
+    left: 0;
+    top:1.5em;
+    margin-left: 0;
+}
+.formControls div.dropDownMenu dd {
+    width: 30em;
+    top: 1.7em;
+    border: 1px solid #8CACBB;
 }
