@@ -1,3 +1,17 @@
+/* @group Basic styles */
+body {
+    padding: 10px;
+    font: 12px/1.5 Verdana, Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #205C90;
+    text-decoration: none;
+}
+a:hover {
+    color: #75AD0A;
+}
+
 .actionMenuContent {
     display: none;
     position: relative;
@@ -8,44 +22,53 @@
 }
 dt.actionMenuHeader {
     float: left;
-background:White url(../images/saveButton.png) no-repeat scroll 2px 1px;
-border:1px solid #8CACBB;
-color:Black;
-cursor:pointer;
-margin-bottom:1px !important;
-padding:1px 1px 1px 19px;
-text-transform:none;
-margin-left: 1em;
+    background:White url(../images/saveButton.png) no-repeat scroll 2px 1px;
+    border:1px solid #8CACBB;
+    color:Black;
+    cursor:pointer;
+    margin-bottom:1px !important;
+    padding:1px 1px 1px 19px;
+    text-transform:none;
+    margin-left: 1em;
 }
 input.searchButton {
-float: left;
-background:White url(../images/search_icon.png) no-repeat scroll 2px 1px;
-border:1px solid #8CACBB;
-color:Black;
-cursor:pointer;
-margin-bottom:1px !important;
-padding:1px 1px 1px 19px;
-text-transform:none;
+    float: left;
+    background:White url(../images/search_icon.png) no-repeat scroll 2px 1px;
+    border:1px solid #8CACBB;
+    color:Black;
+    cursor:pointer;
+    margin-bottom:1px !important;
+    padding:1px 1px 1px 19px;
+    text-transform:none;
 }
 input {
-background:White url(../images/input_background.png) repeat-x scroll 0 0;
-border-color:#666666 #DDDDDD #DDDDDD #666666;
-border-style:solid;
-border-width:1px;
-color:Black;
-font-family:"Lucida Grande",Verdana,Lucida,Helvetica,Arial,sans-serif;
-vertical-align:middle;
-visibility:visible;
+    background:White url(../images/input_background.png) repeat-x scroll 0 0;
+    border-color:#666666 #DDDDDD #DDDDDD #666666;
+    border-style:solid;
+    border-width:1px;
+    color:Black;
+    font-family:"Lucida Grande",Verdana,Lucida,Helvetica,Arial,sans-serif;
+    vertical-align:middle;
+    visibility:visible;
 }
-        form fieldset {
-            border: none;
-            padding: 0;
-            margin: 0;
-        }
-        .field {
-            margin-bottom: 1em;
-        }
-        .field select,
-        .field input {
-            width:15em
-        }        
+form fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.field {
+    margin-bottom: 1em;
+    display: table;
+}
+.field select,
+.field input,
+.field dl.actionMenu {
+    width:15em;
+    display: table-cell;
+    margin: 0 0.5em;
+}
+dl.actionMenu dt {
+    margin-left:0.5em;
+    margin-right:0.5em;
+    padding:1px 10px 0 20px;
+}
