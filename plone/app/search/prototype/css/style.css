@@ -1,0 +1,51 @@
+.actionMenuContent {
+    display: none;
+    position: relative;
+    clear:both;
+}
+.portalMessage {
+    display: none;
+}
+dt.actionMenuHeader {
+    float: left;
+background:White url(../images/saveButton.png) no-repeat scroll 2px 1px;
+border:1px solid #8CACBB;
+color:Black;
+cursor:pointer;
+margin-bottom:1px !important;
+padding:1px 1px 1px 19px;
+text-transform:none;
+margin-left: 1em;
+}
+input.searchButton {
+float: left;
+background:White url(../images/search_icon.png) no-repeat scroll 2px 1px;
+border:1px solid #8CACBB;
+color:Black;
+cursor:pointer;
+margin-bottom:1px !important;
+padding:1px 1px 1px 19px;
+text-transform:none;
+}
+input {
+background:White url(../images/input_background.png) repeat-x scroll 0 0;
+border-color:#666666 #DDDDDD #DDDDDD #666666;
+border-style:solid;
+border-width:1px;
+color:Black;
+font-family:"Lucida Grande",Verdana,Lucida,Helvetica,Arial,sans-serif;
+vertical-align:middle;
+visibility:visible;
+}
+        form fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+        .field {
+            margin-bottom: 1em;
+        }
+        .field select,
+        .field input {
+            width:15em
+        }        

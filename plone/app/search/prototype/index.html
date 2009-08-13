@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>Query Builder</title>
+    <link type="text/css" href="css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="js/init.js"></script>
+  </head>
+  <body>
+    <dl class="portalMessage info">
+      <dt>Info</dt>
+      <dd>Changes saved.</dd>
+    </dl>
+
+<form action="" method="get" accept-charset="utf-8">
+    <fieldset>
+        <div class="field">
+            <div class="formHelp"><!-- --></div>
+            <select name="query.i:records" id="index1">
+                <option value="Searchable Text" selected="1">Searchable Text</option>
+                <option value="Content type">Content type</option>
+                <option value="Keywords">Keywords</option>     
+            </select>
+            
+            <select name="query.c:records" id="criterion1">
+                <option value="contains" selected="1">contains</option>
+                <option value="does_not_contain">does not contain</option>   
+            </select>
+
+            <input type="text" name="query.v:records" value="Text for Search" id="value1"/>            
+            
+            <a href="" class="More fields"><strong>+</strong></a>            
+            <a id="advancedsearch" href="./search_form?SearchableText=">Advanced Search</a>
+        </div>
+        
+        <div class="field">
+            <div class="formHelp"><!-- --></div>
+            <select name="query.i:records" id="index2">
+                <option value="Searchable Text">Searchable Text</option>
+                <option value="Content type" selected="1">Content type</option>
+                <option value="Keywords">Keywords</option>     
+            </select>
+            
+            <select name="query.c:records" id="criterion2">
+                <option value="contains" selected="1">is</option>
+                <option value="does_not_contain">is not</option>
+            </select>
+            
+            <select name="query.v:records" id="value2" multiple="multiple">
+                <option value="Page">Page</option>
+                <option value="Event" selected="1">Event</option>
+                <option value="File">File</option>
+                <option value="Folder">Folder</option>  
+            </select>
+            
+            <a href="" class="More fields"><strong>+</strong></a>
+                        
+        </div>
+        
+        <div class="field">
+            <div class="formHelp"><!-- --></div>
+            <select name="query.i:records" id="index3">
+                <option value="Searchable Text">Searchable Text</option>
+                <option value="Content type">Content type</option>
+                <option value="Keywords" selected="1">Keywords</option>     
+            </select>
+            
+            <select name="query.c:records" id="criterion3">
+                <option value="all" selected="1">match all of</option>
+                <option value="any">match any of</option>
+                <option value="not_any">do not match any of</option>
+                <option value="not_all">do not match all of</option>
+            </select>
+            
+            <select name="query.v:records" id="value3" multiple="multiple">
+                <option value="mac">Mac OS</option>
+                <option value="win">Windows</option>
+                <option value="lin">Linux</option>                
+                <option value="12in">12''</option>
+                <option value="15in">15''</option> 
+                <option value="17in">17''</option>                 
+            </select>
+            
+            <a href="" class="More fields"><strong>+</strong></a>
+            
+        </div>    
+        
+        <div class="sortingField">
+            <div class="formHelp"><!-- --></div>
+            <label for="sort_on">
+                Sort on
+            </label>
+            <select name="sort_on" id="sort_on">
+                <option value="Searchable Text">Searchable Text</option>
+                <option value="Content type">Content type</option>
+                <option value="Keywords" selected="1">Keywords</option>     
+            </select>
+            
+            <input type="checkbox" name="sort_order" value="Reversed order" checked="checked" id="sort_order"/>
+            <label for="sort_order">Reversed order</label>            
+            
+            
+        </div>    
+        
+        <div class="formControls">
+            <input class="searchButton" type="submit" name="submit" value="Search" />
+    <dl class="actionMenu activated">
+      <dt class="actionMenuHeader">
+        <a title="Save the current search query as a collection." href="#">
+          <span>Save as collection</span> <span class="arrowDownAlternative">▼</span>
+        </a>
+      </dt>
+      <dd class="actionMenuContent">
+        <div class="field">
+          <label for="title">Title</label>
+          <span title="Required" class="fieldRequired">(Required)</span>
+          <input type="text" size="40" value="Site" name="title" id="title"/>
+        </div>
+        <div class="field">
+          <label for="location">Location</label>
+          <span title="Required" class="fieldRequired">(Required)</span>
+          <label for="searchlocation">Search</label>
+          <input type="text" size="20" value"Search" name="searchlocation" id="searchlocation"/>
+          <ul class="navTree navTreeLevel0">
+            <li class="navTreeItem visualNoMarker navTreeCurrentNode navTreeFolderish node-235bdb7fb4b9ab7cfa0c0d5439ee68f2">
+    <span title="Click to expand or collapse" class="expandedNode">
+     Expand</span>
+
+    
+
+        <input type="radio" name="location"/>
+        <img width="16" height="16" alt="Folder" src="http://localhost:8080/test/folder_icon.gif"/>
+        <span>Folder 1</span>
+
+    <ul class="navTree navTreeLevel1">  
+        
+
+
+
+<li class="navTreeItem visualNoMarker node-7a5744c8c9fdd925251fa010e000a550">
+
+    
+
+    <span class="noChildren">
+      </span>
+
+        <input type="radio" name="location"/>
+        <img width="16" height="16" alt="Page" src="http://localhost:8080/test/document_icon.gif"/>
+        <span>Page 1</span>
+
+    
+</li>
+
+
+<li class="navTreeItem visualNoMarker navTreeFolderish node-61e949ffd601038aacd25fe3c797ba6e">
+
+    <span title="Click to expand or collapse" class="toggleNode">
+     Expand</span>
+
+    
+
+        <input type="radio" name="location"/>
+        <img width="16" height="16" alt="Folder" src="http://localhost:8080/test/folder_icon.gif"/>
+        <span>Subfolder</span>
+
+    
+</li>
+
+
+
+
+    </ul>
+</li>
+
+
+<li class="navTreeItem visualNoMarker navTreeFolderish node-2d151132a3814f0866c341a484900c92">
+
+    <span title="Click to expand or collapse" class="toggleNode">
+     Expand</span>
+
+    
+
+        <input type="radio" name="location"/>
+        <img width="16" height="16" alt="Folder" src="http://localhost:8080/test/folder_icon.gif"/>
+        <span>Folder 2</span>
+
+    
+</li>
+
+
+
+
+        </ul>
+        </div>
+        <div class="formControls">
+          <input type="button" value="Save" id="save" name="form.button.Save" class="context"/>
+          <input type="button" value="Cancel" id="cancel" name="form.button.Cancel" class="standalone"/>
+        </div>
+      </dd>
+    </dl>
+
+
+        </div>
+        
+    </fieldset>
+</form>
+
+    </form>
+
+  </body>
+</html>
