@@ -85,7 +85,7 @@
 <script tal:content="python:view.getJavascriptConfig()"></script>
 <script type="text/javascript">
 jQuery(function($) {
-    $('.queryindex').change(function () {
+    $('.queryindex').live('change', function () {
         var value = $(this).children(':selected')[0].value;
         var queryoperator = $(this).parent().children('.queryoperator');
         queryoperator.children().remove();
@@ -99,27 +99,61 @@ jQuery(function($) {
         }
         UpdateSearch();
     });
-    $('.addparameter').change(function () {
+    $('.addparameter').live('change', function () {
         var value = $(this).children(':selected')[0].value;
         var field = $(this).parents('.field');
-        field.prepend(
-            $(document.createElement('div'))
-                .addClass('field')
-                .html(
-                    $(document.createElement('select'))
-                        .addClass('queryindex')
-                        .attr('name','query.i:records')
-                        .append(
-                            $.each(plone_app_search_config.indexes, function (i, val) {
-                                console.log(i);
-                                console.log(val.friendly_name);
-                                return $(document.createElement('option')).html(val.friendly_name);
-                            })
-                        )
-                )
+        var newfield = $(document.createElement('div'))
+                            .addClass('field');
+
+        // Create queryindex
+        var queryindex = $(document.createElement('select'))
+                            .addClass('queryindex')
+                            .attr('name','query.i:records')
+        $.each(plone_app_search_config.indexes, function (i, val) {
+            var option = $(document.createElement('option'))
+                            .attr('value', i)
+                            .html(val.friendly_name)
+            if (i == value) {
+                option.attr('selected', 'selected');
+            }
+            queryindex.append(option)
+        });
+
+        // Create queryoperator
+        var queryoperator = $(document.createElement('select'))
+                            .addClass('queryoperator')
+                            .attr('name','query.c:records')
+        $.each(plone_app_search_config.indexes[value].operators, function (i, val) {
+            queryoperator.append(
+                $(document.createElement('option'))
+                    .attr('value', i)
+                    .html(val.friendly_name)
+            )
+        });
+
+        newfield.append(queryindex);
+        newfield.append(queryoperator);
+        newfield.append(
+            $(document.createElement('input'))
+                .attr({
+                    'type': 'text',
+                    'value': '',
+                    'name': 'query.v:records'
+                })
         )
+        newfield.append(
+            $(document.createElement('a'))
+                .attr({
+                    'title': 'Remove parameter',
+                    'href': ''
+                })
+                .addClass('removeparameter discreet')
+                .html('Remove parameter')
+        )
+        field.before(newfield);
+        $(this).val('empty');
     });
-    $('.removeparameter').click(function () {
+    $('.removeparameter').live('click', function () {
         $(this).parents('.field').remove();
         UpdateSearch();
         return false;
