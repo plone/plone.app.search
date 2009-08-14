@@ -29,15 +29,14 @@
         <fieldset>            
             <div tal:repeat="row context/REQUEST/form/query" tal:condition="exists: context/REQUEST/form/query">
                     <div class="field">
-                        <div class="formHelp"><!-- --></div>
-                        <select name="query.i:records">
+                        <select class="queryindex" name="query.i:records">
                             <tal:index repeat="index python:indexes.keys()">
                             <option tal:attributes="value index; selected python:row['i'] == index and 'selected' or nothing" 
                                     tal:content="python:indexes[index]['friendly_name']">Index</option>
                             </tal:index>
                         </select>
                     
-                        <select name="query.c:records" tal:define="index_name python:row['i'];
+                        <select class="queryoperator" name="query.c:records" tal:define="index_name python:row['i'];
                                                                    operators python:indexes[index_name]['operators']">
                             <tal:operators repeat="operator python:operators.keys()">
                                 <option tal:attributes="value operator; 
@@ -48,13 +47,12 @@
                         <input type="text" name="query.v:records" value="Text for Search"
                                tal:attributes="value python:row['v']"/>
 
-                        <a href="" class="discreet" title="Remove parameter">Remove parameter</a>
+                        <a href="" class="removeparameter discreet" title="Remove parameter">Remove parameter</a>
                     </div>
                 </div>
                 
                 <div class="field">
-                    <div class="formHelp"><!-- --></div>
-                    <select name="query.i:records">
+                    <select class="addparameter" name="dummy">
                         <option value="empty" selected="selected">Choose your parameter...</option>
                         <tal:index repeat="index python:indexes.keys()">                        
                         <option tal:attributes="value index;"
@@ -81,9 +79,61 @@
             
         </fieldset>
       </form>
-
+<div id="searchresults">
+    
+</div>
 <script tal:content="python:view.getJavascriptConfig()"></script>
-      
+<script type="text/javascript">
+jQuery(function($) {
+    $('.queryindex').change(function () {
+        var value = $(this).children(':selected')[0].value;
+        var queryoperator = $(this).parent().children('.queryoperator');
+        queryoperator.children().remove();
+        var operators = plone_app_search_config.indexes[value].operators;
+        for (operator in operators) {
+            queryoperator.append(
+                $(document.createElement('option'))
+                    .attr('value', operator)
+                    .html(operators[operator].friendly_name)
+            );
+        }
+        UpdateSearch();
+    });
+    $('.addparameter').change(function () {
+        var value = $(this).children(':selected')[0].value;
+        var field = $(this).parents('.field');
+        field.prepend(
+            $(document.createElement('div'))
+                .addClass('field')
+                .html(
+                    $(document.createElement('select'))
+                        .addClass('queryindex')
+                        .attr('name','query.i:records')
+                        .append(
+                            $.each(plone_app_search_config.indexes, function (i, val) {
+                                console.log(i);
+                                console.log(val.friendly_name);
+                                return $(document.createElement('option')).html(val.friendly_name);
+                            })
+                        )
+                )
+        )
+    });
+    $('.removeparameter').click(function () {
+        $(this).parents('.field').remove();
+        UpdateSearch();
+        return false;
+    });
+    function UpdateSearch() {
+        $.get('previewadvancedsearchresults?query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14&query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14&query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14',
+            {},
+            function (data) {
+                $('#searchresults').html(data);
+            });
+        
+    }
+}(jQuery))
+</script>
 </div>
 </body>
 </html>
