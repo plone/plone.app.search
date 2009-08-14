@@ -11,7 +11,7 @@ CRITERION={
                             'friendly_name' : 'Equals',
                             'widget'        : 'StringWidget',},
                             },
-                            
+         },
                             
          'modified':{
             'friendly_name': 'Modification date',
@@ -26,5 +26,4 @@ CRITERION={
                                  'widget': 'DateWidget',},
                                  }
                     }
-                }
             }
