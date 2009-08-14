@@ -11,4 +11,9 @@ $(function(){
         $('.portalMessage').show();
         $(this).parents('.actionMenuContent').hide();
     });
+    $('#advancedsearchlink').click(function() {
+        $('#simplesearch').hide();
+        $('#advancedsearch').show();
+        return false;
+    });
 });
