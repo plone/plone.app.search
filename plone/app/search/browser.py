@@ -18,22 +18,23 @@ class Search(BrowserView):
 class AdvancedSearch(BrowserView):
     
     def __init__(self, context, request):
-        self.results = None
+        self._results = None
         self.context = context
         self.request = request
         
         
     def getNumberOfResults(self):
-        return len(self.results())
+        return len(self._results())
 
     def results(self):
-        if self.results is None:
-            results = self._queryForResults()
-        return results
+        if self._results is None:
+            self._results = self._queryForResults()
+        return self._results
     
     def _queryForResults(self):
         # parse query
-        query = QueryParser.parseFormquery(self.request.get('query',None))
+        queryparser=QueryParser()
+        query = queryparser.parseFormquery(self.request.get('query',None))
 
         self.query = query
     
