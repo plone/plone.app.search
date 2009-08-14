@@ -22,13 +22,63 @@
 </head>
 
 <body>
-<div metal:fill-slot="main" tal:define="results view/results">
+<div metal:fill-slot="main" tal:define="results view/results;
+                                        config view/getConfig">
 
-      <div tal:content="structure context/REQUEST/form"></div>
+
+      <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
+        <fieldset>            
+            <div tal:repeat="row context/REQUEST/form/query">
+
+                <div class="field">
+                    <div class="formHelp"><!-- --></div>
+                    <select name="query.i:records" id="index1">
+                        <tal:index repeat="index python:config.keys()">
+                        <option tal:attributes="value index; selected python:row['i'] == index and 'selected' or nothing" 
+                                tal:content="python:config[index]['friendly_name']">Searchable Text</option>
+                        </tal:index>
+                    </select>
+                    
+                    <select name="query.c:records" id="criterion1" tal:define="index_name python:row['i'];
+                                                                               operators python:config[index_name]['operators']">
+                        <tal:operators repeat="operator python:operators.keys()">
+                            <option tal:attributes="value operator; 
+                                                    selected python:row['c'] == operator and 'selected' or nothing" 
+                                    tal:content="python:operators[operator]['friendly_name']">Searchable Text</option>                            
+                        </tal:operators>
+                        <!-- <span tal:content="operators"></span> -->
+                    </select>
+                    <input type="text" name="query.v:records" value="Text for Search" id="value1"/>
+
+                    <button type="button" title="Remove"><img src="images/delete_icon.png" alt="Remove" /></button>
+                    <button type="button" title="Add criterium"><img src="images/add_icon.gif" alt="Add criterium" /></button>            
+                </div>
+            </div>
 
 
-      <div tal:content="view/printQuery"></div>
 
+            <div class="sortingField">
+                <div class="formHelp"><!-- --></div>
+                <label for="sort_on">
+                    Sort on
+                </label>
+                <select name="sort_on" id="sort_on">
+                    <option value="Searchable Text">Searchable Text</option>
+                    <option value="Content type">Content type</option>
+                    <option value="Keywords" selected="selected">Keywords</option>     
+                </select>
+
+                <input type="checkbox" name="sort_order" value="Reversed order" checked="checked" id="sort_order"/>
+                <label for="sort_order">Reversed order</label>            
+            </div>
+
+            <div class="formControls">
+                <input class="searchPage searchButton" type="submit" name="submit" value="Search" />
+            </div>
+            
+        </fieldset>
+      </form>
+      
 </div>
 </body>
 </html>
