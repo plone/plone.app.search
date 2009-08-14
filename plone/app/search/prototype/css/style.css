@@ -32,7 +32,6 @@ dt.actionMenuHeader {
     margin-left: 1em;
 }
 input.searchButton {
-    float: left;
     background:White url(../images/search_icon.png) no-repeat scroll 2px 1px;
     border:1px solid #8CACBB;
     color:Black;
@@ -40,6 +39,10 @@ input.searchButton {
     margin-bottom:1px !important;
     padding:1px 1px 1px 19px;
     text-transform:none;
+}
+input.searchButton.searchPage {
+    background-image: none;
+    padding-left: 1px;
 }
 input {
     background:White url(../images/input_background.png) repeat-x scroll 0 0;
@@ -60,6 +63,7 @@ form fieldset {
     padding: 0.5em;
     margin-bottom: 0.5em;
     display: table;
+/*    width:100%;*/
 }
 .field select,
 .field input,
@@ -67,6 +71,7 @@ div.dropDownMenu {
     width:15em;
     display: table-cell;
     margin: 0 0.5em;
+    vertical-align: middle;
 }
 dl.actionMenu {
     position:relative;
@@ -75,7 +80,8 @@ dl.actionMenu {
 dl.actionMenu dt {
     margin-left:0.5em;
     margin-right:0.5em;
-    padding:1px 10px 0 20px;
+    padding:1px 1em 0 2em;
+    width:12em;
 }
 dl.actionMenu dd {
     position:absolute;
@@ -87,4 +93,21 @@ dl.actionMenu dd {
     width: 30em;
     top: 1.7em;
     border: 1px solid #8CACBB;
+}
+#advancedsearch {
+    margin: 0 auto 2em;
+    width: 55em;
+}
+#advancedsearch button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-right: 0.5em;
+}
+.sortingField {
+    text-align: center;
+}
+.formControls {
+    text-align: center;
+    margin-top: 2em;
 }
