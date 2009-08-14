@@ -31,16 +31,66 @@ class Search(BrowserView):
             # default behaviour
             tmp={index:values}
             
-            # ranges
+            # Ranges
+            
+            # query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14
+            # v[0] >= x > v[1]
             if criteria =='between':
                 tmp={index:{
                     'query':values,
                     'range':'minmax'
                 }}
             
+            # query.i:records=modified&query.c:records=larger_then_or_equal&query.v:records=2009/08/12
+            # x >= value
+            elif criteria =='larger_then_or_equal':
+                tmp={index:{
+                    'query':values,
+                    'range':'min'
+                }}
+            
+            # query.i:records=modified&query.c:records=less_then&query.v:records=2009/08/14
+            # x < value
+            elif criteria =='less_then':
+                tmp={index:{
+                    'query':values,
+                    'range':'max'
+                }}
+            
+            
             query.update(tmp)
         return query
         
+    def getConfig(self):
+        config={
+            'indexes': [
+                {'name': 'creator',
+                 'friendly_name': 'Creator',
+                 'operators': [
+                    {'name': 'is_not',
+                     'friendly_name': 'Does not equal',
+                     'widget': 'StringWidget',},
+                    {'name': 'is',
+                     'friendly_name': 'Equals',
+                     'widget': 'StringWidget',},
+                ],},
+                {'name': 'modified',
+                 'friendly_name': 'Modification date',
+                 'operators': [
+                    {'name': 'smaller_or_equal',
+                     'friendly_name': 'Before',
+                     'widget': 'DateWidget',},
+                    {'name': 'is',
+                     'friendly_name': 'On',
+                     'widget': 'DateWidget',},
+                    {'name': 'larger_then',
+                     'friendly_name': 'After',
+                     'widget': 'DateWidget',},
+                    {'name': 'between',
+                     'friendly_name': 'between',
+                     'widget': 'DateWidget',},
+                ],},
+            ],
+        }
         
-        
-# query.i:records=modified&query.c:records=between&query.v:records:list=2009/01/01&query.v:records:list=2009/10/01
+        return config
