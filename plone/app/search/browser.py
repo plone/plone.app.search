@@ -14,6 +14,7 @@ class Search(BrowserView):
             return IContentListing(results)
         return []
 
+
 class AdvancedSearch(BrowserView):
     
     def __init__(self, context, request):

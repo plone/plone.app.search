@@ -22,6 +22,14 @@
     />
 
 
+<browser:page
+    name="previewadvancedsearchresults"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="Products.CMFCore.interfaces.IFolderish"
+    template="previewsearchresults.pt"
+    />
+
 
 
     
