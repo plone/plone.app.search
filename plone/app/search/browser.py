@@ -14,7 +14,21 @@ class Search(BrowserView):
 
 class AdvancedSearch(BrowserView):
     
+    def __init__(self, context, request):
+        self.results = None
+        self.context = context
+        self.request = request
+        
+        
+    def getNumberOfResults(self):
+        return len(self.results())
+
     def results(self):
+        if self.results is None:
+            results = self._queryForResults()
+        return results
+    
+    def _queryForResults(self):
         # parse query
         query = self.parseFormquery(self.request.get('query',None))
 
@@ -73,7 +87,14 @@ class AdvancedSearch(BrowserView):
     def printQuery(self):
         return self.query
         
-    def getConfig(self):        
+    def getConfig(self):
+        return {'indexes':CRITERION}  
+        # we wrap this in a dictionary so we can add more configuration data 
+        # to the payload in the future. This is data that will be fetched 
+        # by a browser AJAX call
+         
+        
+    def getIndexesVocabulary(self):
         return CRITERION
         
         
