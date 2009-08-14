@@ -28,7 +28,7 @@
 
       <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
         <fieldset>            
-            <div tal:repeat="row context/REQUEST/form/query">
+            <div tal:repeat="row context/REQUEST/form/query" tal:condition="exists: context/REQUEST/form/query">
 
                 <div class="field">
                     <div class="formHelp"><!-- --></div>
@@ -78,6 +78,8 @@
             
         </fieldset>
       </form>
+
+<script tal:content="python:view.getJavascriptConfig()"></script>
       
 </div>
 </body>
