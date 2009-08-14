@@ -12,5 +12,17 @@
     for="Products.CMFCore.interfaces.IFolderish"
     template="search.pt"
     />
+
+<browser:page
+    name="collectiontest"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="Products.CMFCore.interfaces.IFolderish"
+    template="collectionstest.pt"
+    />
+
+
+
+
     
 </configure>

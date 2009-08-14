@@ -6,6 +6,15 @@ from Products.CMFCore.utils import getToolByName
 class Search(BrowserView):
     
     def results(self):
+        catalog = getToolByName(self.context, 'portal_catalog')
+        results = catalog()
+        if results:
+            return IContentListing(results)
+        return []
+
+class AdvancedSearch(BrowserView):
+    
+    def results(self):
         # parse query
         query=self.parseFormquery(self.request.get('query',None))
 
@@ -15,7 +24,7 @@ class Search(BrowserView):
         catalog = getToolByName(self.context, 'portal_catalog')
         results=catalog(query)
         if results:
-            return IContentListing(catalog(query))
+            return IContentListing(results)
         return []
         
     def parseFormquery(self, formquery):
