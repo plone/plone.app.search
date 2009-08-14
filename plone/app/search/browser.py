@@ -61,9 +61,7 @@ class AdvancedSearch(BrowserView):
         
     def getJavascriptConfig(self):
         template = """
-        if (!window.plone_app_search) var window.plone_app_search = {}
-        if (!window.plone_app_search.config) var window.plone_app_search.config = {}
-        var window.plone_app_search.config = %s
+        var plone_app_search_config = %s
         """
         return template%(json.dumps(self.getConfig()))
         
