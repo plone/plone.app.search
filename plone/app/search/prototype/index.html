@@ -18,7 +18,7 @@
     <fieldset>
         <input type="hidden" name="query.i:records" value="Searcheable Text"/>
         <input type="hidden" name="query.c:records" value="contains"/>
-        <input type="text" name="query.v:records" value="Text for Search" id="value1"/>
+        <input type="text" name="query.v:records" value="Text for Search" id="value0"/>
         <input class="searchButton" type="submit" name="submit" value="Search" />
         <p class="discreet">
         Did you not find what you were looking for? Try the
@@ -35,13 +35,13 @@
         <div class="field">
             <div class="formHelp"><!-- --></div>
             <select name="query.i:records" id="index1">
-                <option value="Searchable Text" selected="1">Searchable Text</option>
+                <option value="Searchable Text" selected="selected">Searchable Text</option>
                 <option value="Content type">Content type</option>
                 <option value="Keywords">Keywords</option>     
             </select>
             <input type="submit" value=">>"/>
             <select name="query.c:records" id="criterion1">
-                <option value="contains" selected="1">contains</option>
+                <option value="contains" selected="selected">contains</option>
                 <option value="does_not_contain">does not contain</option>   
             </select>
             <input type="submit" value=">>"/>
@@ -53,14 +53,14 @@
             <div class="formHelp"><!-- --></div>
             <select name="query.i:records" id="index2">
                 <option value="Searchable Text">Searchable Text</option>
-                <option value="Content type" selected="1">Content type</option>
+                <option value="Content type" selected="selected">Content type</option>
                 <option value="Keywords">Keywords</option>     
             </select>
             
             <input type="submit" value=">>"/>
             
             <select name="query.c:records" id="criterion2">
-                <option value="contains" selected="1">is</option>
+                <option value="contains" selected="selected">is</option>
                 <option value="does_not_contain">is not</option>
             </select>
             
@@ -72,9 +72,9 @@
               </dt>
               <dd class="actionMenuContent">
                 <select name="query.v:records" id="value2" multiple="multiple">
-                  <option selected="1" value="Page">Page</option>
+                  <option selected="selected" value="Page">Page</option>
                   <option value="Event">Event</option>
-                  <option selected="1" value="File">File</option>
+                  <option selected="selected" value="File">File</option>
                   <option value="Folder">Folder</option>  
                 </select>
               </dd>
@@ -87,13 +87,13 @@
             <select name="query.i:records" id="index3">
                 <option value="Searchable Text">Searchable Text</option>
                 <option value="Content type">Content type</option>
-                <option value="Keywords" selected="1">Keywords</option>     
+                <option value="Keywords" selected="selected">Keywords</option>     
             </select>
             
             <input type="submit" value=">>"/>
 
             <select name="query.c:records" id="criterion3">
-                <option value="all" selected="1">match all of</option>
+                <option value="all" selected="selected">match all of</option>
                 <option value="any">match any of</option>
                 <option value="not_any">do not match any of</option>
                 <option value="not_all">do not match all of</option>
@@ -128,7 +128,7 @@
             <select name="sort_on" id="sort_on">
                 <option value="Searchable Text">Searchable Text</option>
                 <option value="Content type">Content type</option>
-                <option value="Keywords" selected="1">Keywords</option>     
+                <option value="Keywords" selected="selected">Keywords</option>     
             </select>
             
             <input type="checkbox" name="sort_order" value="Reversed order" checked="checked" id="sort_order"/>
