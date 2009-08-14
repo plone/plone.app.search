@@ -4,15 +4,44 @@ from Products.CMFCore.utils import getToolByName
 from config import CRITERION
 import json
 from queryparser import QueryParser
+from zope.component import queryMultiAdapter
+from ZTUtils import make_query
 
 class Search(BrowserView):
     
     def results(self):
-        catalog = getToolByName(self.context, 'portal_catalog')
-        results = catalog()
-        if results:
-            return IContentListing(results)
-        return []
+        return queryMultiAdapter((self.context, self.request),name='searchResults')()
+
+    def getSortOptions(self):
+
+        q = {}
+        q.update(self.request.form)
+        
+        class sortoption(object):
+            def __init__(self, request, title, sortkey=None, reverse=False):
+                self.request = request
+                self.title = title
+                self.sortkey = sortkey
+                self.reverse = reverse
+
+            def selected(self):
+                return self.request.get('sort_on') == self.sortkey
+                
+            def url(self):
+                q = {}
+                if self.request.get('SearchableText'):
+                    q = {'SearchableText':self.request.get('SearchableText')}
+                if self.sortkey:
+                    q['sort_on'] = self.sortkey
+                if self.reverse:
+                    q['sort_order'] = 'reverse'
+                return self.request.URL + '?' + make_query(q)
+
+        return(
+            sortoption(self.request, 'Relevance'),
+            sortoption(self.request, 'Date (newest first)', 'Date', reverse=True),
+            sortoption(self.request, 'Aphabetically', 'sortable_title'),
+        )
 
 
 class AdvancedSearch(BrowserView):
