@@ -27,6 +27,8 @@
       <div tal:content="structure context/REQUEST/form"></div>
 
 
+      <div tal:content="view/printQuery"></div>
+
 </div>
 </body>
 </html>

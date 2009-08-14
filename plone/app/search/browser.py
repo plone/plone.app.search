@@ -16,16 +16,16 @@ class AdvancedSearch(BrowserView):
     
     def results(self):
         # parse query
-        query=self.parseFormquery(self.request.get('query',None))
+        query = self.parseFormquery(self.request.get('query',None))
 
         self.query = query
     
         # Get me my stuff!
         catalog = getToolByName(self.context, 'portal_catalog')
-        results=catalog(query)
+        results = catalog(query)
         if results:
             return IContentListing(results)
-        return []
+        return IContentListing([])
         
     def parseFormquery(self, formquery):
         query = {}
@@ -69,6 +69,9 @@ class AdvancedSearch(BrowserView):
             
             query.update(tmp)
         return query
+        
+    def printQuery(self):
+        return self.query
         
     def getConfig(self):
         config={
