@@ -13,7 +13,7 @@
       <div tal:content="structure context/REQUEST/form"></div>
       
       
-        <tal:results repeat="item view/results">  
+        <tal:results repeat="item view/results">
         <dt>
             <span class="summary">
                 <img tal:replace="structure item/getIcon" />
@@ -31,11 +31,13 @@
                       <span i18n:translate="label_by_author">
                         by
                       <a href="#"
+                         tal:condition="exists: author/home_page"
                          tal:attributes="href author/home_page"
                          tal:content="python: path('author/fullname') or path('author/username')"
                          i18n:name="author">
                         Bob Dobalina
                       </a>
+                      <span tal:condition="not:exists: author/home_page" tal:content="author" i18n:name="author">Bob Dobalina</span>
                       </span>
                     </tal:name>
                         &mdash;
@@ -52,7 +54,7 @@
         </dl>
         </tal:results>
         
-         <div tal:content="structure view/query"></div>
+         <div tal:content="structure python:view.query"></div>
 
    
    
