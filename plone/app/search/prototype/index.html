@@ -23,18 +23,20 @@
       <dd>Changes saved.</dd>
     </dl>
   
-  <form class="searchPage" action="" name="searchform" id="simplesearch" method="get">
-      <input type="hidden" name="query.i:records" value="Searcheable Text"/>
-      <input type="hidden" name="query.c:records" value="contains"/>
+  <form class="searchPage" action="" id="simplesearch" method="get">
+      <fieldset>
+          <input type="hidden" name="query.i:records" value="Searcheable Text"/>
+          <input type="hidden" name="query.c:records" value="contains"/>
       
-      <input type="text" value="welcome" title="Search Site" size="25" name="query.v:records" class="searchPage"/>
-      <input type="submit"name="submit" value="Search" class="searchPage searchButton"/>
+          <input type="text" value="welcome" title="Search Site" size="25" name="query.v:records" class="searchPage"/>
+          <input type="submit" name="submit" value="Search" class="searchPage searchButton"/>
 
-      <p class="discreet">
-          Did you not find what you were looking for? Try the
-          <a id="advancedsearchlink" href="#">Advanced Search</a>
-          to refine your search.
-      </p>
+          <p class="discreet">
+              Did you not find what you were looking for? Try the
+              <a id="advancedsearchlink" href="#">Advanced Search</a>
+              to refine your search.
+          </p>
+      </fieldset>
   </form>
   
   <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
