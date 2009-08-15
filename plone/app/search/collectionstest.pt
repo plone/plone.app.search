@@ -33,6 +33,36 @@
 .previewSearchResultsHeading {
     margin-top: 1em;
 }
+#advancedsearch .field {
+    margin: 0 1em 0.5em 0;
+}
+.removecriteria {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+}
+.multipleSelectionWidget {
+    overflow:auto; 
+    height:6em;
+}
+.queryvalue {
+    float: left;
+    width: 200px;
+    border-width: 1px;
+}
+dl.queryvalue {
+    margin: 0;
+}
+dl.queryvalue dd {
+    margin: 0;
+}
+.dateRangeWidget input {
+    width: 80px;
+}
+div.queryvalue, dl.queryvalue {
+    border: solid 1px transparent;
+}
 </style>
 
 <script tal:content="python:view.getJavascriptConfig()"></script>
@@ -104,6 +134,11 @@ jQuery(function($) {
 
     $('.queryvalue').live('keyup', function () {
         UpdateSearch();
+    });
+    $('.queryvalue').live('keydown', function (e) {
+        if (e.keyCode == 13) {
+            return false;
+        }
     });
 
     $('.addIndex').live('change', function () {
@@ -203,10 +238,40 @@ jQuery(function($) {
                     <span tal:content="python:indexes[row.i]['operators'][row.o]['friendly_name']"/>
                 </div>
 
-                <input autocomplete="off" type="text" class="queryvalue" name="query.v:records" value="Text for Search"
-                       tal:attributes="value python:row['v']"/>
+                <input class="queryvalue stringWidget"
+                       autocomplete="off" type="text" name="query.v:records"
+                       tal:attributes="value python:row['v']"
+                       tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'StringWidget'"/>
 
-                <a href="" class="removecriteria discreet" title="Remove criteria">Remove criteria</a>
+                <dl class="queryvalue multipleSelectionWidget"
+                     tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'MultipleSelectionWidget'">
+                    <dt class="hiddenStructure">Select...</dt>
+                    <dd><input type="checkbox" name="query.v:records" value="Repeat Value" />Repeat Value</dd>
+                </dl>
+
+                <dl class="queryvalue locationWidget"
+                     tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'LocationWidget'">
+                    <dt class="hiddenStructure">Select...</dt>
+                    <dd><input autocomplete="off" type="text" name="query.v:records"
+                               tal:attributes="value python:row['v']" /></dd>
+                </dl>
+
+                <dl class="queryvalue dateWidget"
+                    tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'DateWidget'">
+                    <input autocomplete="off" type="text" class="queryvalue" name="query.v:records"
+                           tal:attributes="value python:row['v']"/>
+                </dl>
+
+                <div class="queryvalue dateRangeWidget"
+                     tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'DateRangeWidget'">
+                    <input autocomplete="off" type="text" name="query.v:records"
+                           tal:attributes="value python:row['v']"/>
+                    <span>and</span>
+                    <input autocomplete="off" type="text" name="query.v:records"
+                           tal:attributes="value python:row['v']"/>
+                </div>
+
+                <input type="submit" name="removecriteria" class="removecriteria discreet" value="Remove criteria">
             </div>
 
             <div class="field" tal:condition="python: addindexselected and addoperatorselected">
@@ -223,9 +288,39 @@ jQuery(function($) {
                     <span tal:content="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['friendly_name']"/>
                 </div>
 
-                <input autocomplete="off" type="text" class="queryvalue" name="query.v:records" value=""/>
+                <input class="queryvalue stringWidget"
+                       autocomplete="off" type="text" name="query.v:records" value=""
+                       tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'StringWidget'"/>
 
-                <a href="" class="removecriteria discreet" title="Remove criteria">Remove criteria</a>
+                <div class="queryvalue multipleSelectionWidget"
+                     tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'MultipleSelectionWidget'">
+                    <dl>
+                        <dt class="hiddenStructure">Select...</dt>
+                        <dd><input type="checkbox" name="query.v:records" value="Repeat Value" />Repeat Value</dd>
+                    </dl>
+                </div>
+
+                <div class="queryvalue locationWidget"
+                     tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'LocationWidget'">
+                    <dl>
+                        <dt class="hiddenStructure">Select...</dt>
+                        <dd><input autocomplete="off" type="text" name="query.v:records"/></dd>
+                    </dl>
+                </div>
+
+                <div class="queryvalue dateWidget"
+                     tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'DateWidget'">
+                     <input autocomplete="off" type="text" class="queryvalue" name="query.v:records"/>
+                </div>
+
+                <div class="queryvalue dateRangeWidget"
+                     tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'DateRangeWidget'">
+                    <input autocomplete="off" type="text" name="query.v:records"/>
+                    <span>and</span>
+                    <input autocomplete="off" type="text" name="query.v:records"/>
+                </div>
+
+                <input type="submit" name="removecriteria" class="removecriteria discreet" value="Remove criteria">
             </div>
 
             <div class="field">
