@@ -70,9 +70,6 @@ class AdvancedSearch(BrowserView):
         query['sort_on'] = getattr(self.request, 'sort_on', 'getObjPositionInParent')
         query['sort_order'] = getattr(self.request, 'sort_order', 'ascending')
 
-        # debug
-        self.query = query
-
         # Get me my stuff!
         catalog = getToolByName(self.context, 'portal_catalog')
         results = catalog(query)
@@ -89,9 +86,6 @@ class AdvancedSearch(BrowserView):
         # to the payload in the future. This is data that will be fetched 
         # by a browser AJAX call
 
-    def getIndexesVocabulary(self):
-        return CRITERION
-        
     def getJavascriptConfig(self):
         template = """
         var plone_app_search_config = %s
