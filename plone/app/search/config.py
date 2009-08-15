@@ -1,8 +1,12 @@
-# Static config, for prototype use now.
-# This have to be in the registry later on.
+# (temporary) Static config for plone.app.search
+# ===================================================
+# This has to be in the plone.app.registry later on. (preferable)
 
-# CRITERION contains the indexes and operators
-# SORTABLES contains the sortables
+# CRITERION contains the searchable indexes and their operators and widgettypes
+# SORTABLES contains the sortable indexes
+
+# note: a view types a commented, because there is something about them
+# see description/header per item
 
 
 
@@ -287,10 +291,11 @@ SORTABLES={
                   'friendly_name' : 'Item Type',
                   'description' : 'The type of the item',
          },
-         'getId':{  
-                  'friendly_name' : 'Short name',
-                  'description' : 'The short name of the item',
-         },
+# is there an usecase?
+#         'getId':{  
+#                  'friendly_name' : 'Short name',
+#                  'description' : 'The short name of the item',
+#         },
 # same as getId?
 #         'id':{  
 #                  'friendly_name' : 'ID',
@@ -346,10 +351,11 @@ SORTABLES={
                   'friendly_name' : 'Event type',
                   'description' : 'The type of event',
          },
-         'getRawRelatedItems':{  
-                  'friendly_name' : 'Related items',
-                  'description' : 'Related items',
-         },
+# use case?
+#         'getRawRelatedItems':{  
+#                  'friendly_name': 'Related to',
+#                  'description': 'Find items related to the selected items',
+#         },
          'relevence':{
                   'friendly_name' : 'Relevence',
                   'description' : 'Relevence',
