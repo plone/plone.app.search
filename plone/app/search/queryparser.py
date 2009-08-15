@@ -1,11 +1,13 @@
 from Products.CMFCore.utils import getToolByName
-import DateTime
+from DateTime import DateTime
+from copy import deepcopy
 
 class QueryParser(object):
     def parseFormquery(self, formquery):
         query = {}
         if not formquery:
             return query
+        formquery=deepcopy(formquery)
         mapping={
             'between': '_between',
             'larger_then_or_equal': '_largerThenOrEqual',
@@ -34,7 +36,7 @@ class QueryParser(object):
                 tmp=meth( row )
 
             query.update(tmp)
-            return query
+        return query
             
 
     # operators
@@ -71,24 +73,39 @@ class QueryParser(object):
         tmp={'creator':self._getCurrentUsername()}
         return tmp
 
-    # XXX check and fix
     # query.i:records=modified&query.o:records=less_then_relative_date&query.v:records=-7
     def _lessThenRelativeDate(self, row):
-        values=row.values
-        now=DateTime.now()
+        values=int(row.values)
+
+        now=DateTime()
         my_date=now + values
-        row.values=[now, my_date]
-        raise ValueError(row.values)
-        return self._between(row)
+        
+        my_date=my_date.earliestTime()
+        row.values=my_date
+        return self._lessThen(row)
+        
+        # place in right order
+        if values>0:
+            low,high=(now, my_date)
+        else:
+            low,high=(my_date, now)
+    
+    # query.i:records=modified&query.o:records=more_then_relative_date&query.v:records=-2
+    def _moreThenRelativeDate(self, row):
+        values=int(row.values)
+
+        now=DateTime()
+        my_date=now + values
+        
+        my_date=my_date.latestTime()
+        row.values=my_date
+        return self._largerThenOrEqual(row)
     
     # XXX check and fix
-    def _moreThenRelativeDate(self, row):
-        values=row.values
-        now=DateTime.now()
-        my_date=now = values
-        return self._largerThenOrEqual(row)
-
-
+    def _relativePathToAbsolutePath(self):
+        # transform ../../.. to proper path for catalog querying
+        pass
+        
     # Helper methods
     def _getCurrentUsername(self):
         mt=getToolByName('portal_membership')
@@ -96,11 +113,6 @@ class QueryParser(object):
         if user:
             return user.getUserName()
         return ''
-        
-    # XXX check and fix
-    def _relativePathToAbsolutePath(self):
-        # transform ../../.. to proper path for catalog querying
-        pass
         
         
         
