@@ -10,8 +10,16 @@
 <body>
 <div tal:define="results view/results">
 
-    <div tal:content="structure view/request/query"></div>
-    
+    <h2 class="previewSearchResultsHeading">
+        <span>
+            Search results
+        </span>
+        <span class="discreet">
+        &mdash;
+        <span><tal:count content="view/getNumberOfResults">1</tal:count> items matching your search terms</span>
+      </span>
+    </h2>
+
     <div tal:condition="not: results">
         <p><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
     </div>
@@ -36,6 +44,7 @@
                       <a href="#"
                          tal:content="author/fullname"
                          tal:omit-tag="not:item/Creator"
+                         tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${author/username}"
                          i18n:name="author">
                         Bob Dobalina
                       </a>
