@@ -1,4 +1,6 @@
 # Static config, for prototype use now.
+# This have to be in the registry later on.
+# For now its static
 
 CRITERION={
          'Subject':{
