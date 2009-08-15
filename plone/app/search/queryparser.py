@@ -1,12 +1,19 @@
 from Products.CMFCore.utils import getToolByName
 from DateTime import DateTime
 from copy import deepcopy
+from Acquisition import aq_parent
 
 class QueryParser(object):
-    def parseFormquery(self, formquery):
-        query = {}
+    
+    def __init__(self, context, request):
+        self.context=context
+        self.request=request
+    
+    def parseFormquery(self, formquery=None):
+        formquery=formquery or getattr(self.request, 'query', None)
         if not formquery:
-            return query
+            return {}
+
         formquery=deepcopy(formquery)
         mapping={
             'between': '_between',
@@ -15,8 +22,11 @@ class QueryParser(object):
             'current_user': '_currentUser',
             'less_then_relative_date': '_lessThenRelativeDate',
             'more_then_relative_date': '_moreThenRelativeDate',
+            'path': '_path',
+            'relative_path': '_relativePath',
         }
         
+        query = {}
         for row in formquery:
             index=row.get('i', None)
             operator=row.get('o', None)
@@ -24,12 +34,11 @@ class QueryParser(object):
             row.index=index
             row.operator=operator
             row.values=values
-
-            if not values:
-                continue
             
             # default behaviour
-            tmp={index:values}
+            tmp={index:{
+                'query':values
+            }}
             
             if mapping.has_key(operator):
                 meth=getattr(self, mapping[operator])
@@ -69,7 +78,9 @@ class QueryParser(object):
         
     # current user
     def _currentUser(self, row):
-        tmp={'creator':self._getCurrentUsername()}
+        tmp={row.index:{
+            'query': self.getCurrentUsername()
+        }}
         return tmp
 
     # query.i:records=modified&query.o:records=less_then_relative_date&query.v:records=-7
@@ -82,12 +93,6 @@ class QueryParser(object):
         my_date=my_date.earliestTime()
         row.values=my_date
         return self._lessThen(row)
-        
-        # place in right order
-        if values>0:
-            low,high=(now, my_date)
-        else:
-            low,high=(my_date, now)
     
     # query.i:records=modified&query.o:records=more_then_relative_date&query.v:records=-2
     def _moreThenRelativeDate(self, row):
@@ -100,21 +105,62 @@ class QueryParser(object):
         row.values=my_date
         return self._largerThenOrEqual(row)
     
-    # XXX check and fix
-    def _relativePathToAbsolutePath(self):
-        # transform ../../.. to proper path for catalog querying
-        pass
+    # query.i:records=path&query.o:records=path&query.v:records=/search/news/
+    # query.i:records=path&query.o:records=path&query.v:records=08fb402c83d0e68cf4d547ea79f7680c
+    def _path(self, row):
+        values=row.values
+        
+        # UID
+        if not '/' in values:
+            row.values=self.getPathByUID(values)
+        
+        tmp={row.index:{
+            'query':row.values
+        }}
+        
+        depth = getattr(row, 'depth', None)
+        if depth is not None: # can be 0
+            tmp[row.index]['depth']=int(depth)
+        return tmp
+        
+    # query.i:records=path&query.o:records=relative_path&query.v:records=../../..
+    def _relativePath(self, row):
+        t=len([x for x in row.values.split('/') if x])
+        
+        obj=self.context
+        for x in xrange(t):
+            obj=aq_parent(obj)
+
+        if obj and hasattr(obj, 'getPhysicalPath'):
+            row.values='/'.join(obj.getPhysicalPath())
+            return self._path(row)
+        
+        row.values='/'.join(obj.getPhysicalPath())
+        return self.path(row)
         
     # Helper methods
-    def _getCurrentUsername(self):
+    def getCurrentUsername(self):
         mt=getToolByName('portal_membership')
         user=mt.getAuthenticatedMember()
         if user:
             return user.getUserName()
         return ''
-        
-        
-        
-        
-            
-        
+
+    def getPathByUID(self):
+        """Returns the path of an object specified in the request by UID"""
+
+        context = self.context
+        request = context.REQUEST
+
+        if not hasattr(request, 'uid'):
+        	return ""
+
+        uid = request['uid']
+
+        reference_tool = getToolByName(context, 'reference_catalog')
+        obj = reference_tool.lookupObject(uid)
+
+        if obj:
+        	return obj.absolute_url()
+
+        return ""
