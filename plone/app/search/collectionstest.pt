@@ -13,75 +13,16 @@
               tal:define="here_url context/@@plone_context_state/object_url"
               tal:condition="request/SearchableText|nothing"
               tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
-    </metal:block>
 
-    <metal:block fill-slot="top_slot"
-                 tal:define="dummy python:request.set('disable_border',1)" />
-    <metal:block fill-slot="column_one_slot" />
-    <metal:block fill-slot="column_two_slot" />
-</head>
+<style type="text/css">
+.queryindex {
+    width: 200px;
+}
+.queryoperator {
+    width: 150px;
+}
+</style>
 
-<body>
-<div metal:fill-slot="main" tal:define="indexes python:view.getConfig()['indexes']">
-
-
-      <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
-        <fieldset>            
-            <div tal:repeat="row context/REQUEST/form/query" tal:condition="exists: context/REQUEST/form/query">
-                    <div class="field">
-                        <select class="queryindex" name="query.i:records">
-                            <tal:index repeat="index python:indexes.keys()">
-                            <option tal:attributes="value index; selected python:row['i'] == index and 'selected' or nothing" 
-                                    tal:content="python:indexes[index]['friendly_name']">Index</option>
-                            </tal:index>
-                        </select>
-                    
-                        <select class="queryoperator" name="query.c:records" tal:define="index_name python:row['i'];
-                                                                   operators python:indexes[index_name]['operators']">
-                            <tal:operators repeat="operator python:operators.keys()">
-                                <option tal:attributes="value operator; 
-                                                        selected python:row['o'] == operator and 'selected' or nothing" 
-                                        tal:content="python:operators[operator]['friendly_name']">Operator</option>                            
-                            </tal:operators>
-                        </select>
-                        <input type="text" name="query.v:records" value="Text for Search"
-                               tal:attributes="value python:row['v']"/>
-
-                        <a href="" class="removeparameter discreet" title="Remove parameter">Remove parameter</a>
-                    </div>
-                </div>
-                
-                <div class="field">
-                    <select class="addparameter" name="dummy">
-                        <option value="empty" selected="selected">Choose your parameter...</option>
-                        <tal:index repeat="index python:indexes.keys()">                        
-                        <option tal:attributes="value index;"
-                                tal:content="python:indexes[index]['friendly_name']">Index</option>
-                        </tal:index>
-                    </select>
-                </div>
-
-
-            <div class="sortingField">
-                <div class="formHelp"><!-- --></div>
-                <label for="sort_on">
-                    Sort on
-                </label>
-                <select name="sort_on" id="sort_on">
-                    <option value="Searchable Text">Searchable Text</option>
-                    <option value="Content type">Content type</option>
-                    <option value="Keywords" selected="selected">Keywords</option>     
-                </select>
-
-                <input type="checkbox" name="sort_order" value="Reversed order" checked="checked" id="sort_order"/>
-                <label for="sort_order">Reversed order</label>            
-            </div>
-            
-        </fieldset>
-      </form>
-<div id="searchresults">
-    
-</div>
 <script tal:content="python:view.getJavascriptConfig()"></script>
 <script type="text/javascript">
 jQuery(function($) {
@@ -97,6 +38,12 @@ jQuery(function($) {
                     .html(operators[operator].friendly_name)
             );
         }
+        UpdateSearch();
+    });
+    $('.queryoperator').live('change', function () {
+        UpdateSearch();
+    });
+    $('.queryvalue').live('keyup', function () {
         UpdateSearch();
     });
     $('.addparameter').live('change', function () {
@@ -122,7 +69,7 @@ jQuery(function($) {
         // Create queryoperator
         var queryoperator = $(document.createElement('select'))
                             .addClass('queryoperator')
-                            .attr('name','query.c:records')
+                            .attr('name','query.o:records')
         $.each(plone_app_search_config.indexes[value].operators, function (i, val) {
             queryoperator.append(
                 $(document.createElement('option'))
@@ -140,6 +87,7 @@ jQuery(function($) {
                     'value': '',
                     'name': 'query.v:records'
                 })
+                .addClass('queryvalue')
         )
         newfield.append(
             $(document.createElement('a'))
@@ -158,16 +106,108 @@ jQuery(function($) {
         UpdateSearch();
         return false;
     });
+    $('#sort_on').live('change', function () {
+        UpdateSearch();
+    })
+    $('#sort_order').live('change', function () {
+        UpdateSearch();
+    })
     function UpdateSearch() {
-        $.get('previewadvancedsearchresults?query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14&query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14&query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14',
-            {},
-            function (data) {
-                $('#searchresults').html(data);
-            });
-        
+        var query = "previewadvancedsearchresults?";
+        var querylist  = [];
+        $('#advancedsearch .queryindex').each(function () {
+            querylist.push('query.i:records=' + $(this).val());
+            querylist.push('query.o:records=' + $(this).parents('.field').children('.queryoperator').val());
+            querylist.push('query.v:records=' + $(this).parents('.field').children('.queryvalue').val());
+        });
+        query += querylist.join('&');
+        query += '&sort_on=' + $('#sort_on').val();
+        if ($('#sort_order:checked').length > 0) {
+            query += '&sort_order=reverse'
+        }
+        console.log(query);
+        if (querylist.length > 0) {
+            $.get(query,
+                {},
+                function (data) {
+                    $('#searchresults').html(data);
+                });
+        } else {
+            $('#searchresults').html('');
+        }
     }
 }(jQuery))
 </script>
+    </metal:block>
+
+    <metal:block fill-slot="top_slot"
+                 tal:define="dummy python:request.set('disable_border',1)" />
+    <metal:block fill-slot="column_one_slot" />
+    <metal:block fill-slot="column_two_slot" />
+</head>
+
+<body>
+<div metal:fill-slot="main" tal:define="indexes python:view.getConfig()['indexes']">
+
+
+      <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
+        <fieldset>            
+            <div tal:repeat="row context/REQUEST/form/query" tal:condition="exists: context/REQUEST/form/query">
+                    <div class="field">
+                        <select class="queryindex" name="query.i:records">
+                            <tal:index repeat="index python:indexes.keys()">
+                            <option tal:attributes="value index; selected python:row['i'] == index and 'selected' or nothing" 
+                                    tal:content="python:indexes[index]['friendly_name']">Index</option>
+                            </tal:index>
+                        </select>
+                    
+                        <select class="queryoperator" name="query.o:records" tal:define="index_name python:row['i'];
+                                                                   operators python:indexes[index_name]['operators']">
+                            <tal:operators repeat="operator python:operators.keys()">
+                                <option tal:attributes="value operator; 
+                                                        selected python:row['o'] == operator and 'selected' or nothing" 
+                                        tal:content="python:operators[operator]['friendly_name']">Operator</option>                            
+                            </tal:operators>
+                        </select>
+                        <input type="text" class="queryvalue" name="query.v:records" value="Text for Search"
+                               tal:attributes="value python:row['v']"/>
+
+                        <a href="" class="removeparameter discreet" title="Remove parameter">Remove parameter</a>
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <select class="addparameter" name="dummy">
+                        <option value="empty" selected="selected">Choose your parameter...</option>
+                        <tal:index repeat="index python:indexes.keys()">                        
+                        <option tal:attributes="value index;"
+                                tal:content="python:indexes[index]['friendly_name']">Index</option>
+                        </tal:index>
+                    </select>
+                </div>
+
+
+            <div class="sortingField">
+                <div class="formHelp"><!-- --></div>
+                <label for="sort_on">
+                    Sort on
+                </label>
+                <select name="sort_on" id="sort_on">
+                    <tal:index repeat="index python:indexes.keys()">
+                        <option tal:attributes="value index; selected python:(request.has_key('sort_on') and request.sort_on == index) and 'selected' or nothing" 
+                                tal:content="python:indexes[index]['friendly_name']">Index</option>
+                    </tal:index>
+                </select>
+
+                <input type="checkbox" name="sort_order" value="reverse" checked="checked" id="sort_order"/>
+                <label for="sort_order">Reversed order</label>
+            </div>
+            
+        </fieldset>
+      </form>
+<div id="searchresults">
+    
+</div>
 </div>
 </body>
 </html>
