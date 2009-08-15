@@ -142,6 +142,7 @@ CRITERION={
                                     'widget': 'DateRangeWidget',
                                     },
                            },
+                  
 
                   },
          'Type':{
@@ -157,7 +158,23 @@ CRITERION={
                                     'widget'        : 'MultipleSelectionWidget',
                                     },
                            },
+                  'values': {
+                           'Page':{
+                                    'friendly_name' : 'Page',
+# possible extension/option
+#                                    'preselected' : True,
+                           },
+                           'Folder':{
+                                    'friendly_name' : 'Folder',
+                           },
+                           'File':{
+                                    'friendly_name' : 'File',
+                           },
+                           'Collection':{
+                                    'friendly_name' : 'Collection',
+                           },
                   },
+         },
          'path':{
                   'friendly_name': 'Location (path)',
                   'description': 'The location of an item in the site (path)',
