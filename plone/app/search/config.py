@@ -113,11 +113,11 @@ CRITERION={
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
-                                    'widget'        : 'StringWidget',
+                                    'widget'        : 'MultipleSelectionWidget',
                                     },
                            'is':{
                                     'friendly_name' : 'Equals',
-                                    'widget'        : 'StringWidget',
+                                    'widget'        : 'MultipleSelectionWidget',
                                     },
                            },
                   },
