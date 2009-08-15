@@ -40,6 +40,10 @@ CRITERION={
                                     'friendly_name': 'After',
                                     'widget': 'DateWidget',
                                     },
+                           'between':{
+                                    'friendly_name': 'Between',
+                                    'widget': 'BetweenDatesWidget',
+                                    },
                            },
                   }, 
          'Description':{
@@ -71,7 +75,12 @@ CRITERION={
                                     'friendly_name': 'After',
                                     'widget': 'DateWidget',
                                     },
+                           'between':{
+                                    'friendly_name': 'Between',
+                                    'widget': 'BetweenDatesWidget',
+                                    },
                            },
+
                   },
          'end':{
                   'friendly_name': 'End date (event)',
@@ -88,7 +97,12 @@ CRITERION={
                                     'friendly_name': 'After',
                                     'widget': 'DateWidget',
                                     },
+                           'between':{
+                                    'friendly_name': 'Between',
+                                    'widget': 'BetweenDatesWidget',
+                                    },
                            },
+
                     
                   },
          'expires':{
@@ -106,7 +120,12 @@ CRITERION={
                                     'friendly_name': 'After',
                                     'widget': 'DateWidget',
                                     },
+                           'between':{
+                                    'friendly_name': 'Between',
+                                    'widget': 'BetweenDatesWidget',
+                                    },
                            },
+
                   },
          'Type':{
                   'friendly_name': 'Item type',
@@ -149,7 +168,12 @@ CRITERION={
                                     'friendly_name': 'After',
                                     'widget': 'DateWidget',
                                     },
+                           'between':{
+                                    'friendly_name': 'Between',
+                                    'widget': 'BetweenDatesWidget',
+                                    },
                            },
+
                   },
          'getRawRelatedItems':{
                   'friendly_name': 'Is related',
@@ -201,7 +225,12 @@ CRITERION={
                                     'friendly_name': 'After',
                                     'widget': 'DateWidget',
                                     },
+                           'between':{
+                                    'friendly_name': 'Between',
+                                    'widget': 'BetweenDatesWidget',
+                                    },
                            },
+
                   },
          'review_state':{
                   'friendly_name': 'State',
@@ -227,5 +256,13 @@ CRITERION={
          }
 
 
-
+#StringWidget
+#DateWidget
+#MultipleSelectionWidget
+#ReferenceWidget
+#RelativePathWidget
+#DateRangeWidget
+#IntegerWidget
+#BetweenWidget
+#BetweenDatesWidget
 
