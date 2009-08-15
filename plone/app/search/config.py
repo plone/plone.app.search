@@ -13,6 +13,18 @@ CRITERION={
                                     'widget'        : 'StringWidget',},
                            },
                   },
+         'Creator':{
+                  'friendly_name': 'Creator',
+                  'operators':{
+                           'is_not':{
+                                    'friendly_name' : 'Does not equal',
+                                    'widget'        : 'StringWidget',
+                                    },
+                          'is':{
+                                    'friendly_name' : 'Equals',
+                                    'widget'        : 'StringWidget',},
+                           },
+                  },
          'created':{
                   'friendly_name': 'Creation date',
                   'operators':{
