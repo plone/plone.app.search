@@ -44,7 +44,10 @@
 }
 .multipleSelectionWidget {
     overflow:auto; 
-    height:6em;
+    height:6.5em;
+}
+.multipleSelectionWidget label {
+    display: block;
 }
 .queryvalue {
     float: left;
@@ -165,16 +168,17 @@ jQuery(function($) {
                 .addClass('queryvalue')
         )
         newfield.append(
-            $(document.createElement('a'))
+            $(document.createElement('input'))
                 .attr({
-                    'title': 'Remove criteria',
-                    'href': ''
+                    'value': 'Remove criteria',
+                    'type': 'submit',
+                    'name': 'removecriteria'
                 })
                 .addClass('removecriteria discreet')
-                .html('Remove criteria')
         )
         field.before(newfield);
         $(this).val('');
+        UpdateSearch();
     });
 
     $('.removecriteria').live('click', function () {
@@ -246,14 +250,21 @@ jQuery(function($) {
                 <dl class="queryvalue multipleSelectionWidget"
                      tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'MultipleSelectionWidget'">
                     <dt class="hiddenStructure">Select...</dt>
-                    <dd><input type="checkbox" name="query.v:records" value="Repeat Value" />Repeat Value</dd>
+                    <dd>
+                    <tal:values repeat="index python:indexes[row.i]['values'].keys()">
+                    <label><input type="checkbox" name="query.v:records:list" tal:attributes="value index"/>
+                    <span tal:content="python:indexes[row.i]['values'][index]['friendly_name']"/>
+                    </label>
+                    </tal:values>
+                    </dd>
                 </dl>
 
                 <dl class="queryvalue locationWidget"
                      tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'LocationWidget'">
                     <dt class="hiddenStructure">Select...</dt>
-                    <dd><input autocomplete="off" type="text" name="query.v:records"
-                               tal:attributes="value python:row['v']" /></dd>
+                    <dd>
+                        <input autocomplete="off" type="text" name="query.v:records" tal:attributes="value python:row['v']" />
+                    </dd>
                 </dl>
 
                 <dl class="queryvalue dateWidget"
