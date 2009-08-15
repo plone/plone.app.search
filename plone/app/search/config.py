@@ -16,24 +16,53 @@ CRITERION={
                   'description': 'The subject',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Does not equal',
+                                    'friendly_name' : 'does not equal',
                                     'widget'        : 'StringWidget',
                                     },
-                          'is':{
-                                    'friendly_name' : 'Equals',
+                           'is':{
+                                    'friendly_name' : 'equals',
                                     'widget'        : 'StringWidget',},
                            },
                   },
+         'Categories':{
+                  'friendly_name': 'Categories',
+                  'description': 'The category the item is put in.',
+                  'operators':{
+                           'is_not':{
+                                    'friendly_name' : 'are not',
+                                    'widget'        : 'MultipleSelectionWidget',
+                                    },
+                           'is':{
+                                    'friendly_name' : 'are',
+                                    'widget'        : 'MultipleSelectionWidget',
+                                },
+                           },
+                  'values': {
+                           'Plone':{
+                                    'friendly_name' : 'Plone',
+                           },
+                           'Zope':{
+                                    'friendly_name' : 'Zope',
+                           },
+                           'Python':{
+                                    'friendly_name' : 'Python',
+                           },
+                           'Javascript':{
+                                    'friendly_name' : 'Javascript',
+                           },
+                        },
+                  },
+
          'Creator':{
                   'friendly_name': 'Creator',
                   'description': 'The creator of the item',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Does not equal',
+                                    'friendly_name' : 'does not equal',
                                     'widget'        : 'StringWidget',
                                     },
                           'is':{
-                                    'friendly_name' : 'Equals',
+                                    'friendly_name' : 'equals',
                                     'widget'        : 'StringWidget',},
                            },
                   },
@@ -42,19 +71,19 @@ CRITERION={
                   'description': 'The time and date an item was created',
                   'operators':{
                            'smaller_or_equal':{
-                                    'friendly_name': 'Before',
+                                    'friendly_name': 'before',
                                     'widget': 'DateWidget',
                                     },
                           'is':{
-                                    'friendly_name': 'On',
+                                    'friendly_name': 'on',
                                     'widget': 'DateWidget',
                                     },
                           'larger_then':{
-                                    'friendly_name': 'After',
+                                    'friendly_name': 'after',
                                     'widget': 'DateWidget',
                                     },
                            'between':{
-                                    'friendly_name': 'Between',
+                                    'friendly_name': 'between',
                                     'widget': 'DateRangeWidget',
                                     },
                            },
@@ -64,12 +93,12 @@ CRITERION={
                   'description': 'Description',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Does not equal',
+                                    'friendly_name' : 'does not equal',
                                     'widget'        : 'StringWidget',
                                     },
                             
                            'is':{
-                                    'friendly_name' : 'Equals',
+                                    'friendly_name' : 'equals',
                                     'widget'        : 'StringWidget'
                                     ,},
                            },
@@ -79,19 +108,19 @@ CRITERION={
                   'description': 'The time and date an item becomes publicly available',
                   'operators':{
                            'smaller_or_equal':{
-                                    'friendly_name': 'Before',
+                                    'friendly_name': 'before',
                                     'widget': 'DateWidget',
                                     },
                           'is':{
-                                    'friendly_name': 'On',
+                                    'friendly_name': 'on',
                                     'widget': 'DateWidget',
                                     },
                           'larger_then':{
-                                    'friendly_name': 'After',
+                                    'friendly_name': 'after',
                                     'widget': 'DateWidget',
                                     },
                            'between':{
-                                    'friendly_name': 'Between',
+                                    'friendly_name': 'between',
                                     'widget': 'DateRangeWidget',
                                     },
                            },
@@ -102,19 +131,19 @@ CRITERION={
                   'description': 'The end date and time of an event',
                   'operators':{
                            'smaller_or_equal':{
-                                    'friendly_name': 'Before',
+                                    'friendly_name': 'before',
                                     'widget': 'DateWidget',
                                     },
                            'is':{
-                                    'friendly_name': 'On',
+                                    'friendly_name': 'on',
                                     'widget': 'DateWidget',
                            },
                            'larger_then':{
-                                    'friendly_name': 'After',
+                                    'friendly_name': 'after',
                                     'widget': 'DateWidget',
                                     },
                            'between':{
-                                    'friendly_name': 'Between',
+                                    'friendly_name': 'between',
                                     'widget': 'DateRangeWidget',
                                     },
                            },
@@ -126,19 +155,19 @@ CRITERION={
                   'description': 'The time and date an item is no longer publicly available',
                   'operators':{
                            'smaller_or_equal':{
-                                    'friendly_name': 'Before',
+                                    'friendly_name': 'before',
                                     'widget': 'DateWidget',
                                     },
                           'is':{
-                                    'friendly_name': 'On',
+                                    'friendly_name': 'on',
                                     'widget': 'DateWidget',
                                     },
                           'larger_then':{
-                                    'friendly_name': 'After',
+                                    'friendly_name': 'after',
                                     'widget': 'DateWidget',
                                     },
                            'between':{
-                                    'friendly_name': 'Between',
+                                    'friendly_name': 'between',
                                     'widget': 'DateRangeWidget',
                                     },
                            },
@@ -150,11 +179,11 @@ CRITERION={
                   'description': 'An item\'s type (e.g. Event)',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Does not equal',
+                                    'friendly_name' : 'does not equal',
                                     'widget'        : 'MultipleSelectionWidget',
                                     },
                            'is':{
-                                    'friendly_name' : 'Equals',
+                                    'friendly_name' : 'equals',
                                     'widget'        : 'MultipleSelectionWidget',
                                     },
                            },
@@ -180,11 +209,11 @@ CRITERION={
                   'description': 'The location of an item in the site (path)',
                   'operators':{
                            'is':{
-                                    'friendly_name' : 'Location in the site',
+                                    'friendly_name' : 'location in the site',
                                     'widget'        : 'ReferenceWidget',
                            },
                            'relative_location':{
-                                    'friendly_name' : 'Location in site relative to the current location',
+                                    'friendly_name' : 'location in site relative to the current location',
                                     'widget'        : 'RelativePathWidget',
                                     },
                            },
@@ -194,19 +223,19 @@ CRITERION={
                   'description': 'The time and date an item was last modified',
                   'operators':{
                            'smaller_or_equal':{
-                                    'friendly_name': 'Before',
+                                    'friendly_name': 'before',
                                     'widget': 'DateWidget',
                                     },
                            'is':{
-                                    'friendly_name': 'On',
+                                    'friendly_name': 'on',
                                     'widget': 'DateWidget',
                            },
                            'larger_then':{
-                                    'friendly_name': 'After',
+                                    'friendly_name': 'after',
                                     'widget': 'DateWidget',
                                     },
                            'between':{
-                                    'friendly_name': 'Between',
+                                    'friendly_name': 'between',
                                     'widget': 'DateRangeWidget',
                                     },
                            },
@@ -227,11 +256,11 @@ CRITERION={
                   'description': 'Text search of an item\'s contents',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Does not equal',
+                                    'friendly_name' : 'does not equal',
                                     'widget'        : 'StringWidget',
                                     },
                            'is':{
-                                    'friendly_name' : 'Equals',
+                                    'friendly_name' : 'equals',
                                     'widget'        : 'StringWidget',
                                     },
                            },
@@ -241,11 +270,11 @@ CRITERION={
                   'description': 'Short name of the item',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Does not equal',
+                                    'friendly_name' : 'does not equal',
                                     'widget'        : 'StringWidget',
                                     },
                            'is':{
-                                    'friendly_name' : 'Equals',
+                                    'friendly_name' : 'equals',
                                     'widget'        : 'StringWidget',
                                     },
                            },
@@ -255,19 +284,19 @@ CRITERION={
                   'description': 'The start date and time of an event',
                   'operators':{
                            'smaller_or_equal':{
-                                    'friendly_name': 'Before',
+                                    'friendly_name': 'before',
                                     'widget': 'DateWidget',
                                     },
                           'is':{
-                                    'friendly_name': 'On',
+                                    'friendly_name': 'on',
                                     'widget': 'DateWidget',
                                     },
                           'larger_then':{
-                                    'friendly_name': 'After',
+                                    'friendly_name': 'after',
                                     'widget': 'DateWidget',
                                     },
                            'between':{
-                                    'friendly_name': 'Between',
+                                    'friendly_name': 'between',
                                     'widget': 'DateRangeWidget',
                                     },
                            },
@@ -278,21 +307,45 @@ CRITERION={
                   'description': 'An item\'s workflow state (e.g.published)',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Equals',
-                                    'widget'        : 'SelectionWidget',
+                                    'friendly_name' : 'does not equal',
+                                    'widget'        : 'MultipleSelectionWidget',
                                     },
+                           'is':{
+                                    'friendly_name' : 'equals',
+                                    'widget'        : 'MultipleSelectionWidget',
+                                },
                            },
+                  'values': {
+                           'Published':{
+                                    'friendly_name' : 'Published',
+                           },
+                           'Private':{
+                                    'friendly_name' : 'Private',
+                           },
+                           'Pending':{
+                                    'friendly_name' : 'Pending',
+                           },
+                           'Rejected':{
+                                    'friendly_name' : 'Rejected',
+                           },
+                           'Sent_back':{
+                                    'friendly_name' : 'Sent Back',
+                           },
+                           'Draft':{
+                                    'friendly_name' : 'Draft',
+                           },
+                      },
                   },
          'Title':{
                   'friendly_name': 'Title',
                   'description': 'Title of the item',
                   'operators':{
                            'is_not':{
-                                    'friendly_name' : 'Does not equal',
+                                    'friendly_name' : 'does not equal',
                                     'widget'        : 'StringWidget',
                                     },
                            'is':{
-                                    'friendly_name' : 'Equals',
+                                    'friendly_name' : 'equals',
                                     'widget'        : 'StringWidget',},
                            },
                   },
