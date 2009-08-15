@@ -1,10 +1,15 @@
 # Static config, for prototype use now.
 # This have to be in the registry later on.
-# For now its static
+
+# CRITERION contains the indexes and operators
+# SORTABLES contains the sortables
+
+
 
 CRITERION={
          'Subject':{
                   'friendly_name': 'Subject',
+                  'description': 'The subject',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
@@ -17,6 +22,7 @@ CRITERION={
                   },
          'Creator':{
                   'friendly_name': 'Creator',
+                  'description': 'The creator of the item',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
@@ -29,6 +35,7 @@ CRITERION={
                   },
          'created':{
                   'friendly_name': 'Creation date',
+                  'description': 'The time and date an item was created',
                   'operators':{
                            'smaller_or_equal':{
                                     'friendly_name': 'Before',
@@ -50,6 +57,7 @@ CRITERION={
                   }, 
          'Description':{
                   'friendly_name': 'Description',
+                  'description': 'Description',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
@@ -64,6 +72,7 @@ CRITERION={
                   },
          'effective':{
                   'friendly_name': 'Effective date (publish date)',
+                  'description': 'The time and date an item becomes publicly available',
                   'operators':{
                            'smaller_or_equal':{
                                     'friendly_name': 'Before',
@@ -86,6 +95,7 @@ CRITERION={
                   },
          'end':{
                   'friendly_name': 'End date (event)',
+                  'description': 'The end date and time of an event',
                   'operators':{
                            'smaller_or_equal':{
                                     'friendly_name': 'Before',
@@ -109,6 +119,7 @@ CRITERION={
                   },
          'expires':{
                   'friendly_name': 'Expiration date',
+                  'description': 'The time and date an item is no longer publicly available',
                   'operators':{
                            'smaller_or_equal':{
                                     'friendly_name': 'Before',
@@ -131,6 +142,7 @@ CRITERION={
                   },
          'Type':{
                   'friendly_name': 'Item type',
+                  'description': 'An item\'s type (e.g. Event)',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
@@ -144,6 +156,7 @@ CRITERION={
                   },
          'path':{
                   'friendly_name': 'Location (path)',
+                  'description': 'The location of an item in the site (path)',
                   'operators':{
                            'is':{
                                     'friendly_name' : 'Location in the site',
@@ -157,6 +170,7 @@ CRITERION={
                   },
          'modified':{
                   'friendly_name': 'Modification date',
+                  'description': 'The time and date an item was last modified',
                   'operators':{
                            'smaller_or_equal':{
                                     'friendly_name': 'Before',
@@ -178,7 +192,8 @@ CRITERION={
 
                   },
          'getRawRelatedItems':{
-                  'friendly_name': 'Is related',
+                  'friendly_name': 'Related to',
+                  'description': 'Find items related to the selected items',
                   'operators':{
                            'to':{
                                     'friendly_name' : 'to',
@@ -188,6 +203,7 @@ CRITERION={
                   },
          'SearchableText':{
                   'friendly_name': 'Search text',
+                  'description': 'Text search of an item\'s contents',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
@@ -201,6 +217,7 @@ CRITERION={
                   },
          'getId':{
                   'friendly_name': 'Short name',
+                  'description': 'Short name of the item',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
@@ -214,6 +231,7 @@ CRITERION={
                   },
          'start':{
                   'friendly_name': 'Start date',
+                  'description': 'The start date and time of an event',
                   'operators':{
                            'smaller_or_equal':{
                                     'friendly_name': 'Before',
@@ -236,6 +254,7 @@ CRITERION={
                   },
          'review_state':{
                   'friendly_name': 'State',
+                  'description': 'An item\'s workflow state (e.g.published)',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Equals',
@@ -245,6 +264,7 @@ CRITERION={
                   },
          'Title':{
                   'friendly_name': 'Title',
+                  'description': 'Title of the item',
                   'operators':{
                            'is_not':{
                                     'friendly_name' : 'Does not equal',
@@ -258,13 +278,80 @@ CRITERION={
          }
 
 
-#StringWidget
-#DateWidget
-#MultipleSelectionWidget
-#ReferenceWidget
-#RelativePathWidget
-#DateRangeWidget
-#IntegerWidget
-#RangeWidget
-
-
+SORTABLES={
+         'Creator':{
+                  'friendly_name' : 'Creator',
+                  'description' : 'The creator (username) of the item',
+         },
+         'Type':{
+                  'friendly_name' : 'Item Type',
+                  'description' : 'The type of the item',
+         },
+         'getId':{  
+                  'friendly_name' : 'Short name',
+                  'description' : 'The short name of the item',
+         },
+# same as getId?
+#         'id':{  
+#                  'friendly_name' : 'ID',
+#                  'description' : '',
+#         },
+# this is portal type, such as document (not page), topic (not collection)
+#         'portal_type':{  
+#                  'friendly_name' : '',
+#                  'description' : '',
+#         },
+         'review_state':{  
+                  'friendly_name' : 'State',
+                  'description' : 'An item\'s workflow state (e.g.published)',
+         },
+         'sortable_title':{  
+                  'friendly_name' : 'Title',
+                  'description' : 'An item\'s title transformed for sorting',
+         },
+# Same as Modification Date?
+#         'Date':{  
+#                  'friendly_name' : 'Date',
+#                  'description' : '',
+#         },
+         'created':{  
+                  'friendly_name' : 'Creation date',
+                  'description' : 'The time and date an item was created',
+         },
+         'effective':{  
+                  'friendly_name' : 'Effective date',
+                  'description' : 'The time and date an item becomes publicly available',
+         },
+         'end':{  
+                  'friendly_name' : 'End date (Event)',
+                  'description' : 'The end date and time of an event',
+         },
+         'expires':{  
+                  'friendly_name' : 'Expire date',
+                  'description' : 'The time and date an item is no longer publicly available',
+         },
+         'modified':{  
+                  'friendly_name' : 'Modification date',
+                  'description' : 'The time and date an item was last modified',
+         },
+         'start':{  
+                  'friendly_name' : 'Start date',
+                  'description' : 'The start date and time of an event',
+         },
+         'Subject':{  
+                  'friendly_name' : 'Categories',
+                  'description' : 'The keywords used to describe an item',
+         },
+         'getEventType':{  
+                  'friendly_name' : 'Event type',
+                  'description' : 'The type of event',
+         },
+         'getRawRelatedItems':{  
+                  'friendly_name' : 'Related items',
+                  'description' : 'Related items',
+         },
+         'relevence':{
+                  'friendly_name' : 'Relevence',
+                  'description' : 'Relevence',
+         }
+}
