@@ -21,7 +21,6 @@
     template="collectionstest.pt"
     />
 
-
 <browser:page
     name="previewadvancedsearchresults"
     class=".browser.AdvancedSearch"
@@ -30,7 +29,12 @@
     template="previewsearchresults.pt"
     />
 
+<browser:page
+    name="previewadvancedsearchnumberofresults"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="Products.CMFCore.interfaces.IFolderish"
+    attribute="getFormattedNumberOfResults"
+    />
 
-
-    
 </configure>

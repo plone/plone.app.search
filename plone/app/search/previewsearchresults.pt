@@ -10,7 +10,7 @@
 <body>
 <div tal:define="results view/results">
 
-    <h2 class="previewSearchResultsHeading">
+    <h2 class="previewsearchResultsHeading">
         <span>
             Search results
         </span>
