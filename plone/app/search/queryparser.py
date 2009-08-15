@@ -1,4 +1,4 @@
-operator'o'from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.utils import getToolByName
 import DateTime
 
 class QueryParser(object):
@@ -6,14 +6,13 @@ class QueryParser(object):
         query = {}
         if not formquery:
             return query
-        
         mapping={
             'between': '_between',
             'larger_then_or_equal': '_largerThenOrEqual',
             'less_then': '_lessThen',
             'current_user': '_currentUser',
             'less_then_relative_date': '_lessThenRelativeDate',
-            'between_relative_date': '_betweenRelativeDates'
+            'more_then_relative_date': '_moreThenRelativeDate'
         }
         
         for row in formquery:
@@ -30,7 +29,6 @@ class QueryParser(object):
             # default behaviour
             tmp={index:values}
             
-            # exceptions
             if mapping.has_key(operator):
                 meth=getattr(self, mapping[operator])
                 tmp=meth( row )
@@ -41,7 +39,7 @@ class QueryParser(object):
 
     # operators
     
-    # query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14
+    # query.i:records=modified&query.o:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14
     # v[0] >= x > v[1]
     def _between(self, row):
         tmp={row.index:{
@@ -50,7 +48,7 @@ class QueryParser(object):
         }}
         return tmp
             
-    # query.i:records=modified&query.c:records=larger_then_or_equal&query.v:records=2009/08/12
+    # query.i:records=modified&query.o:records=larger_then_or_equal&query.v:records=2009/08/12
     # x >= value
     def _largerThenOrEqual(self, row):
         tmp={row.index:{
@@ -59,7 +57,7 @@ class QueryParser(object):
         }}
         return tmp
     
-    # query.i:records=modified&query.c:records=less_then&query.v:records=2009/08/14
+    # query.i:records=modified&query.o:records=less_then&query.v:records=2009/08/14
     # x < value
     def _lessThen(self, row):
         tmp={row.index:{
@@ -74,6 +72,7 @@ class QueryParser(object):
         return tmp
 
     # XXX check and fix
+    # query.i:records=modified&query.o:records=less_then_relative_date&query.v:records=-7
     def _lessThenRelativeDate(self, row):
         values=row.values
         now=DateTime.now()
