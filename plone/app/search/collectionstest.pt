@@ -16,70 +16,97 @@
 
 <style type="text/css">
 .queryindex {
+    display: block;
     width: 200px;
+    float: left;
+    margin-right: 0.5em;
 }
 .queryoperator {
+    display: block;
     width: 150px;
+    float: left;
+    margin-right: 0.5em;
+}
+.previewSearchResultsHeading {
+    margin-top: 1em;
+}
+.addcriteria {
+    width: 200px;
 }
 </style>
 
 <script tal:content="python:view.getJavascriptConfig()"></script>
 <script type="text/javascript">
 jQuery(function($) {
+
+    // Create a select menu
+    function CreateSelect(values, selectedvalue, class, name) {
+        // Create select
+        var select = $(document.createElement('select'))
+                            .addClass(class)
+                            .attr('name', name)
+        $.each(values, function (i, val) {
+            var option = $(document.createElement('option'))
+                            .attr('value', i)
+                            .html(val.friendly_name)
+            if (i == selectedvalue) {
+                option.attr('selected', 'selected');
+            }
+            select.append(option);
+        });
+        return select;
+    }
+
+    // Create a queryindex select menu
+    function CreateQueryIndex(value) {
+        return CreateSelect(plone_app_search_config.indexes,
+                            value,
+                            'queryindex',
+                            'query.i:records');
+    }
+
+    // Create a queryoperator select menu
+    function CreateQueryOperator(index, value) {
+        return CreateSelect(plone_app_search_config.indexes[index].operators,
+                            value,
+                            'queryoperator',
+                            'query.o:records');
+    }
+
+    // Enhance for javascript browsers
+    $(document).ready(function () {
+        $('div.queryindex').each(function () {
+            $(this).replaceWith(CreateQueryIndex($(this).children('input').val()));
+        });
+        $('div.queryoperator').each(function () {
+            $(this).replaceWith(CreateQueryOperator($(this).parents('.field').children('.queryindex').val(),
+                                                    $(this).children('input').val()));
+        });
+        $(".formControls").hide();
+    });
+
     $('.queryindex').live('change', function () {
-        var value = $(this).children(':selected')[0].value;
-        var queryoperator = $(this).parent().children('.queryoperator');
-        queryoperator.children().remove();
-        var operators = plone_app_search_config.indexes[value].operators;
-        for (operator in operators) {
-            queryoperator.append(
-                $(document.createElement('option'))
-                    .attr('value', operator)
-                    .html(operators[operator].friendly_name)
-            );
-        }
+        $(this).parent().children('.queryoperator')
+            .replaceWith(CreateQueryOperator($(this).children(':selected')[0].value, ''));
         UpdateSearch();
     });
-    $('.queryoperator').live('change', function () {
+
+    $('#sort_on,#sort_order,.queryoperator').live('change', function () {
         UpdateSearch();
     });
+
     $('.queryvalue').live('keyup', function () {
         UpdateSearch();
     });
-    $('.addparameter').live('change', function () {
+
+    $('.addcriteria').live('change', function () {
         var value = $(this).children(':selected')[0].value;
         var field = $(this).parents('.field');
         var newfield = $(document.createElement('div'))
                             .addClass('field');
 
-        // Create queryindex
-        var queryindex = $(document.createElement('select'))
-                            .addClass('queryindex')
-                            .attr('name','query.i:records')
-        $.each(plone_app_search_config.indexes, function (i, val) {
-            var option = $(document.createElement('option'))
-                            .attr('value', i)
-                            .html(val.friendly_name)
-            if (i == value) {
-                option.attr('selected', 'selected');
-            }
-            queryindex.append(option)
-        });
-
-        // Create queryoperator
-        var queryoperator = $(document.createElement('select'))
-                            .addClass('queryoperator')
-                            .attr('name','query.o:records')
-        $.each(plone_app_search_config.indexes[value].operators, function (i, val) {
-            queryoperator.append(
-                $(document.createElement('option'))
-                    .attr('value', i)
-                    .html(val.friendly_name)
-            )
-        });
-
-        newfield.append(queryindex);
-        newfield.append(queryoperator);
+        newfield.append(CreateQueryIndex(value));
+        newfield.append(CreateQueryOperator(value,''));
         newfield.append(
             $(document.createElement('input'))
                 .attr({
@@ -92,26 +119,22 @@ jQuery(function($) {
         newfield.append(
             $(document.createElement('a'))
                 .attr({
-                    'title': 'Remove parameter',
+                    'title': 'Remove criteria',
                     'href': ''
                 })
-                .addClass('removeparameter discreet')
-                .html('Remove parameter')
+                .addClass('removecriteria discreet')
+                .html('Remove criteria')
         )
         field.before(newfield);
-        $(this).val('empty');
+        $(this).val('');
     });
-    $('.removeparameter').live('click', function () {
+
+    $('.removecriteria').live('click', function () {
         $(this).parents('.field').remove();
         UpdateSearch();
         return false;
     });
-    $('#sort_on').live('change', function () {
-        UpdateSearch();
-    })
-    $('#sort_order').live('change', function () {
-        UpdateSearch();
-    })
+
     function UpdateSearch() {
         var query = "previewadvancedsearchresults?";
         var querylist  = [];
@@ -125,16 +148,11 @@ jQuery(function($) {
         if ($('#sort_order:checked').length > 0) {
             query += '&sort_order=reverse'
         }
-        console.log(query);
-        if (querylist.length > 0) {
-            $.get(query,
-                {},
-                function (data) {
-                    $('#searchresults').html(data);
-                });
-        } else {
-            $('#searchresults').html('');
-        }
+        $.get(query,
+            {},
+            function (data) {
+                $('#searchresults').html(data);
+            });
     }
 }(jQuery))
 </script>
@@ -148,44 +166,45 @@ jQuery(function($) {
 
 <body>
 <div metal:fill-slot="main" tal:define="indexes python:view.getConfig()['indexes']">
+    <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
+        <fieldset>
+            <legend>Criteria</legend>
+            <div class="field"
+                 tal:repeat="row context/REQUEST/form/query"
+                 tal:condition="exists: context/REQUEST/form/query">
 
-
-      <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
-        <fieldset>            
-            <div tal:repeat="row context/REQUEST/form/query" tal:condition="exists: context/REQUEST/form/query">
-                    <div class="field">
-                        <select class="queryindex" name="query.i:records">
-                            <tal:index repeat="index python:indexes.keys()">
-                            <option tal:attributes="value index; selected python:row['i'] == index and 'selected' or nothing" 
-                                    tal:content="python:indexes[index]['friendly_name']">Index</option>
-                            </tal:index>
-                        </select>
-                    
-                        <select class="queryoperator" name="query.o:records" tal:define="index_name python:row['i'];
-                                                                   operators python:indexes[index_name]['operators']">
-                            <tal:operators repeat="operator python:operators.keys()">
-                                <option tal:attributes="value operator; 
-                                                        selected python:row['o'] == operator and 'selected' or nothing" 
-                                        tal:content="python:operators[operator]['friendly_name']">Operator</option>                            
-                            </tal:operators>
-                        </select>
-                        <input type="text" class="queryvalue" name="query.v:records" value="Text for Search"
-                               tal:attributes="value python:row['v']"/>
-
-                        <a href="" class="removeparameter discreet" title="Remove parameter">Remove parameter</a>
-                    </div>
-                </div>
-                
-                <div class="field">
-                    <select class="addparameter" name="dummy">
-                        <option value="empty" selected="selected">Choose your parameter...</option>
-                        <tal:index repeat="index python:indexes.keys()">                        
-                        <option tal:attributes="value index;"
-                                tal:content="python:indexes[index]['friendly_name']">Index</option>
-                        </tal:index>
-                    </select>
+                <div class="queryindex">
+                    <input type="hidden" name="query.i:records"
+                           tal:attributes="value row/i" />
+                    <span tal:content="python:indexes[row.i]['friendly_name']"/>
                 </div>
 
+                <div class="queryoperator">
+                    <input type="hidden" name="query.o:records"
+                           tal:attributes="value row/o" />
+                    <span tal:content="python:indexes[row.i]['operators'][row.o]['friendly_name']"/>
+                </div>
+
+                <input autocomplete="off" type="text" class="queryvalue" name="query.v:records" value="Text for Search"
+                       tal:attributes="value python:row['v']"/>
+
+                <a href="" class="removecriteria discreet" title="Remove criteria">Remove criteria</a>
+            </div>
+
+            <div class="field">
+                <label for="dummy" class="hiddenStructure">Add criteria</label>
+                <select class="addcriteria" name="dummy">
+                    <option value="" selected="selected">Add criteria...</option>
+                    <tal:index repeat="index python:indexes.keys()">
+                    <option tal:attributes="value index;"
+                            tal:content="python:indexes[index]['friendly_name']">Index</option>
+                    </tal:index>
+                </select>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Display options</legend>
 
             <div class="sortingField">
                 <div class="formHelp"><!-- --></div>
@@ -202,13 +221,17 @@ jQuery(function($) {
                 <input type="checkbox" name="sort_order" value="reverse" checked="checked" id="sort_order"/>
                 <label for="sort_order">Reversed order</label>
             </div>
-            
+
         </fieldset>
-      </form>
-<div id="searchresults">
-    
+
+        <div class="formControls">
+            <input type="submit" value="Save" name="form.button.save" class="context"/>
+        </div>
+    </form>
+    <div id="searchresults" tal:content="structure view/previewSearchResults">
+    </div>
 </div>
-</div>
+
 </body>
 </html>
 
