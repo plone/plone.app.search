@@ -165,7 +165,9 @@ jQuery(function($) {
 </head>
 
 <body>
-<div metal:fill-slot="main" tal:define="indexes python:view.getConfig()['indexes']">
+<div metal:fill-slot="main" tal:define="config python:view.getConfig();
+                                        indexes config/indexes;
+                                        sortable_indexes config/sortable_indexes">
     <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
         <fieldset>
             <legend>Criteria</legend>
@@ -212,9 +214,9 @@ jQuery(function($) {
                     Sort on
                 </label>
                 <select name="sort_on" id="sort_on">
-                    <tal:index repeat="index python:indexes.keys()">
+                    <tal:index repeat="index python:sortable_indexes.keys()">
                         <option tal:attributes="value index; selected python:(request.has_key('sort_on') and request.sort_on == index) and 'selected' or nothing" 
-                                tal:content="python:indexes[index]['friendly_name']">Index</option>
+                                tal:content="python:sortable_indexes[index]['friendly_name']">Index</option>
                     </tal:index>
                 </select>
 

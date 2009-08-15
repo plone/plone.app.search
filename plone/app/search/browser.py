@@ -84,7 +84,7 @@ class AdvancedSearch(BrowserView):
         return self.query
 
     def getConfig(self):
-        return {'indexes':CRITERION, 'sortable_indes': SORTABLES}
+        return {'indexes':CRITERION, 'sortable_indexes': SORTABLES}
         # we wrap this in a dictionary so we can add more configuration data 
         # to the payload in the future. This is data that will be fetched 
         # by a browser AJAX call
