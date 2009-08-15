@@ -1,4 +1,5 @@
-from Products.CMFCore.utils import getToolByName
+operator'o'from Products.CMFCore.utils import getToolByName
+import DateTime
 
 class QueryParser(object):
     def parseFormquery(self, formquery):
@@ -11,12 +12,17 @@ class QueryParser(object):
             'larger_then_or_equal': '_largerThenOrEqual',
             'less_then': '_lessThen',
             'current_user': '_currentUser',
+            'less_then_relative_date': '_lessThenRelativeDate',
+            'between_relative_date': '_betweenRelativeDates'
         }
-            
+        
         for row in formquery:
-            index=row.get('i')
-            values=row.get('v')
-            criteria=row.get('c')
+            index=row.get('i', None)
+            operator=row.get('o', None)
+            values=row.get('v', None)
+            row.index=index
+            row.operator=operator
+            row.values=values
 
             if not values:
                 continue
@@ -25,32 +31,30 @@ class QueryParser(object):
             tmp={index:values}
             
             # exceptions
-            if mapping.has_key(criteria):
-                meth=getattr(self, mapping[criteria])
-                tmp=meth( (index,criteria,values) )
+            if mapping.has_key(operator):
+                meth=getattr(self, mapping[operator])
+                tmp=meth( row )
 
             query.update(tmp)
             return query
             
 
-    # Criteria
+    # operators
     
     # query.i:records=modified&query.c:records=between&query.v:records:list=2009/08/12&query.v:records:list=2009/08/14
     # v[0] >= x > v[1]
     def _between(self, row):
-        index,criteria,values=row
-        tmp={index:{
-            'query':values,
+        tmp={row.index:{
+            'query':row.values,
             'range':'minmax'
         }}
         return tmp
             
     # query.i:records=modified&query.c:records=larger_then_or_equal&query.v:records=2009/08/12
     # x >= value
-    def _largerTheOrEqual(self, row):
-        index,criteria,values=row
-        tmp={index:{
-            'query':values,
+    def _largerThenOrEqual(self, row):
+        tmp={row.index:{
+            'query':row.values,
             'range':'min'
         }}
         return tmp
@@ -58,32 +62,49 @@ class QueryParser(object):
     # query.i:records=modified&query.c:records=less_then&query.v:records=2009/08/14
     # x < value
     def _lessThen(self, row):
-        index,criteria,values=row
-        tmp={index:{
-            'query':values,
+        tmp={row.index:{
+            'query':row.values,
             'range':'max'
         }}
         return tmp
         
     # current user
     def _currentUser(self, row):
-        index,criteria,values=row
-        tmp={'creator':self.getCurrentUsername()}
+        tmp={'creator':self._getCurrentUsername()}
         return tmp
-        
+
+    # XXX check and fix
     def _lessThenRelativeDate(self, row):
-        index,criteria,values=row
+        values=row.values
         now=DateTime.now()
         my_date=now + values
-        tmp={index:{
-            'query':[now, my_date],
-            'range':'max'
-        }}
-        return tmp
-        
+        row.values=[now, my_date]
+        raise ValueError(row.values)
+        return self._between(row)
+    
+    # XXX check and fix
+    def _moreThenRelativeDate(self, row):
+        values=row.values
+        now=DateTime.now()
+        my_date=now = values
+        return self._largerThenOrEqual(row)
+
+
+    # Helper methods
     def _getCurrentUsername(self):
         mt=getToolByName('portal_membership')
         user=mt.getAuthenticatedMember()
         if user:
             return user.getUserName()
         return ''
+        
+    # XXX check and fix
+    def _relativePathToAbsolutePath(self):
+        # transform ../../.. to proper path for catalog querying
+        pass
+        
+        
+        
+        
+            
+        

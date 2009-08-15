@@ -53,7 +53,7 @@ class AdvancedSearch(BrowserView):
         
         
     def getNumberOfResults(self):
-        return len(self._results())
+        return len(self.results())
 
     def results(self):
         if self._results is None:

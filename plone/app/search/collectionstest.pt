@@ -40,7 +40,7 @@
                                                                    operators python:indexes[index_name]['operators']">
                             <tal:operators repeat="operator python:operators.keys()">
                                 <option tal:attributes="value operator; 
-                                                        selected python:row['c'] == operator and 'selected' or nothing" 
+                                                        selected python:row['o'] == operator and 'selected' or nothing" 
                                         tal:content="python:operators[operator]['friendly_name']">Operator</option>                            
                             </tal:operators>
                         </select>
