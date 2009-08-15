@@ -14,7 +14,7 @@ class QueryParser(object):
             'less_then': '_lessThen',
             'current_user': '_currentUser',
             'less_then_relative_date': '_lessThenRelativeDate',
-            'more_then_relative_date': '_moreThenRelativeDate'
+            'more_then_relative_date': '_moreThenRelativeDate',
         }
         
         for row in formquery:
@@ -37,7 +37,6 @@ class QueryParser(object):
 
             query.update(tmp)
         return query
-            
 
     # operators
     

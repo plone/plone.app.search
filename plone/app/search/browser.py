@@ -64,7 +64,12 @@ class AdvancedSearch(BrowserView):
         # parse query
         queryparser=QueryParser()
         query = queryparser.parseFormquery(self.request.get('query',None))
+        
+        # sorting
+        query['sort_on'] = getattr(self.request, 'sort_on', 'getObjPositionInParent')
+        query['sort_order'] = getattr(self.request, 'sort_order', 'ascending')
 
+        # debug
         self.query = query
     
         # Get me my stuff!
