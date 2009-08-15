@@ -42,7 +42,7 @@ CRITERION={
                                     },
                            'between':{
                                     'friendly_name': 'Between',
-                                    'widget': 'BetweenDatesWidget',
+                                    'widget': 'DateRangeWidget',
                                     },
                            },
                   }, 
@@ -77,7 +77,7 @@ CRITERION={
                                     },
                            'between':{
                                     'friendly_name': 'Between',
-                                    'widget': 'BetweenDatesWidget',
+                                    'widget': 'DateRangeWidget',
                                     },
                            },
 
@@ -99,7 +99,7 @@ CRITERION={
                                     },
                            'between':{
                                     'friendly_name': 'Between',
-                                    'widget': 'BetweenDatesWidget',
+                                    'widget': 'DateRangeWidget',
                                     },
                            },
 
@@ -122,7 +122,7 @@ CRITERION={
                                     },
                            'between':{
                                     'friendly_name': 'Between',
-                                    'widget': 'BetweenDatesWidget',
+                                    'widget': 'DateRangeWidget',
                                     },
                            },
 
@@ -170,7 +170,7 @@ CRITERION={
                                     },
                            'between':{
                                     'friendly_name': 'Between',
-                                    'widget': 'BetweenDatesWidget',
+                                    'widget': 'DateRangeWidget',
                                     },
                            },
 
@@ -227,7 +227,7 @@ CRITERION={
                                     },
                            'between':{
                                     'friendly_name': 'Between',
-                                    'widget': 'BetweenDatesWidget',
+                                    'widget': 'DateRangeWidget',
                                     },
                            },
 
@@ -263,6 +263,6 @@ CRITERION={
 #RelativePathWidget
 #DateRangeWidget
 #IntegerWidget
-#BetweenWidget
-#BetweenDatesWidget
+#RangeWidget
+
 
