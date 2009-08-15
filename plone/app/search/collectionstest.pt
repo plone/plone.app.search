@@ -15,23 +15,23 @@
               tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
 
 <style type="text/css">
-.queryindex {
+.queryindex, .addIndex {
     display: block;
     width: 200px;
     float: left;
     margin-right: 0.5em;
 }
-.queryoperator {
+.queryoperator, .addOperator {
     display: block;
     width: 150px;
     float: left;
     margin-right: 0.5em;
 }
+.queryresults {
+    float: right;
+}
 .previewSearchResultsHeading {
     margin-top: 1em;
-}
-.addcriteria {
-    width: 200px;
 }
 </style>
 
@@ -76,6 +76,11 @@ jQuery(function($) {
     // Enhance for javascript browsers
     $(document).ready(function () {
         $('div.queryindex').each(function () {
+            $(this).before(
+                $(document.createElement('div'))
+                    .addClass('queryresults discreet')
+                    .html('')
+            )
             $(this).replaceWith(CreateQueryIndex($(this).children('input').val()));
         });
         $('div.queryoperator').each(function () {
@@ -83,6 +88,8 @@ jQuery(function($) {
                                                     $(this).children('input').val()));
         });
         $(".formControls").hide();
+        $(".addIndexButton").hide();
+        UpdateSearch();
     });
 
     $('.queryindex').live('change', function () {
@@ -99,12 +106,17 @@ jQuery(function($) {
         UpdateSearch();
     });
 
-    $('.addcriteria').live('change', function () {
+    $('.addIndex').live('change', function () {
         var value = $(this).children(':selected')[0].value;
         var field = $(this).parents('.field');
         var newfield = $(document.createElement('div'))
                             .addClass('field');
 
+        newfield.append(
+                $(document.createElement('div'))
+                    .addClass('queryresults discreet')
+                    .html('')
+            )
         newfield.append(CreateQueryIndex(value));
         newfield.append(CreateQueryOperator(value,''));
         newfield.append(
@@ -112,7 +124,8 @@ jQuery(function($) {
                 .attr({
                     'type': 'text',
                     'value': '',
-                    'name': 'query.v:records'
+                    'name': 'query.v:records',
+                    'autocomplete': 'off'
                 })
                 .addClass('queryvalue')
         )
@@ -139,20 +152,21 @@ jQuery(function($) {
         var query = "previewadvancedsearchresults?";
         var querylist  = [];
         $('#advancedsearch .queryindex').each(function () {
+            var results = $(this).parents('.field').children('.queryresults');
             querylist.push('query.i:records=' + $(this).val());
             querylist.push('query.o:records=' + $(this).parents('.field').children('.queryoperator').val());
             querylist.push('query.v:records=' + $(this).parents('.field').children('.queryvalue').val());
+
+            $.get('previewadvancedsearchnumberofresults?' + querylist.join('&'),
+                  {},
+                  function (data) { results.html(data); });
         });
         query += querylist.join('&');
         query += '&sort_on=' + $('#sort_on').val();
         if ($('#sort_order:checked').length > 0) {
             query += '&sort_order=reverse'
         }
-        $.get(query,
-            {},
-            function (data) {
-                $('#searchresults').html(data);
-            });
+        $.get(query, {}, function (data) { $('#searchresults').html(data); });
     }
 }(jQuery))
 </script>
@@ -167,7 +181,9 @@ jQuery(function($) {
 <body>
 <div metal:fill-slot="main" tal:define="config python:view.getConfig();
                                         indexes config/indexes;
-                                        sortable_indexes config/sortable_indexes">
+                                        sortable_indexes config/sortable_indexes;
+                                        addindexselected python:request.has_key('addindex') and request.addindex != '';
+                                        addoperatorselected python:request.has_key('addoperator') and request.addoperator != ''">
     <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
         <fieldset>
             <legend>Criteria</legend>
@@ -193,15 +209,51 @@ jQuery(function($) {
                 <a href="" class="removecriteria discreet" title="Remove criteria">Remove criteria</a>
             </div>
 
+            <div class="field" tal:condition="python: addindexselected and addoperatorselected">
+
+                <div class="queryindex">
+                    <input type="hidden" name="query.i:records"
+                           tal:attributes="value context/REQUEST/form/addindex" />
+                    <span tal:content="python:indexes[request.form['addindex']]['friendly_name']"/>
+                </div>
+
+                <div class="queryoperator">
+                    <input type="hidden" name="query.o:records"
+                           tal:attributes="value context/REQUEST/form/addoperator" />
+                    <span tal:content="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['friendly_name']"/>
+                </div>
+
+                <input autocomplete="off" type="text" class="queryvalue" name="query.v:records" value=""/>
+
+                <a href="" class="removecriteria discreet" title="Remove criteria">Remove criteria</a>
+            </div>
+
             <div class="field">
-                <label for="dummy" class="hiddenStructure">Add criteria</label>
-                <select class="addcriteria" name="dummy">
+                <label for="addindex" class="hiddenStructure">Add criteria</label>
+
+                <select class="addIndex" name="addindex" tal:condition="python: not(addindexselected) or addoperatorselected">
                     <option value="" selected="selected">Add criteria...</option>
                     <tal:index repeat="index python:indexes.keys()">
                     <option tal:attributes="value index;"
                             tal:content="python:indexes[index]['friendly_name']">Index</option>
                     </tal:index>
                 </select>
+
+                <div class="addIndex" tal:condition="python: addindexselected and not(addoperatorselected)">
+                    <input type="hidden" name="addindex"
+                           tal:attributes="value context/REQUEST/form/addindex"/>
+                    <span tal:content="python:indexes[request.form['addindex']]['friendly_name']"/>
+                </div>
+
+                <select class="addOperator" name="addoperator" tal:condition="python: addindexselected and not(addoperatorselected)">
+                    <option value="" selected="selected">Add criteria...</option>
+                    <tal:index repeat="index python:indexes[request.form['addindex']]['operators'].keys()">
+                    <option tal:attributes="value index;"
+                            tal:content="python:indexes[request.form['addindex']]['operators'][index]['friendly_name']">Index</option>
+                    </tal:index>
+                </select>
+
+                <input type="submit" value="Add criteria" name="form.button.addcriteria" class="context addIndexButton"/>
             </div>
         </fieldset>
 
