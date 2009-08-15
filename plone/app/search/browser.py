@@ -1,7 +1,7 @@
 from Products.Five.browser import BrowserView
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
-from config import CRITERION
+from config import CRITERION, SORTABLES
 import json
 from queryparser import QueryParser
 from zope.component import queryMultiAdapter
@@ -79,12 +79,11 @@ class AdvancedSearch(BrowserView):
             return IContentListing(results)
         return IContentListing([])
         
-        
     def printQuery(self):
         return self.query
         
     def getConfig(self):
-        return {'indexes':CRITERION}  
+        return {'indexes':CRITERION, 'sortable_indes': SORTABLES}  
         # we wrap this in a dictionary so we can add more configuration data 
         # to the payload in the future. This is data that will be fetched 
         # by a browser AJAX call
