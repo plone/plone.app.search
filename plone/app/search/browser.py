@@ -4,7 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from config import CRITERION, SORTABLES
 import json
 from queryparser import QueryParser
-from zope.component import queryMultiAdapter
+from zope.component import queryMultiAdapter, getMultiAdapter
 from ZTUtils import make_query
 
 class Search(BrowserView):
@@ -50,8 +50,7 @@ class AdvancedSearch(BrowserView):
         self._results = None
         self.context = context
         self.request = request
-        
-        
+
     def getNumberOfResults(self):
         return len(self.results())
 
@@ -64,31 +63,32 @@ class AdvancedSearch(BrowserView):
         # parse query
         queryparser=QueryParser(self.context, self.request)
         query = queryparser.parseFormquery()
-        
+        if not query:
+            return IContentListing([])
+
         # sorting
         query['sort_on'] = getattr(self.request, 'sort_on', 'getObjPositionInParent')
         query['sort_order'] = getattr(self.request, 'sort_order', 'ascending')
 
         # debug
         self.query = query
-    
+
         # Get me my stuff!
         catalog = getToolByName(self.context, 'portal_catalog')
         results = catalog(query)
         if results:
             return IContentListing(results)
         return IContentListing([])
-        
+
     def printQuery(self):
         return self.query
-        
+
     def getConfig(self):
-        return {'indexes':CRITERION, 'sortable_indes': SORTABLES}  
+        return {'indexes':CRITERION, 'sortable_indes': SORTABLES}
         # we wrap this in a dictionary so we can add more configuration data 
         # to the payload in the future. This is data that will be fetched 
         # by a browser AJAX call
-         
-        
+
     def getIndexesVocabulary(self):
         return CRITERION
         
@@ -97,5 +97,6 @@ class AdvancedSearch(BrowserView):
         var plone_app_search_config = %s
         """
         return template%(json.dumps(self.getConfig()))
-        
-        
+
+    def previewSearchResults(self):
+        return getMultiAdapter((self.context, self.request),name='previewadvancedsearchresults')()
