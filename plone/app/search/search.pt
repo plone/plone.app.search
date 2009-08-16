@@ -24,11 +24,6 @@
 <body>
 <div metal:fill-slot="main" tal:define="results view/results">
 
-      <div tal:content="structure context/REQUEST/form"></div>
-
-
-      <span tal:content="request/URL"></span>
-
     <form name="searchform" 
           action="@@search"
           class="searchPage">
@@ -87,14 +82,14 @@
     </div>
     
     <p tal:condition="results">
-        Sort results by <span tal:repeat="item view/getSortOptions">
+        <span i18n:translate="sort_by">Sort by</span><span tal:repeat="item view/getSortOptions">
                             <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>  
-                            <strong tal:condition="item/selected" tal:content="item/title"></strong> 
+                            <strong tal:condition="item/selected" tal:content="item/title"></strong> <span tal:condition="not:repeat/item/end">&middot;</span> 
                         </span>
     </p>
 
-    <div tal:condition="results">
-        <dl class="searchResults">
+    <div tal:condition="results">        
+        <dl class="searchResults" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
         <tal:results repeat="item results">
         <tal:entry>
             <dt 

@@ -8,12 +8,26 @@ from zope.component import queryMultiAdapter, getMultiAdapter
 from ZTUtils import make_query
 
 class Search(BrowserView):
-    
-    def results(self):
-        return queryMultiAdapter((self.context, self.request),name='searchResults')()
+
+    def results(self, batch=False, b_size=30):
+        query = {}
+        query.update(getattr(self.request, 'form',{}))
+            #query.update(dict(getattr(self.request, 'other',{})))
+        if not query:
+            return IContentListing([])
+        catalog = getToolByName(self.context, 'portal_catalog')
+        results = catalog(query)
+        
+        if batch:
+            from Products.CMFPlone import Batch
+            b_start = self.request.get('b_start', 0)
+            batch = Batch(results, b_size, int(b_start), orphan=0)
+            return IContentListing(batch)
+        return IContentListing(results)
+
 
     def getSortOptions(self):
-
+        """ options for sorting in the search result template, also for marking selected """
         q = {}
         q.update(self.request.form)
         
@@ -38,13 +52,18 @@ class Search(BrowserView):
                 return self.request.URL + '?' + make_query(q)
 
         return(
-            sortoption(self.request, 'Relevance'),
-            sortoption(self.request, 'Date (newest first)', 'Date', reverse=True),
-            sortoption(self.request, 'Aphabetically', 'sortable_title'),
+            sortoption(self.request, 'relevance'),
+            sortoption(self.request, 'date (newest first)', 'Date', reverse=True),
+            sortoption(self.request, 'aphabetically', 'sortable_title'),
         )
 
 
 class AdvancedSearch(BrowserView):
+    """ """
+    
+    # This is the advanced search that uses the query view from new-style-collections.
+    # If we end up not using this view for advanced search, it should probably be moved to the collections 
+    # package
     
     def __init__(self, context, request):
         self._results = None
