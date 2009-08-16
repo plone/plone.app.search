@@ -366,10 +366,11 @@ jQuery(function($) {
     <form action="" method="get" accept-charset="utf-8" id="advancedsearch">
         <fieldset>
             <legend>Criteria</legend>
+            <tal:counter tal:define="dummy python:request.set('querystringwidgetcounter', 0)"/>
+            <tal:row repeat="row context/REQUEST/form/query"
+                     condition="exists: context/REQUEST/form/query">
             <div class="field"
-                 tal:repeat="row context/REQUEST/form/query"
-                 tal:condition="exists: context/REQUEST/form/query">
-
+                 tal:condition="python:not request.has_key('removecriteria.%s' % repeat['row'].index)">
                 <div class="queryindex">
                     <input type="hidden" name="query.i:records"
                            tal:attributes="value row/i" />
@@ -429,8 +430,11 @@ jQuery(function($) {
                        tal:attributes="value python:row['v']"
                        tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'RelativePathWidget'"/>
 
-                <input type="submit" name="removecriteria" class="removecriteria discreet" value="Remove criteria">
+                <input type="submit" class="removecriteria discreet" value="Remove criteria"
+                    tal:attributes="name python:'removecriteria.%s' % request.get('querystringwidgetcounter')"/>
+                <tal:counter tal:define="dummy python:request.set('querystringwidgetcounter', request.get('querystringwidgetcounter') + 1)"/>
             </div>
+            </tal:row>
 
             <div class="field" tal:condition="python: addindexselected and addoperatorselected">
 
