@@ -49,21 +49,24 @@
 .multipleSelectionWidget label {
     display: block;
 }
-.queryvalue {
+.querywidget {
     float: left;
     width: 200px;
     border-width: 1px;
 }
-dl.queryvalue {
+.referenceWidget input {
+    width: 200px;
+}
+dl.querywidget {
     margin: 0;
 }
-dl.queryvalue dd {
+dl.querywidget dd {
     margin: 0;
 }
 .dateRangeWidget input {
     width: 80px;
 }
-div.queryvalue, dl.queryvalue {
+div.dateRangeWidget, dl.multipleSelectionWidget {
     border: solid 1px transparent;
 }
 </style>
@@ -106,6 +109,104 @@ jQuery(function($) {
                             'query.o:records');
     }
 
+    function CreateWidget(type, index) {
+        switch (type) {
+            case 'StringWidget':
+                return $(document.createElement('input'))
+                    .attr({
+                        'autocomplete': 'off',
+                        'type': 'text',
+                        'name': 'query.v:records'
+                    })
+                    .addClass('querywidget queryvalue stringWidget');
+                break;
+            case 'DateWidget':
+                return $(document.createElement('input'))
+                    .attr({
+                        'autocomplete': 'off',
+                        'type': 'text',
+                        'name': 'query.v:records'
+                    })
+                    .addClass('querywidget queryvalue dateWidget');
+                break;
+            case 'DateRangeWidget':
+                return $(document.createElement('div'))
+                    .addClass('querywidget dateRangeWidget')
+                    .append($(document.createElement('input'))
+                        .attr({
+                            'autocomplete': 'off',
+                            'type': 'text',
+                            'name': 'query.v:records:list'
+                        })
+                        .addClass('queryvalue')
+                    )
+                    .append($(document.createElement('span'))
+                        .html(' and ')
+                    )
+                    .append($(document.createElement('input'))
+                        .attr({
+                            'autocomplete': 'off',
+                            'type': 'text',
+                            'name': 'query.v:records:list'
+                        })
+                        .addClass('queryvalue')
+                    )
+                break;
+            case 'ReferenceWidget':
+                return $(document.createElement('dl'))
+                    .addClass('querywidget referenceWidget')
+                    .append($(document.createElement('dt'))
+                        .html('Select...')
+                        .addClass('hiddenStructure')
+                    )
+                    .append($(document.createElement('dd'))
+                        .append($(document.createElement('input'))
+                            .attr({
+                                'autocomplete': 'off',
+                                'type': 'text',
+                                'name': 'query.v:records'
+                            })
+                            .addClass('queryvalue')
+                        )
+                    )
+                break;
+            case 'RelativePathWidget':
+                return $(document.createElement('input'))
+                    .attr({
+                        'autocomplete': 'off',
+                        'type': 'text',
+                        'name': 'query.v:records'
+                    })
+                    .addClass('querywidget queryvalue relativePathWidget');
+                break;
+            case 'MultipleSelectionWidget':
+                var dl = $(document.createElement('dl'))
+                    .addClass('querywidget multipleSelectionWidget')
+                    .append($(document.createElement('dt'))
+                        .html('Select...')
+                        .addClass('hiddenStructure')
+                    )
+                var dd = $(document.createElement('dd'));
+                $.each(plone_app_search_config.indexes[index].values, function (i, val) {
+                    dd.append($(document.createElement('label'))
+                        .append($(document.createElement('input'))
+                            .attr({
+                                'type': 'checkbox',
+                                'name': 'query.v:records:list',
+                                'value': i
+                            })
+                        )
+                        .append($(document.createElement('span'))
+                            .html(val.friendly_name)
+                        )
+                    )
+                });
+                dl.append(dd);
+                return dl;
+                break;
+        }
+    }
+
     // Enhance for javascript browsers
     $(document).ready(function () {
         $('div.queryindex').each(function () {
@@ -126,12 +227,24 @@ jQuery(function($) {
     });
 
     $('.queryindex').live('change', function () {
+        var index = $(this).children(':selected')[0].value;
         $(this).parent().children('.queryoperator')
-            .replaceWith(CreateQueryOperator($(this).children(':selected')[0].value, ''));
+            .replaceWith(CreateQueryOperator(index, ''));
+        var operatorvalue = $(this).parents('.field').children('.queryoperator').val();
+        $(this).parent().children('.querywidget')
+            .replaceWith(CreateWidget(plone_app_search_config.indexes[index].operators[operatorvalue].widget, index));
         UpdateSearch();
     });
 
-    $('#sort_on,#sort_order,.queryoperator').live('change', function () {
+    $('.queryoperator').live('change', function () {
+        var index = $(this).parents('.field').children('.queryindex').val();
+        var operatorvalue = $(this).children(':selected')[0].value;
+        $(this).parent().children('.querywidget')
+            .replaceWith(CreateWidget(plone_app_search_config.indexes[index].operators[operatorvalue].widget, index));
+        UpdateSearch();
+    });
+
+    $('#sort_on,#sort_order').live('change', function () {
         UpdateSearch();
     });
 
@@ -145,7 +258,7 @@ jQuery(function($) {
     });
 
     $('.addIndex').live('change', function () {
-        var value = $(this).children(':selected')[0].value;
+        var index = $(this).children(':selected')[0].value;
         var field = $(this).parents('.field');
         var newfield = $(document.createElement('div'))
                             .addClass('field');
@@ -155,18 +268,11 @@ jQuery(function($) {
                     .addClass('queryresults discreet')
                     .html('')
             )
-        newfield.append(CreateQueryIndex(value));
-        newfield.append(CreateQueryOperator(value,''));
-        newfield.append(
-            $(document.createElement('input'))
-                .attr({
-                    'type': 'text',
-                    'value': '',
-                    'name': 'query.v:records',
-                    'autocomplete': 'off'
-                })
-                .addClass('queryvalue')
-        )
+        newfield.append(CreateQueryIndex(index));
+        var operator = CreateQueryOperator(index,'');
+        newfield.append(operator);
+        var operatorvalue = $(operator.children()[0]).attr('value');
+        newfield.append(CreateWidget(plone_app_search_config.indexes[index].operators[operatorvalue].widget, index));
         newfield.append(
             $(document.createElement('input'))
                 .attr({
@@ -194,7 +300,7 @@ jQuery(function($) {
             var results = $(this).parents('.field').children('.queryresults');
             querylist.push('query.i:records=' + $(this).val());
             querylist.push('query.o:records=' + $(this).parents('.field').children('.queryoperator').val());
-            querylist.push('query.v:records=' + $(this).parents('.field').children('.queryvalue').val());
+            querylist.push('query.v:records=' + $(this).parents('.field').find('.queryvalue').val());
 
             $.get('previewadvancedsearchnumberofresults?' + querylist.join('&'),
                   {},
@@ -242,12 +348,12 @@ jQuery(function($) {
                     <span tal:content="python:indexes[row.i]['operators'][row.o]['friendly_name']"/>
                 </div>
 
-                <input class="queryvalue stringWidget"
+                <input class="querywidget queryvalue stringWidget"
                        autocomplete="off" type="text" name="query.v:records"
                        tal:attributes="value python:row['v']"
                        tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'StringWidget'"/>
 
-                <dl class="queryvalue multipleSelectionWidget"
+                <dl class="querywidget queryvalue multipleSelectionWidget"
                      tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'MultipleSelectionWidget'">
                     <dt class="hiddenStructure">Select...</dt>
                     <dd>
@@ -259,28 +365,32 @@ jQuery(function($) {
                     </dd>
                 </dl>
 
-                <dl class="queryvalue locationWidget"
-                     tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'LocationWidget'">
+                <dl class="querywidget referenceWidget"
+                     tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'ReferenceWidget'">
                     <dt class="hiddenStructure">Select...</dt>
                     <dd>
-                        <input autocomplete="off" type="text" name="query.v:records" tal:attributes="value python:row['v']" />
+                        <input class="queryvalue" autocomplete="off" type="text" name="query.v:records" tal:attributes="value python:row['v']" />
                     </dd>
                 </dl>
 
-                <dl class="queryvalue dateWidget"
-                    tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'DateWidget'">
-                    <input autocomplete="off" type="text" class="queryvalue" name="query.v:records"
-                           tal:attributes="value python:row['v']"/>
-                </dl>
+                <input class="querywidget queryvalue dateWidget"
+                       autocomplete="off" type="text" class="queryvalue" name="query.v:records"
+                       tal:attributes="value python:row['v']"
+                       tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'DateWidget'"/>
 
-                <div class="queryvalue dateRangeWidget"
+                <div class="querywidget queryvalue dateRangeWidget"
                      tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'DateRangeWidget'">
                     <input autocomplete="off" type="text" name="query.v:records"
                            tal:attributes="value python:row['v']"/>
-                    <span>and</span>
+                    <span> and </span>
                     <input autocomplete="off" type="text" name="query.v:records"
                            tal:attributes="value python:row['v']"/>
                 </div>
+
+                <input class="querywidget queryvalue relativePathWidget"
+                       autocomplete="off" type="text" class="queryvalue" name="query.v:records"
+                       tal:attributes="value python:row['v']"
+                       tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'RelativePathWidget'"/>
 
                 <input type="submit" name="removecriteria" class="removecriteria discreet" value="Remove criteria">
             </div>
@@ -299,11 +409,11 @@ jQuery(function($) {
                     <span tal:content="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['friendly_name']"/>
                 </div>
 
-                <input class="queryvalue stringWidget"
+                <input class="querywidget queryvalue stringWidget"
                        autocomplete="off" type="text" name="query.v:records" value=""
                        tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'StringWidget'"/>
 
-                <div class="queryvalue multipleSelectionWidget"
+                <div class="querywidget queryvalue multipleSelectionWidget"
                      tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'MultipleSelectionWidget'">
                     <dl>
                         <dt class="hiddenStructure">Select...</dt>
@@ -311,25 +421,29 @@ jQuery(function($) {
                     </dl>
                 </div>
 
-                <div class="queryvalue locationWidget"
-                     tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'LocationWidget'">
+                <div class="querywidget referenceWidget"
+                     tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'ReferenceWidget'">
                     <dl>
                         <dt class="hiddenStructure">Select...</dt>
-                        <dd><input autocomplete="off" type="text" name="query.v:records"/></dd>
+                        <dd><input class="queryvalue" autocomplete="off" type="text" name="query.v:records"/></dd>
                     </dl>
                 </div>
 
-                <div class="queryvalue dateWidget"
+                <div class="querywidget queryvalue dateWidget"
                      tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'DateWidget'">
                      <input autocomplete="off" type="text" class="queryvalue" name="query.v:records"/>
                 </div>
 
-                <div class="queryvalue dateRangeWidget"
+                <div class="querywidget queryvalue dateRangeWidget"
                      tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'DateRangeWidget'">
                     <input autocomplete="off" type="text" name="query.v:records"/>
-                    <span>and</span>
+                    <span> and </span>
                     <input autocomplete="off" type="text" name="query.v:records"/>
                 </div>
+
+                <input class="querywidget queryvalue relativePathWidget"
+                       autocomplete="off" type="text" name="query.v:records" value=""
+                       tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'RelativePathWidget'"/>
 
                 <input type="submit" name="removecriteria" class="removecriteria discreet" value="Remove criteria">
             </div>
