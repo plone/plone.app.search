@@ -314,9 +314,21 @@ jQuery(function($) {
         var querylist  = [];
         $('#advancedsearch .queryindex').each(function () {
             var results = $(this).parents('.field').children('.queryresults');
-            querylist.push('query.i:records=' + $(this).val());
-            querylist.push('query.o:records=' + $(this).parents('.field').children('.queryoperator').val());
-            querylist.push('query.v:records=' + $(this).parents('.field').find('.queryvalue').val());
+            var index = $(this).val();
+            var operator = $(this).parents('.field').children('.queryoperator').val();
+            var widget = plone_app_search_config.indexes[index].operators[operator].widget;
+            querylist.push('query.i:records=' + index);
+            querylist.push('query.o:records=' + operator);
+            switch (widget) {
+                case 'DateRangeWidget':
+                    var querywidget = $(this).parents('.field').find('.querywidget');
+                    querylist.push('query.v:records:list=' + $(querywidget.children('input')[0]).val());
+                    querylist.push('query.v:records:list=' + $(querywidget.children('input')[1]).val());
+                    break;
+                default:
+                    querylist.push('query.v:records=' + $(this).parents('.field').find('.queryvalue').val());
+                    break;
+            }
 
             $.get('previewadvancedsearchnumberofresults?' + querylist.join('&'),
                   {},
@@ -396,11 +408,11 @@ jQuery(function($) {
 
                 <div class="querywidget queryvalue dateRangeWidget"
                      tal:condition="python:indexes[row.i]['operators'][row.o]['widget'] == 'DateRangeWidget'">
-                    <input autocomplete="off" type="text" name="query.v:records"
-                           tal:attributes="value python:row['v']"/>
+                    <input autocomplete="off" type="text" name="query.v:records:list"
+                           tal:attributes="value python:row['v'][0]"/>
                     <span> and </span>
-                    <input autocomplete="off" type="text" name="query.v:records"
-                           tal:attributes="value python:row['v']"/>
+                    <input autocomplete="off" type="text" name="query.v:records:list"
+                           tal:attributes="value python:row['v'][1]"/>
                 </div>
 
                 <input class="querywidget queryvalue relativePathWidget"
@@ -452,9 +464,9 @@ jQuery(function($) {
 
                 <div class="querywidget queryvalue dateRangeWidget"
                      tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'DateRangeWidget'">
-                    <input autocomplete="off" type="text" name="query.v:records"/>
+                    <input autocomplete="off" type="text" name="query.v:records:list"/>
                     <span> and </span>
-                    <input autocomplete="off" type="text" name="query.v:records"/>
+                    <input autocomplete="off" type="text" name="query.v:records:list"/>
                 </div>
 
                 <input class="querywidget queryvalue relativePathWidget"
