@@ -61,7 +61,7 @@ CRITERION={
         'friendly_name': 'Creation date',
         'description': 'The time and date an item was created',
         'operators':{
-            'smaller_or_equal':{
+            'less_then':{
                 'friendly_name': 'before',
                 'widget': 'DateWidget',
                 'description'   : 'please use YYYY/MM/DD.',
@@ -105,7 +105,7 @@ CRITERION={
         'friendly_name': 'Effective date (publish date)',
         'description': 'The time and date an item becomes publicly available',
         'operators':{
-            'smaller_or_equal':{
+            'less_then':{
                 'friendly_name': 'before',
                 'widget': 'DateWidget',
                 'description'   : 'please use YYYY/MM/DD.',
@@ -132,7 +132,7 @@ CRITERION={
         'friendly_name': 'End date (event)',
         'description': 'The end date and time of an event',
         'operators':{
-            'smaller_or_equal':{
+            'less_then':{
                 'friendly_name': 'before',
                 'widget': 'DateWidget',
                 'description'   : 'please use YYYY/MM/DD.',
@@ -159,7 +159,7 @@ CRITERION={
         'friendly_name': 'Expiration date',
         'description': 'The time and date an item is no longer publicly available',
         'operators':{
-            'smaller_or_equal':{
+            'less_then':{
                 'friendly_name': 'before',
                 'widget': 'DateWidget',
                 'description'   : 'please use YYYY/MM/DD.',
@@ -234,7 +234,7 @@ CRITERION={
         'friendly_name': 'Modification date',
         'description': 'The time and date an item was last modified',
         'operators':{
-            'smaller_or_equal':{
+            'less_then':{
                 'friendly_name': 'before',
                 'widget': 'DateWidget',
                 'description'   : 'please use YYYY/MM/DD.',
@@ -304,7 +304,7 @@ CRITERION={
         'friendly_name': 'Start date',
         'description': 'The start date and time of an event',
         'operators':{
-            'smaller_or_equal':{
+            'less_then':{
                 'friendly_name': 'before',
                 'widget': 'DateWidget',
                 'description'   : 'please use YYYY/MM/DD.',

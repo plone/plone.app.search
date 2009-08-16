@@ -20,6 +20,15 @@
     for="Products.CMFCore.interfaces.IFolderish"
     template="collectionstest.pt"
     />
+    
+    
+<browser:page
+    name="kekketest"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="Products.CMFCore.interfaces.IFolderish"
+    template="test.pt"
+    />
 
 <browser:page
     name="previewadvancedsearchresults"

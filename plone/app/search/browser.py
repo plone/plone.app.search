@@ -62,10 +62,13 @@ class AdvancedSearch(BrowserView):
             self._results = self._queryForResults()
         return self._results
     
-    def _queryForResults(self):
+    def _queryForResults(self, formquery=None):
         # parse query
+        if not formquery:
+            formquery=self.request.get('query', None)
         queryparser=QueryParser(self.context, self.request)
-        query = queryparser.parseFormquery()
+        query = queryparser.parseFormquery(formquery)
+
         if not query:
             return IContentListing([])
 
@@ -76,6 +79,7 @@ class AdvancedSearch(BrowserView):
         # Get me my stuff!
         catalog = getToolByName(self.context, 'portal_catalog')
         results = catalog(query)
+
         if results:
             return IContentListing(results)
         return IContentListing([])

@@ -9,15 +9,14 @@ class QueryParser(object):
         self.context=context
         self.request=request
     
-    def parseFormquery(self, formquery=None):
-        formquery=formquery or getattr(self.request, 'query', None)
+    def parseFormquery(self, formquery):
         if not formquery:
             return {}
 
         formquery=deepcopy(formquery)
         mapping={
             'between': '_between',
-            'larger_then_or_equal': '_largerThenOrEqual',
+            'larger_then': '_largerThen',
             'less_then': '_lessThen',
             'current_user': '_currentUser',
             'less_then_relative_date': '_lessThenRelativeDate',
@@ -60,7 +59,7 @@ class QueryParser(object):
             
     # query.i:records=modified&query.o:records=larger_then_or_equal&query.v:records=2009/08/12
     # x >= value
-    def _largerThenOrEqual(self, row):
+    def _largerThen(self, row):
         tmp={row.index:{
             'query':row.values,
             'range':'min'
