@@ -386,8 +386,9 @@ jQuery(function($) {
                     <dt class="hiddenStructure">Select...</dt>
                     <dd>
                     <tal:values repeat="index python:indexes[row.i]['values'].keys()">
-                    <label><input type="checkbox" name="query.v:records:list" tal:attributes="value index"/>
-                    <span tal:content="python:indexes[row.i]['values'][index]['friendly_name']"/>
+                    <label>
+                        <input type="checkbox" name="query.v:records:list" tal:attributes="value index"/>
+                        <span tal:content="python:indexes[row.i]['values'][index]['friendly_name']"/>
                     </label>
                     </tal:values>
                     </dd>
@@ -441,13 +442,20 @@ jQuery(function($) {
                        autocomplete="off" type="text" name="query.v:records" value=""
                        tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'StringWidget'"/>
 
-                <div class="querywidget queryvalue multipleSelectionWidget"
+                <dl class="querywidget queryvalue multipleSelectionWidget"
                      tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'MultipleSelectionWidget'">
-                    <dl>
-                        <dt class="hiddenStructure">Select...</dt>
-                        <dd><input type="checkbox" name="query.v:records" value="Repeat Value" />Repeat Value</dd>
-                    </dl>
-                </div>
+                    <dt class="hiddenStructure">Select...</dt>
+                    <dd>
+                        <tal:values repeat="index python:indexes[request.form['addindex']]['values'].keys()">
+                        <label>
+                            <input type="checkbox" name="query.v:records:list"
+                                tal:attributes="value index;
+                                                checked string:checked"/>
+                            <span tal:content="python:indexes[request.form['addindex']]['values'][index]['friendly_name']"/>
+                        </label>
+                        </tal:values>
+                    </dd>
+                </dl>
 
                 <div class="querywidget referenceWidget"
                      tal:condition="python:indexes[request.form['addindex']]['operators'][request.form['addoperator']]['widget'] == 'ReferenceWidget'">
