@@ -55,7 +55,7 @@ class AdvancedSearch(BrowserView):
         return len(self.results())
 
     def getFormattedNumberOfResults(self):
-        return "%d items matching" % (len(self.results()))
+        return "%d items remaining" % (len(self.results()))
 
     def results(self):
         if self._results is None:
