@@ -243,7 +243,7 @@ jQuery(function($) {
         var operatorvalue = $(this).parents('.field').children('.queryoperator').val();
         var widget = plone_app_search_config.indexes[index].operators[operatorvalue].widget;
         var querywidget = $(this).parent().children('.querywidget');
-        if (widget != GetCurrentWidget(querywidget)) {
+        if ((widget != GetCurrentWidget(querywidget)) || (widget == 'MultipleSelectionWidget')) {
             querywidget.replaceWith(CreateWidget(widget, index));
         }
         UpdateSearch();
@@ -260,7 +260,7 @@ jQuery(function($) {
         UpdateSearch();
     });
 
-    $('#sort_on,#sort_order').live('change', function () {
+    $('#sort_on,#sort_order,.multipleSelectionWidget input').live('change', function () {
         UpdateSearch();
     });
 
@@ -325,6 +325,12 @@ jQuery(function($) {
                     querylist.push('query.v:records:list=' + $(querywidget.children('input')[0]).val());
                     querylist.push('query.v:records:list=' + $(querywidget.children('input')[1]).val());
                     break;
+                case 'MultipleSelectionWidget':
+                    var querywidget = $(this).parents('.field').find('.querywidget');
+                    querywidget.find('input:checked').each(function () {
+                        querylist.push('query.v:records:list=' + $(this).val());
+                    });
+                    break;
                 default:
                     querylist.push('query.v:records=' + $(this).parents('.field').find('.queryvalue').val());
                     break;
@@ -387,7 +393,9 @@ jQuery(function($) {
                     <dd>
                     <tal:values repeat="index python:indexes[row.i]['values'].keys()">
                     <label>
-                        <input type="checkbox" name="query.v:records:list" tal:attributes="value index"/>
+                        <input type="checkbox" name="query.v:records:list"
+                               tal:attributes="value index;
+                                               checked python: index in row.v and 'checked' or nothing"/>
                         <span tal:content="python:indexes[row.i]['values'][index]['friendly_name']"/>
                     </label>
                     </tal:values>
@@ -448,9 +456,7 @@ jQuery(function($) {
                     <dd>
                         <tal:values repeat="index python:indexes[request.form['addindex']]['values'].keys()">
                         <label>
-                            <input type="checkbox" name="query.v:records:list"
-                                tal:attributes="value index;
-                                                checked string:checked"/>
+                            <input type="checkbox" name="query.v:records:list" tal:attributes="value index"/>
                             <span tal:content="python:indexes[request.form['addindex']]['values'][index]['friendly_name']"/>
                         </label>
                         </tal:values>
