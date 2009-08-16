@@ -89,11 +89,8 @@ class AdvancedSearch(BrowserView):
         # to the payload in the future. This is data that will be fetched 
         # by a browser AJAX call
 
-    def getJavascriptConfig(self):
-        template = """
-        var plone_app_search_config = %s
-        """
-        return template%(json.dumps(self.getConfig()))
+    def getJSONConfig(self):
+        return json.dumps(self.getConfig())
 
     def previewSearchResults(self):
         return getMultiAdapter((self.context, self.request),name='previewadvancedsearchresults')()

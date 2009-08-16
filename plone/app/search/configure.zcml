@@ -37,4 +37,12 @@
     attribute="getFormattedNumberOfResults"
     />
 
+<browser:page
+    name="jsonadvancedsearchconfig"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="*"
+    attribute="getJSONConfig"
+    />
+
 </configure>
