@@ -226,21 +226,37 @@ jQuery(function($) {
         UpdateSearch();
     });
 
+    function GetCurrentWidget (node) {
+        var classes = node.attr('class').split(' ');
+        for (i in classes) {
+            if (classes[i].indexOf('Widget') != -1) {
+                var classname = classes[i];
+                return classname.slice(0,1).toUpperCase() + classname.slice(1);
+            }
+        }
+    }
+
     $('.queryindex').live('change', function () {
         var index = $(this).children(':selected')[0].value;
         $(this).parent().children('.queryoperator')
             .replaceWith(CreateQueryOperator(index, ''));
         var operatorvalue = $(this).parents('.field').children('.queryoperator').val();
-        $(this).parent().children('.querywidget')
-            .replaceWith(CreateWidget(plone_app_search_config.indexes[index].operators[operatorvalue].widget, index));
+        var widget = plone_app_search_config.indexes[index].operators[operatorvalue].widget;
+        var querywidget = $(this).parent().children('.querywidget');
+        if (widget != GetCurrentWidget(querywidget)) {
+            querywidget.replaceWith(CreateWidget(widget, index));
+        }
         UpdateSearch();
     });
 
     $('.queryoperator').live('change', function () {
         var index = $(this).parents('.field').children('.queryindex').val();
         var operatorvalue = $(this).children(':selected')[0].value;
-        $(this).parent().children('.querywidget')
-            .replaceWith(CreateWidget(plone_app_search_config.indexes[index].operators[operatorvalue].widget, index));
+        var widget = plone_app_search_config.indexes[index].operators[operatorvalue].widget;
+        var querywidget = $(this).parent().children('.querywidget');
+        if (widget != GetCurrentWidget(querywidget)) {
+            querywidget.replaceWith(CreateWidget(widget, index));
+        }
         UpdateSearch();
     });
 
