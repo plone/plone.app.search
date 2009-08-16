@@ -7,7 +7,7 @@
       i18n:domain="plone">
 <head>
     <metal:block metal:fill-slot="head_slot">
-    <!-- XXX FIX XXX -->
+    <!-- ***  THIS IS A TESTING TEMPLATE FOR THE PLIP WORK. IT WILL GO AWAY BEFORE RELEASE   ***  -->
     
         <link rel="alternate" title="RSS 1.0" type="application/rss+xml"
               tal:define="here_url context/@@plone_context_state/object_url"
