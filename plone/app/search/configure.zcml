@@ -25,7 +25,7 @@
     name="previewadvancedsearchresults"
     class=".browser.AdvancedSearch"
     permission="zope2.View"
-    for="Products.CMFCore.interfaces.IFolderish"
+    for="*"
     template="previewsearchresults.pt"
     />
 
@@ -33,7 +33,7 @@
     name="previewadvancedsearchnumberofresults"
     class=".browser.AdvancedSearch"
     permission="zope2.View"
-    for="Products.CMFCore.interfaces.IFolderish"
+    for="*"
     attribute="getFormattedNumberOfResults"
     />
 
