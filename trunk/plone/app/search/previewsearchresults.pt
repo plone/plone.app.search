@@ -1,0 +1,113 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+     
+      i18n:domain="plone">
+<head>
+</head>
+<body>
+<div tal:define="results view/results">
+
+    <h2 class="previewsearchResultsHeading">
+        <span>
+            Search results
+        </span>
+        <span class="discreet">
+        &mdash;
+        <span><tal:count content="view/getNumberOfResults">1</tal:count> items matching your search terms</span>
+      </span>
+    </h2>
+
+    <div tal:condition="not: results">
+        <p><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
+    </div>
+
+    <div tal:condition="results">
+        <dl class="searchResults">
+        <tal:results repeat="item results">
+        <tal:entry>
+            <dt 
+                tal:attributes="class string:FIXME">
+              <img tal:replace="structure item/getIcon" />
+               <a
+                 href="#" 
+                 tal:attributes="href item/getURL;
+                                 class item/review_state"
+                 tal:content="item/Title" />
+
+            <span class="documentByLine">
+                <span class="documentAuthor" tal:define="author item/Creator"
+                    i18n:translate="label_by_author" tal:condition="author/fullname">
+                by
+                      <a href="#"
+                         tal:content="author/fullname"
+                         tal:omit-tag="not:item/Creator"
+                         tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${author/username}"
+                         i18n:name="author">
+                        Bob Dobalina
+                      </a>
+                </span>
+
+                <span class="documentModified">
+                  &mdash;
+                    <span i18n:translate="box_last_modified">
+                    last modified
+                    </span>
+                    <span tal:replace="item/ModificationDate">
+                    August 16, 2001 at 23:35:59
+                    </span>
+                </span>
+
+                <span tal:define="categories item/Subject|nothing"
+                      tal:condition="categories">
+                    &mdash;
+                    <tal:filedunder i18n:translate="label_filed_under">filed under:</tal:filedunder>
+                        <span tal:repeat="category categories">
+                            <a href=""
+                               class="link-category"
+                               rel="tag"
+                               tal:content="category"
+                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/search?Subject%3Alist=${category}">
+                               Category
+                            </a><tal:separator condition="not: repeat/category/end">,</tal:separator>
+                        </span>
+                </span>
+
+            </span>
+            </dt>
+            
+            <dd>
+                <span tal:replace="item/Description">
+                    Cropped description
+                </span>
+
+                <span class="documentLocation">
+                    <a href=""
+                       class="link-location"
+                       tal:content="item/getPath"
+                       tal:attributes="href item/getURL">
+                        Location
+                    </a>
+                </span>
+           </dd>
+
+        </tal:entry>
+        </tal:results>
+        </dl>
+
+
+    </div>
+      
+      
+
+      
+      
+</div>
+</body>
+</html>
+
+
+
+

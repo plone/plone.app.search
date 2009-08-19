@@ -1,0 +1,113 @@
+/* @group Basic styles */
+body {
+    padding: 10px;
+    font: 12px/1.5 Verdana, Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #205C90;
+    text-decoration: none;
+}
+a:hover {
+    color: #75AD0A;
+}
+
+.actionMenuContent {
+    display: none;
+    position: relative;
+    clear:both;
+}
+.portalMessage {
+    display: none;
+}
+dt.actionMenuHeader {
+    float: left;
+    background:White url(../images/saveButton.png) no-repeat scroll 2px 1px;
+    border:1px solid #8CACBB;
+    color:Black;
+    cursor:pointer;
+    margin-bottom:1px !important;
+    padding:1px 1px 1px 19px;
+    text-transform:none;
+    margin-left: 1em;
+}
+input.searchButton {
+    background:White url(../images/search_icon.png) no-repeat scroll 2px 1px;
+    border:1px solid #8CACBB;
+    color:Black;
+    cursor:pointer;
+    margin-bottom:1px !important;
+    padding:1px 1px 1px 19px;
+    text-transform:none;
+}
+input.searchButton.searchPage {
+    background-image: none;
+    padding-left: 1px;
+}
+input {
+    background:White url(../images/input_background.png) repeat-x scroll 0 0;
+    border-color:#666666 #DDDDDD #DDDDDD #666666;
+    border-style:solid;
+    border-width:1px;
+    color:Black;
+    font-family:"Lucida Grande",Verdana,Lucida,Helvetica,Arial,sans-serif;
+    vertical-align:middle;
+    visibility:visible;
+}
+form fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.field {
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    display: table;
+/*    width:100%;*/
+}
+.field select,
+.field input,
+div.dropDownMenu {
+    width:15em;
+    display: table-cell;
+    margin: 0 0.5em;
+    vertical-align: middle;
+}
+dl.actionMenu {
+    position:relative;
+    margin: 0;
+}
+dl.actionMenu dt {
+    margin-left:0.5em;
+    margin-right:0.5em;
+    padding:1px 1em 0 2em;
+    width:12em;
+}
+dl.actionMenu dd {
+    position:absolute;
+    left: 0;
+    top:1.5em;
+    margin-left: 0;
+}
+.formControls div.dropDownMenu dd {
+    width: 30em;
+    top: 1.7em;
+    border: 1px solid #8CACBB;
+}
+#advancedsearch {
+    margin: 0 auto 2em;
+    width: 55em;
+}
+#advancedsearch button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin-right: 0.5em;
+}
+.sortingField {
+    text-align: center;
+}
+.formControls {
+    text-align: center;
+    margin-top: 2em;
+}
