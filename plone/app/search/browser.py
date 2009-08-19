@@ -1,13 +1,11 @@
 from Products.Five.browser import BrowserView
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
-from zope.component import getUtility
-from config import SearchConfig
+from config import CRITERION, SORTABLES
+import json
 from queryparser import QueryParser
 from zope.component import queryMultiAdapter, getMultiAdapter
 from ZTUtils import make_query
-
-import json
 
 class Search(BrowserView):
 
@@ -109,15 +107,13 @@ class AdvancedSearch(BrowserView):
         return self.query
 
     def getConfig(self):
-        config=SearchConfig(self.context, self.request)
-        return {'indexes':config.criterion, 'sortable_indexes': config.sortables}
+        return {'indexes':CRITERION, 'sortable_indexes': SORTABLES}
         # we wrap this in a dictionary so we can add more configuration data 
         # to the payload in the future. This is data that will be fetched 
         # by a browser AJAX call
 
     def getJSONConfig(self):
-        config=self.getConfig()
-        return json.dump(config)
+        return json.dumps(self.getConfig())
 
     def previewSearchResults(self):
         return getMultiAdapter((self.context, self.request),name='previewadvancedsearchresults')()
