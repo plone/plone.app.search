@@ -22,7 +22,9 @@
 </head>
 
 <body>
-<div metal:fill-slot="main" tal:define="results view/results">
+<div metal:fill-slot="main" tal:define="results view/results;
+                 Batch python:modules['Products.CMFPlone'].Batch;
+                 b_size python:30;b_start python:0;b_start request/b_start | b_start;">
 
     <form name="searchform" 
           action="@@search"
@@ -88,17 +90,17 @@
                         </span>
     </p>
 
-    <div tal:condition="results">        
+    <div tal:condition="results" tal:define="batch python:Batch(results, b_size, int(b_start), orphan=1)">        
         <dl class="searchResults" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
-        <tal:results repeat="item results">
+        <tal:results repeat="item batch">
         <tal:entry>
             <dt 
-                tal:attributes="class string:FIXME">
+                tal:attributes="class item/ContentTypeClass">
               <img tal:replace="structure item/getIcon" />
                <a
                  href="#" 
                  tal:attributes="href item/getURL;
-                                 class item/review_state"
+                                 class string:state-${item/review_state}"
                  tal:content="item/Title" />
 
             <span class="documentByLine">
@@ -142,7 +144,7 @@
             </dt>
             
             <dd>
-                <span tal:replace="item/Description">
+                <span tal:replace="item/CroppedDescription">
                     Cropped description
                 </span>
 
@@ -159,6 +161,8 @@
         </tal:entry>
         </tal:results>
         </dl>
+
+        <div metal:use-macro="context/batch_macros/macros/navigation" />
 
 
     </div>
