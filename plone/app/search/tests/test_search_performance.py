@@ -6,9 +6,8 @@ example.
 """
 
 import unittest
-from base import SearchTestCase, SearchFunctionalTestCase
+from base import SearchFunctionalTestCase
 from Products.CMFCore.utils import getToolByName
-from zope.interface.verify import verifyObject 
 from Products.Five.testbrowser import Browser
         
 
@@ -61,7 +60,6 @@ class TestSetup(SearchFunctionalTestCase):
         # we time the results and compare them. 
         # if the new result is slower than the old, the test fails
         
-        from time import time
         self.setRoles(['Manager', 'Member'])
         #make 10 pages
         for i in range(0,10):
