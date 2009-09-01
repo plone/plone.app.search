@@ -53,32 +53,37 @@ class TestSetup(SearchFunctionalTestCase):
         self.assertEquals("Plone site", self.portal.getProperty('title'))
 
     def test_functional_searchresults_page(self):
-        # we need to make sure that we don't make Plone superslower.
-        # in this test, we make 100 documents, then search for them 
-        # first in the old search form
-        # then in the new search form
-        # we time the results and compare them. 
-        # if the new result is slower than the old, the test fails
-        
+        """ We make 3 dummy pages, publish them, then check that the rendered search results page 
+            says that we got 3 search results. Crude, but useful."""
+
         self.setRoles(['Manager', 'Member'])
-        #make 10 pages
-        for i in range(0,10):
+        # make 3 pages, then publish them
+        for i in range(0,3):
             new_id = self.folder.invokeFactory('Document', 'my-page'+str(i), text='spam spam ham eggs')
             obj = getattr(self.folder,new_id)
             self.portal.portal_workflow.doActionFor(obj, 'publish')
+        # open the search page in the testbrowser
         portal_url = self.portal.absolute_url()
-        browser2 = Browser()
-        browser2.open(portal_url+'/@@search?SearchableText=spam')
-        self.failUnless("10 items matching your search terms" in browser2.contents)
+        browser = Browser()
+        browser.open(portal_url+'/@@search?SearchableText=spam')
+        self.failUnless("3 items matching your search terms" in browser.contents)
 
     def test_performance_for_100_items(self):
-        # we need to make sure that we don't make Plone superslower.
-        # in this test, we make 100 documents, then search for them 
-        # first in the old search form
-        # then in the new search form
-        # we time the results and compare them. 
-        # if the new result is slower than the old, the test fails
-        print "testing preformance with 100 pages"
+        """
+            To make sure we don't make Plone superslower, we run some crude performance tests.
+            We make 100 documents, publish them, then search for them. 
+            Compare the results with the old search results page
+            If we are much slower (1.5 times) the test fails 
+        
+            These tests WILL be slow to run. 
+            Let's remove or hide these when(if) the PLIP is approved        
+        """
+        
+        heatup_browser = Browser()
+        portal_url = self.portal.absolute_url()
+        heatup_browser.open(portal_url)
+
+        print "testing performance with 100 pages"
         from time import time
         self.setRoles(['Manager', 'Member'])
         for i in range(0,100):
@@ -100,27 +105,36 @@ class TestSetup(SearchFunctionalTestCase):
         browser2.open(portal_url+'/@@search?SearchableText=spam')
         new_end = time()
         new_time = new_end-new_start
+        print "*" * 20
+        print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
-        self.failUnless(old_time > new_time)
+        self.failUnless((old_time*1.5) > new_time)
 
 
     def test_performance_for_1000_items(self):
-        # we need to make sure that we don't make Plone superslower.
-        # in this test, we make 100 documents, then search for them 
-        # first in the old search form
-        # then in the new search form
-        # we time the results and compare them. 
-        # if the new result is slower than the old, the test fails
+        """
+            To make sure we don't make Plone superslower, we run some crude performance tests.
+            We make 1000 documents, publish them, then search for them. 
+            Compare the results with the old search results page
+            If we are much slower (1.5 times) the test fails 
         
-        print "testing preformance with 1000 pages"
+            These tests WILL be slow to run. 
+            Let's remove or hide these when(if) the PLIP is approved        
+        """
+        
+        heatup_browser = Browser()
+        portal_url = self.portal.absolute_url()
+        heatup_browser.open(portal_url)
+        
+        print "testing performance with 1000 pages"
         from time import time
         self.setRoles(['Manager', 'Member'])
         for i in range(0,1000):
             new_id = self.folder.invokeFactory('Document', 'my-page'+str(i), text='spam spam ham eggs')
             obj = getattr(self.folder,new_id)
             self.portal.portal_workflow.doActionFor(obj, 'publish')
-        portal_url = self.portal.absolute_url()
+        
         
         # time rendering the old search page
         old_start = time()
@@ -135,19 +149,16 @@ class TestSetup(SearchFunctionalTestCase):
         browser2.open(portal_url+'/@@search?SearchableText=spam')
         new_end = time()
         new_time = new_end-new_start
-        print "1000 items"
+        print "*" * 20
+        print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
-        self.failUnless(old_time > new_time, "the new search results page is slower than the old search results page")
-
-
-    
-    
+        self.failUnless((old_time*1.5) > new_time, "the new search results page is slower than the old search results page")
 
     #  Having tests in multiple files makes
     #  it possible to run tests from just one package:
     #   
-    #   ./bin/instance test -s example.tests -t test_integration_unit
+    #   ./bin/instance test -s plone.app.search -t test_search_performance
 
 
 def test_suite():
