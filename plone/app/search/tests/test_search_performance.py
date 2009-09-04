@@ -73,16 +73,12 @@ class TestSetup(SearchFunctionalTestCase):
             To make sure we don't make Plone superslower, we run some crude performance tests.
             We make 100 documents, publish them, then search for them. 
             Compare the results with the old search results page
-            If we are much slower (1.5 times) the test fails 
+            If we are slower the test fails 
         
             These tests WILL be slow to run. 
             Let's remove or hide these when(if) the PLIP is approved        
         """
         
-        heatup_browser = Browser()
-        portal_url = self.portal.absolute_url()
-        heatup_browser.open(portal_url)
-
         print "testing performance with 100 pages"
         from time import time
         self.setRoles(['Manager', 'Member'])
@@ -91,6 +87,10 @@ class TestSetup(SearchFunctionalTestCase):
             obj = getattr(self.folder,new_id)
             self.portal.portal_workflow.doActionFor(obj, 'publish')
         portal_url = self.portal.absolute_url()
+
+        heatup_browser = Browser()
+        portal_url = self.portal.absolute_url()
+        heatup_browser.open(portal_url+'/search?SearchableText=spam')
         
         # time rendering the old search page
         old_start = time()
@@ -98,18 +98,21 @@ class TestSetup(SearchFunctionalTestCase):
         browser.open(portal_url+'/search?SearchableText=spam')
         old_end = time()
         old_time = old_end-old_start
+        self.failUnless("100 items matching your search terms" in browser.contents)
 
         # then time rendering the new search page
         new_start = time()
         browser2 = Browser()
         browser2.open(portal_url+'/@@search?SearchableText=spam')
         new_end = time()
+        self.failUnless("100 items matching your search terms" in browser2.contents)
+
         new_time = new_end-new_start
         print "*" * 20
         print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
-        self.failUnless((old_time*1.5) > new_time)
+        self.failUnless((old_time*1.1) >= new_time)
 
 
     def test_performance_for_1000_items(self):
@@ -117,16 +120,11 @@ class TestSetup(SearchFunctionalTestCase):
             To make sure we don't make Plone superslower, we run some crude performance tests.
             We make 1000 documents, publish them, then search for them. 
             Compare the results with the old search results page
-            If we are much slower (1.5 times) the test fails 
+            If we are slower the test fails 
         
             These tests WILL be slow to run. 
             Let's remove or hide these when(if) the PLIP is approved        
         """
-        
-        heatup_browser = Browser()
-        portal_url = self.portal.absolute_url()
-        heatup_browser.open(portal_url)
-        
         print "testing performance with 1000 pages"
         from time import time
         self.setRoles(['Manager', 'Member'])
@@ -134,13 +132,17 @@ class TestSetup(SearchFunctionalTestCase):
             new_id = self.folder.invokeFactory('Document', 'my-page'+str(i), text='spam spam ham eggs')
             obj = getattr(self.folder,new_id)
             self.portal.portal_workflow.doActionFor(obj, 'publish')
-        
+
+        heatup_browser = Browser()
+        portal_url = self.portal.absolute_url()
+        heatup_browser.open(portal_url+'/search?SearchableText=spam')
         
         # time rendering the old search page
         old_start = time()
         browser = Browser()
         browser.open(portal_url+'/search?SearchableText=spam')
         old_end = time()
+        self.failUnless("1000 items matching your search terms" in browser.contents)
         old_time = old_end-old_start
 
         # then time rendering the new search page
@@ -148,12 +150,14 @@ class TestSetup(SearchFunctionalTestCase):
         browser2 = Browser()
         browser2.open(portal_url+'/@@search?SearchableText=spam')
         new_end = time()
+        self.failUnless("1000 items matching your search terms" in browser2.contents)
+        
         new_time = new_end-new_start
         print "*" * 20
         print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
-        self.failUnless((old_time*1.5) > new_time, "the new search results page is slower than the old search results page")
+        self.failUnless((old_time*1.1) > new_time, "the new search results page is slower than the old search results page")
 
     #  Having tests in multiple files makes
     #  it possible to run tests from just one package:
