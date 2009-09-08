@@ -112,6 +112,7 @@ class TestSetup(SearchFunctionalTestCase):
         print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
+        print str((new_time/old_time)*100) + "% time usage"
         self.failUnless((old_time*1.1) >= new_time)
 
 
@@ -157,6 +158,7 @@ class TestSetup(SearchFunctionalTestCase):
         print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
+        print str((new_time/old_time)*100) + "% time usage" 
         self.failUnless((old_time*1.1) > new_time, "the new search results page is slower than the old search results page")
 
     #  Having tests in multiple files makes
