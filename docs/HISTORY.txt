@@ -1,7 +1,17 @@
 Changelog
 =========
 
-1.0 (xxxx-xx-xx)
+1.0 (unreleased)
 ----------------
 
-* Initial release
+- Show username when fullname is not specified.
+  [robgietema]
+
+- Fixed template layout.
+  [robgietema]
+
+- Removed querybuilder and unused views.
+  [robgietema]
+
+- Initial checkin.
+  [elvix]

@@ -103,10 +103,10 @@
 
           <span class="documentByLine">
             <span class="documentAuthor" tal:define="author item/Creator"
-                  i18n:translate="label_by_author" tal:condition="author/fullname">
+                  i18n:translate="label_by_author">
               by
-              <a href="python: #"
-                 tal:content="author/fullname"
+              <a href="#"
+                 tal:content="python:author['fullname'] or author['username']"
                  i18n:name="author">
                 Bob Dobalina
               </a>
