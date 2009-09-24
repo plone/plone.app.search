@@ -106,6 +106,7 @@
                   i18n:translate="label_by_author">
               by
               <a href="#"
+                 tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${author/username}"
                  tal:content="python:author['fullname'] or author['username']"
                  i18n:name="author">
                 Bob Dobalina
