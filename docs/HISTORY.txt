@@ -4,6 +4,10 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Hide documentbyline when user is anonymous and the allow anonymous view about
+  setting is set to false.
+  [robgietema]
+
 - Fixed author url.
   [robgietema]
 
