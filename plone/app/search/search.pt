@@ -145,13 +145,11 @@
             Cropped description
           </span>
 
-          <span class="documentLocation">
-            <a href=""
+          <span class="documentLocation"            
                class="link-location"
                tal:content="item/getPath"
-               tal:attributes="href item/getURL">
+               >
               Location
-            </a>
           </span>
         </dd>
 
