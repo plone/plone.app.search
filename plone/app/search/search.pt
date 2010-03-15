@@ -105,7 +105,7 @@
                              class string:state-${item/review_state}"
              tal:content="item/Title" />
 
-          <span class="documentByLine"
+          <span class="discreet"
             tal:condition="python:not context.portal_membership.isAnonymousUser() or site_properties.allowAnonymousViewAbout">
             <span class="documentAuthor" tal:define="author item/Creator"
                   i18n:translate="label_by_author">

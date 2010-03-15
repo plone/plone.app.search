@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Styling the author and modification date of a search result to look like it was proposed in PLIP #9352.
+  [nzupan] 
+
 - Add RSS icon to the search feed results and clarify associated text.
   [dukebody]
 
