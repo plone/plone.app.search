@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Merge the advanced and basic searches into one.
+  [dukebody]
+
 - Added publication date to a search result.
   [nzupan]
 
