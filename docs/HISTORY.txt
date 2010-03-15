@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Added condition to only display modification date if it is different than publication date.
+  [nzupan]
+
 - Merge the advanced and basic searches into one.
   [dukebody]
 
