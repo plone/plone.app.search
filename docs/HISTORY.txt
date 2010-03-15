@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Added publication date to a search result.
+  [nzupan]
+
 - Styling the author and modification date of a search result to look like it was proposed in PLIP #9352.
   [nzupan] 
 
