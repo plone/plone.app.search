@@ -129,7 +129,8 @@
              tal:attributes="href item/getURL;
                              class string:state-${item/review_state}"
              tal:content="item/Title" />
-
+        </dt>
+        <dd>
           <span class="discreet"
             tal:condition="python:not context.portal_membership.isAnonymousUser() or site_properties.allowAnonymousViewAbout">
             <span class="documentAuthor" tal:define="author item/Creator"
@@ -179,18 +180,16 @@
               </span>
             </span>
           </span>
-        </dt>
-        <dd>
-          <span tal:replace="item/CroppedDescription">
+          <div tal:content="item/CroppedDescription">
             Cropped description
-          </span>
+          </div>
 
-          <span class="documentLocation"            
+          <cite class="documentLocation"            
                class="link-location"
                tal:content="item/getPath"
                >
               Location
-          </span>
+          </cite>
         </dd>
 
         </tal:entry>
