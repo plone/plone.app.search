@@ -1,15 +1,49 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
-    i18n_domain="plone"
+    i18n_domain="plone.app.search"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-  <browser:page
-      name="search"
-      class=".browser.Search"
-      permission="zope2.View"
-      for="Products.CMFCore.interfaces.IFolderish"
-      template="search.pt"
-      />
+
+<browser:page
+    name="search"
+    class=".browser.Search"
+    permission="zope2.View"
+    for="Products.CMFCore.interfaces.IFolderish"
+    template="search.pt"
+    />
+
+<!-- XXX: testing/debug -->
+<browser:page
+    name="collectiontest"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="Products.CMFCore.interfaces.IFolderish"
+    template="collectionstest.pt"
+    />
+
+<browser:page
+    name="previewadvancedsearchresults"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="*"
+    template="previewsearchresults.pt"
+    />
+
+<browser:page
+    name="previewadvancedsearchnumberofresults"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="*"
+    attribute="getFormattedNumberOfResults"
+    />
+
+<browser:page
+    name="jsonadvancedsearchconfig"
+    class=".browser.AdvancedSearch"
+    permission="zope2.View"
+    for="*"
+    attribute="getJSONConfig"
+    />
 
 </configure>
