@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Display a short modification date using toLocalizedTime with long_format parameter set to false.
+  [nzupan]
+
 - Hide documentbyline when user is anonymous and the allow anonymous view about
   setting is set to false.
   [robgietema]

@@ -114,12 +114,12 @@
               </a>
             </span>
 
-            <span class="documentModified">
+            <span class="documentModified" tal:define="modification_date item/ModificationDate">
               &mdash;
               <span i18n:translate="box_last_modified">
                 last modified
               </span>
-              <span tal:replace="item/ModificationDate">
+              <span tal:replace="python:toLocalizedTime(modification_date, long_format=0)">
                 August 16, 2001 at 23:35:59
               </span>
             </span>
