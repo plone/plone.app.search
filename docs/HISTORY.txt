@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Add RSS icon to the search feed results and clarify associated text.
+  [dukebody]
+
 - Display a short modification date using toLocalizedTime with long_format parameter set to false.
   [nzupan]
 
