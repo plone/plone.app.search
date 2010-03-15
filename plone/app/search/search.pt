@@ -31,53 +31,63 @@
 
     <form name="searchform" 
           action="@@search"
-          class="enableAutoFocus">
-      <input class="searchPage"
-             name="SearchableText"
-             type="text"
-             size="25"
-             title="Search Site"
-             i18n:attributes="title title_search_title;"
-             tal:attributes="value request/SearchableText|nothing;"
-             />
-      <input class="searchPage searchButton"
-             type="submit"
-             value="Search"
-             i18n:attributes="value label_search;"/>
+          class="searchPage enableAutoFocus">
+      
+        <input class="searchPage"
+               name="SearchableText"
+               type="text"
+               size="25"
+               title="Search Site"
+               i18n:attributes="title title_search_title;"
+               tal:attributes="value request/SearchableText|nothing;"
+               />
+        <input class="searchPage searchButton"
+               type="submit"
+               value="Search"
+               i18n:attributes="value label_search;"/>
 
-    <div class="search-advanced">
-      <div id="hide-form" style="display:none;">
-        <p>
-          <a href=""
-             tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?${request/QUERY_STRING}">
-            More search options
-          </a>
-        </p>
-        <metal:use use-macro="context/search_form/macros/form" />
-      </div>
-      <p id="show-form">
-        <a href=""
-           tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?${request/QUERY_STRING}">
-          More search options
-        </a>
-      </p>
-    </div>
-    <script type="text/javascript">
-     jq(document).ready(function(){
-	     jq('#show-form a').click(function(event) {
-		     event.preventDefault();
-		     jq('#hide-form').show('slow');
-		     jq('#show-form').hide('slow');
-		 });
-	 });
-     jq(document).ready(function(){
-	jq('#hide-form a').click(function(event) {
-		event.preventDefault();
-		jq('#show-form').show('slow');
-		jq('#hide-form').hide('slow');
-	    });
-     });
-    </script>
+        <div class="search-advanced">
+          <div id="hide-form" style="display:none;">
+            <p class="moreSearchOptions">
+              <a href=""
+                 tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/search_form?${request/QUERY_STRING}">
+                More search options
+              </a>
+            </p>
+            <!-- <metal:use use-macro="context/search_form/macros/form" /> -->
+         </div>
+         <div id="show-form">
+            <p class="moreSearchOptions">
+              <a href=""
+                 tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/search_form?${request/QUERY_STRING}">
+                More search options
+              </a>
+            </p>
+        </div>
+        
+        <script type="text/javascript">
+           search_form_filter = '#content-core > *:not(h2)';        
+           function noformerrorshow(el, noform) {
+               var o = jq(el);
+               var emsg = o.find('dl.portalMessage.error');
+               if (emsg.length) {
+                   o.children().replaceWith(emsg);
+                   return false;
+               } else {
+                   return noform;
+               }
+           }
+           jq('#show-form a').prepOverlay(
+               {
+                   subtype: 'ajax',
+                   filter: search_form_filter,
+                   formselector: 'form#searchform',
+                   noform: function(el) {return noformerrorshow(el, 'reload');},
+                   closeselector: '[name=form.button.Cancel]',
+                   redirect: function () {return location.href;}
+               }
+           );
+        </script>
 
     </form>
 
@@ -188,10 +198,8 @@
             Cropped description
           </div>
 
-          <cite class="documentLocation"            
-               class="link-location"
-               tal:content="item/getPath"
-               >
+          <cite class="documentLocation link-location"
+               tal:content="item/getPath">
               Location
           </cite>
         </dd>
