@@ -73,10 +73,14 @@
        tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
       <a href=""
          class="link-feed"
-         i18n:translate="title_rss_feed"
          tal:define="here_url context/@@plone_context_state/object_url"
          tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
-         Subscribe to an always-updated feed of these search terms</a>
+	<img src="" alt="RSS"
+	     tal:attributes="src string:${portal_url}/rss.gif"/>
+	<span i18n:translate="title_rss_feed">
+	  Subscribe to an always-updated RSS feed of these search terms
+	</span>
+      </a>
     </p>
 
     <div tal:condition="not: results">
