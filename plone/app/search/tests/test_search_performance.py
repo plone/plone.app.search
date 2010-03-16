@@ -160,6 +160,8 @@ class TestSetup(SearchFunctionalTestCase):
         print "*" * 20
         print str((new_time/old_time)*100) + "% time usage" 
         self.failUnless((old_time*1.1) > new_time, "the new search results page is slower than the old search results page")
+        
+        
 
     #  Having tests in multiple files makes
     #  it possible to run tests from just one package:

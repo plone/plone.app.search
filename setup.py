@@ -3,6 +3,8 @@ import os
 
 version = '1.0'
 
+tests_require = ['collective.testcaselayer']
+
 setup(name='plone.app.search',
       version=version,
       description="",
@@ -25,10 +27,12 @@ setup(name='plone.app.search',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'collective.testcaselayer',
           # -*- Extra requirements: -*-
       ],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
+      tests_require=tests_require,
+      extras_require={'tests': tests_require},      
+      entry_points = '''
+          [z3c.autoinclude.plugin]
+          target = plone
+      ''',
       )
