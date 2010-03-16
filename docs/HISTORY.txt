@@ -5,25 +5,25 @@ Changelog
 ----------------
 
 - Added truncating the search result's location url, in case it's too long.
-  [nzupan]
+  [zupo]
 
 - Added condition to only display modification date if it is different than publication date.
-  [nzupan]
+  [zupo]
 
 - Merge the advanced and basic searches into one.
   [dukebody]
 
 - Added publication date to a search result.
-  [nzupan]
+  [zupo]
 
 - Styling the author and modification date of a search result to look like it was proposed in PLIP #9352.
-  [nzupan] 
+  [zupo] 
 
 - Add RSS icon to the search feed results and clarify associated text.
   [dukebody]
 
 - Display a short modification date using toLocalizedTime with long_format parameter set to false.
-  [nzupan]
+  [zupo]
 
 - Hide documentbyline when user is anonymous and the allow anonymous view about
   setting is set to false.
