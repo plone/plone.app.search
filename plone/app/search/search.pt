@@ -66,7 +66,7 @@
         </div>
         
         <script type="text/javascript">
-           search_form_filter = '#content-core > *:not(h2)';        
+           search_form_filter = '#content-core form > *:not(h2):not(#advanced-search-field)';        
            function noformerrorshow(el, noform) {
                var o = jq(el);
                var emsg = o.find('dl.portalMessage.error');
@@ -83,8 +83,7 @@
                    filter: search_form_filter,
                    formselector: 'form#searchform',
                    noform: function(el) {return noformerrorshow(el, 'reload');},
-                   closeselector: '[name=form.button.Cancel]',
-                   redirect: function () {return location.href;}
+                   closeselector: '[name=form.button.Cancel]'
                }
            );
         </script>
