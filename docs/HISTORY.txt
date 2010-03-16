@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Added truncating the search result's location url, in case it's too long.
+  [nzupan]
+
 - Added condition to only display modification date if it is different than publication date.
   [nzupan]
 

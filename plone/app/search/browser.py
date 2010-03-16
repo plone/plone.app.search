@@ -1,9 +1,12 @@
+from urlparse import urlsplit
+from os.path import basename
 from Products.Five.browser import BrowserView
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from config import CRITERION, SORTABLES
 from zope.component import queryMultiAdapter, getMultiAdapter
 from ZTUtils import make_query
+
 
 class Search(BrowserView):
 
@@ -54,3 +57,32 @@ class Search(BrowserView):
             sortoption(self.request, 'date (newest first)', 'Date', reverse=True),
             sortoption(self.request, 'aphabetically', 'sortable_title'),
         )
+
+    @staticmethod
+    def truncate_url(url, url_threshold=80, filename_threshold=20):
+        """ Returns a cropped url.
+
+        The goal is to display only the critical parts of the URL while keeping 
+        the URL short enough to not stand out on the search results page.
+        
+        The url is first split into two parts: path and filename.
+        
+        Path truncating happens first. If the lenght of the whole url exceeds
+        the url_threshold, then everything after the first '/' is truncated.
+        
+        After that we do the filename truncating (only if path truncating already happened).
+        If the lenght of the filename exceeds the filename_threshold, 
+        then everything after the {filename_thresholds}-th character is truncated.
+        """
+        
+        # if url is short enough, just return it without any changes
+        if len(url) < url_threshold:
+            return url
+        
+        surl = urlsplit(url)    
+        filename = basename(url)
+        
+        if len(filename) > filename_threshold:
+            filename = filename[:filename_threshold] + '&hellip;'
+        
+        return "%s://%s/&hellip;/%s" %(surl.scheme, surl.netloc, filename)

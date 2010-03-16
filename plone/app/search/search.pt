@@ -198,7 +198,9 @@
           </div>
 
           <cite class="documentLocation link-location"
-               tal:content="item/getPath">
+                tal:define="url item/getURL;
+                            truncated_url python: view.truncate_url(url);"
+               tal:content="structure truncated_url">
               Location
           </cite>
         </dd>
