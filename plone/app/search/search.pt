@@ -31,7 +31,12 @@
 
     <form name="searchform" 
           action="@@search"
-          class="searchPage enableAutoFocus">
+          class="searchPage enableAutoFocus"
+          tal:define="DateTime python:modules['DateTime'].DateTime;
+                      portal context/@@plone_portal_state/portal;
+                      options context/@@searchform-options;
+                      field_collapsible_class  python:'field'+(options.collapse() and ' collapsible' or '');
+                      first_call  not:request/advanced_search|nothing">
       
         <input class="searchPage"
                name="SearchableText"
@@ -46,48 +51,44 @@
                value="Search"
                i18n:attributes="value label_search;"/>
 
-        <div class="search-advanced">
-          <div id="hide-form" style="display:none;">
-            <p class="moreSearchOptions">
-              <a href=""
-                 tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/search_form?${request/QUERY_STRING}">
-                More search options
-              </a>
-            </p>
-            <!-- <metal:use use-macro="context/search_form/macros/form" /> -->
-         </div>
-         <div id="show-form">
-            <p class="moreSearchOptions">
-              <a href=""
-                 tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/search_form?${request/QUERY_STRING}">
-                More search options
-              </a>
-            </p>
-        </div>
-        
+        <tal:searchfilter define="advanced_search view/showAdvancedSearch">
+            <tal:filter_hidden>
+               <p class="moreSearchOptions" id="show-filter">
+                 <a href="" i18n:translate="label_hide_search_filter"
+                    tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?advanced_search=True&${request/QUERY_STRING}">
+                   Show search filter
+                 </a>
+               </p>
+            </tal:filter_hidden>   
+            <tal:filter_shown>
+               <p class="moreSearchOptions" id="hide-filter" style="display:none">
+                 <a href="" i18n:translate="label_show_search_filter"
+                    tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?${request/QUERY_STRING}">
+                   Hide search filter
+                 </a>
+               </p>    
+               <div id="search-filter" style="display:none">
+                   <metal:use use-macro="context/search_form/macros/formcontent" />
+                   <span class="visualClear"><!-- --></span>
+               </div>
+            </tal:filter_shown>
+        </tal:searchfilter>
         <script type="text/javascript">
-           search_form_filter = '#content-core';        
-           function noformerrorshow(el, noform) {
-               var o = jq(el);
-               var emsg = o.find('dl.portalMessage.error');
-               if (emsg.length) {
-                   o.children().replaceWith(emsg);
-                   return false;
-               } else {
-                   return noform;
-               }
-           }
-           jq('#show-form a').prepOverlay(
-               {
-                   subtype: 'ajax',
-                   filter: search_form_filter,
-                   formselector: '#content-core',
-                   noform: function(el) {return noformerrorshow(el, 'reload');},
-                   closeselector: '[name=form.button.Cancel]'
-               }
-           );
+             jq('#show-filter a').click(function(event){
+                 event.preventDefault();                
+                 jq('#search-filter').slideDown('fast', function(){
+                     jq('#show-filter').hide();
+                     jq('#hide-filter').show();
+                 });
+             });
+             jq('#hide-filter a').click(function(event){
+                 event.preventDefault();                
+                 jq('#search-filter').slideUp('fast', function(){
+                     jq('#show-filter').show();                     
+                     jq('#hide-filter').hide();
+                 });
+             });                 
         </script>
-
     </form>
 
     <h1 class="documentFirstHeading">
@@ -121,12 +122,12 @@
       <p><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
     </div>
 
-    <p tal:condition="results">
+    <!-- <p tal:condition="results">
       <span i18n:translate="sort_by">Sort by</span><span tal:repeat="item view/getSortOptions">
         <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
         <strong tal:condition="item/selected" tal:content="item/title"></strong> <span tal:condition="not:repeat/item/end">&middot;</span>
       </span>
-    </p>
+    </p> -->
 
     <div tal:condition="results" tal:define="batch python:Batch(results, b_size, int(b_start), orphan=1)">
       <dl class="searchResults" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
@@ -135,7 +136,7 @@
         <dt tal:attributes="class item/ContentTypeClass">
           <img tal:replace="structure item/getIcon" />
           <a href="#" 
-             tal:attributes="href string:${item/getURL}${item/appendViewAction};
+             tal:attributes="href item/getURL;
                              class string:state-${item/review_state}"
              tal:content="item/Title" />
         </dt>

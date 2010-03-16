@@ -58,6 +58,15 @@ class Search(BrowserView):
             sortoption(self.request, 'aphabetically', 'sortable_title'),
         )
 
+    def showAdvancedSearch(self):
+        """Whether we need to show advanced search options a.k.a. filters?"""
+        if not self.request.get('advanced_search', None):
+            return False
+        elif self.request.get('advanced_search', None) == 'False':
+            return False
+        elif self.request.get('advanced_search', None) == 'True':
+            return True
+
     @staticmethod
     def truncate_url(url, url_threshold=80, filename_threshold=20):
         """ Returns a cropped url.

@@ -4,10 +4,16 @@ Changelog
 1.0 (unreleased)
 ----------------
 
-- Added truncating the search result's location url, in case it's too long.
+- Advanced search form a.k.a. Search filter is being merged into 
+  search result with JS hide/show.
+  [spliter]
+
+- Added truncating the search result's location url, in case it's too
+  long.
   [zupo]
 
-- Added condition to only display modification date if it is different than publication date.
+- Added condition to only display modification date if it is 
+  different than publication date.
   [zupo]
 
 - Merge the advanced and basic searches into one.
@@ -16,17 +22,19 @@ Changelog
 - Added publication date to a search result.
   [zupo]
 
-- Styling the author and modification date of a search result to look like it was proposed in PLIP #9352.
+- Styling the author and modification date of a search result to 
+  look like it was proposed in PLIP #9352.
   [zupo] 
 
 - Add RSS icon to the search feed results and clarify associated text.
   [dukebody]
 
-- Display a short modification date using toLocalizedTime with long_format parameter set to false.
+- Display a short modification date using toLocalizedTime with 
+  long_format parameter set to false.
   [zupo]
 
-- Hide documentbyline when user is anonymous and the allow anonymous view about
-  setting is set to false.
+- Hide documentbyline when user is anonymous and the allow anonymous
+  view about setting is set to false.
   [robgietema]
 
 - Fixed author url.
