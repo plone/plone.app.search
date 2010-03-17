@@ -15,6 +15,20 @@
           context/@@plone_context_state/object_url;"
           tal:condition="request/SearchableText|nothing"
           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
+          
+    <style type="text/css"> 
+        #searchResultsHeading{ 
+            background-color: #dddddd;
+            padding: 0 0.5em;
+            text-align: left;
+            }
+            
+        .searchCriterion{ font-weight:bold }
+        
+        #searchResultsCount{ float:right }
+        
+    </style> 
+    
   </metal:block>
 
   <metal:block fill-slot="top_slot"
@@ -36,7 +50,8 @@
                       portal context/@@plone_portal_state/portal;
                       options context/@@searchform-options;
                       field_collapsible_class  python:'field'+(options.collapse() and ' collapsible' or '');
-                      first_call  not:request/advanced_search|nothing">
+                      first_call  not:request/advanced_search|nothing"
+          >
       
         <input class="searchPage"
                name="SearchableText"
@@ -91,18 +106,23 @@
         </script>
     </form>
 
-    <h1 class="documentFirstHeading">
-      <span i18n:translate="heading_search_results">
-        Search results
-      </span>
+    <div id="searchResultsHeading">
       <span class="discreet">
-        &mdash;
+        Item type(s): <span class="searchCriterion">Document</span>,
+        Author: <span class="searchCriterion">bob</span>, 
+        New items since: <span class="searchCriterion">last week</span>
+        &nbsp;&nbsp;
+        Sorted by: <span class="searchCriterion">relevance</span>
+      </span>
+
+      <span id="searchResultsCount" class="discreet">
         <span i18n:translate="batch_x_items_matching_your_criteria"
         ><span i18n:name="number" 
         tal:omit-tag="" 
         tal:content="python:len(results)">234</span> items matching your search terms</span>
       </span>
-    </h1>
+
+    </div>
 
     <p class="discreet"
        tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
