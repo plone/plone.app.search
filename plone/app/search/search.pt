@@ -18,10 +18,12 @@
           
     <style type="text/css"> 
         #searchResultsHeading{ 
-            background-color: #dddddd;
-            padding: 0 0.5em;
-            text-align: left;
-            }
+            background-color:#DDDDDD;
+            font-size:1.1em;
+            margin-bottom:0.9em;
+            padding:0.3em 16px;
+            text-align:left;
+        }
             
         .searchCriterion{ font-weight:bold }
         
@@ -126,16 +128,16 @@
 
     <p class="discreet"
        tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
-      <a href=""
-         class="link-feed"
-         tal:define="here_url context/@@plone_context_state/object_url"
-         tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
-	<img src="" alt="RSS"
-	     tal:attributes="src string:${portal_url}/rss.gif"/>
-	<span i18n:translate="title_rss_feed">
-	  Subscribe to an always-updated RSS feed of these search terms
-	</span>
-      </a>
+       	<img src="" alt="RSS"
+       	     tal:attributes="src string:${portal_url}/rss.gif"/>       
+        <a href=""
+           class="link-feed"
+           tal:define="here_url context/@@plone_context_state/object_url"
+           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
+            <span i18n:translate="title_rss_feed">
+              Subscribe to an always-updated RSS feed of these search terms
+            </span>
+        </a>
     </p>
 
     <div tal:condition="not: results">
