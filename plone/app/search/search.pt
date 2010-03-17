@@ -18,16 +18,22 @@
           
     <style type="text/css"> 
         #searchResultsHeading{ 
-            background-color:#DDDDDD;
+            background-color:#eee;
             font-size:1.1em;
-            margin-bottom:0.9em;
+            margin-bottom:1px;
             padding:0.3em 16px;
             text-align:left;
         }
-            
-        .searchCriterion{ font-weight:bold }
-        
+        #searchResultsHeading strong { 
+            color: #000;
+        }
         #searchResultsCount{ float:right }
+        #search-results {
+            margin-top: 1em
+        }
+        #rss-subscription {
+            margin: 0.5em 0 1em;
+        }
         
     </style> 
     
@@ -43,8 +49,10 @@
 
   <div metal:fill-slot="main" tal:define="results view/results;
        Batch python:modules['Products.CMFPlone'].Batch;
-       b_size python:30;b_start python:0;b_start request/b_start | b_start;">
-
+       b_size python:30;
+       b_start python:0;
+       b_start request/b_start | b_start;">
+       
     <form name="searchform" 
           action="@@search"
           class="searchPage enableAutoFocus"
@@ -83,8 +91,31 @@
                     tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?${request/QUERY_STRING}">
                    Hide search filter
                  </a>
-               </p>    
-               <div id="search-filter" style="display:none">
+               </p> 
+                  
+               <div id="searchResultsHeading">
+                 <span class="discreet">
+                   Item type(s): <strong>Document</strong>,
+                   Author: <strong>bob</strong>, 
+                   New items since: <strong>last week</strong>
+                   &nbsp;&nbsp;
+                   <span i18n:translate="sort_by">Sort by</span>
+                   <span tal:repeat="item view/getSortOptions">
+                     <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
+                     <strong tal:condition="item/selected" tal:content="item/title"></strong>
+                     <span tal:condition="not:repeat/item/end">&middot;</span>
+                   </span>
+                 </span>
+
+                 <span id="searchResultsCount" class="discreet">
+                   <span i18n:translate="batch_x_items_matching_your_criteria"
+                   ><span i18n:name="number" 
+                   tal:omit-tag="" 
+                   tal:content="python:len(results)">234</span> items matching your search terms</span>
+                 </span>
+               </div>
+                              
+               <div id="search-filter" style="display:none">                   
                    <metal:use use-macro="context/search_form/macros/formcontent" />
                    <div class="visualClear"><!-- --></div>
                </div>
@@ -108,25 +139,7 @@
         </script>
     </form>
 
-    <div id="searchResultsHeading">
-      <span class="discreet">
-        Item type(s): <span class="searchCriterion">Document</span>,
-        Author: <span class="searchCriterion">bob</span>, 
-        New items since: <span class="searchCriterion">last week</span>
-        &nbsp;&nbsp;
-        Sorted by: <span class="searchCriterion">relevance</span>
-      </span>
-
-      <span id="searchResultsCount" class="discreet">
-        <span i18n:translate="batch_x_items_matching_your_criteria"
-        ><span i18n:name="number" 
-        tal:omit-tag="" 
-        tal:content="python:len(results)">234</span> items matching your search terms</span>
-      </span>
-
-    </div>
-
-    <p class="discreet"
+    <p class="discreet" id="rss-subscription"
        tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
        	<img src="" alt="RSS"
        	     tal:attributes="src string:${portal_url}/rss.gif"/>       
@@ -140,7 +153,7 @@
         </a>
     </p>
 
-    <div tal:condition="not: results">
+    <div tal:condition="not: results" id="search-results">
       <p><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
     </div>
 
@@ -151,7 +164,9 @@
       </span>
     </p> -->
 
-    <div tal:condition="results" tal:define="batch python:Batch(results, b_size, int(b_start), orphan=1)">
+    <div id="search-results" tal:condition="results" 
+         tal:define="batch python:Batch(results, b_size, int(b_start), orphan=1)">
+         
       <dl class="searchResults" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
       <tal:results repeat="item batch">
       <tal:entry>
