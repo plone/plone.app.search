@@ -69,7 +69,7 @@
                </p>    
                <div id="search-filter" style="display:none">
                    <metal:use use-macro="context/search_form/macros/formcontent" />
-                   <span class="visualClear"><!-- --></span>
+                   <div class="visualClear"><!-- --></div>
                </div>
             </tal:filter_shown>
         </tal:searchfilter>
