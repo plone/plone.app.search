@@ -6,7 +6,7 @@ Changelog
 
 - New view for the fetching search results on the fly.
   Referencese http://dev.plone.org/plone/ticket/9352
-  [spliter]
+  [spliter, witsch]
 
 - Advanced search form a.k.a. Search filter is being merged into 
   search result with JS hide/show.
