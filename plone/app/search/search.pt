@@ -352,6 +352,21 @@
         
                     <div class="visualClear"><!-- --></div>
                 </fieldset>
+                
+                <p class="discreet" id="rss-subscription"
+                   tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
+                   	<img src="" alt="RSS"
+                   	     tal:attributes="src string:${portal_url}/rss.gif"/>       
+                    <a href=""
+                       class="link-feed"
+                       tal:define="here_url context/@@plone_context_state/object_url"
+                       tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
+                        <span i18n:translate="title_rss_feed">
+                          Subscribe to an always-updated RSS feed of these search terms
+                        </span>
+                    </a>
+                </p>
+
             </div>
 
             <div class="cell width-3:4 position-1:4">
@@ -482,19 +497,6 @@
                     })
                 </script>
   
-                <p class="discreet" id="rss-subscription"
-                   tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
-                   	<img src="" alt="RSS"
-                   	     tal:attributes="src string:${portal_url}/rss.gif"/>       
-                    <a href=""
-                       class="link-feed"
-                       tal:define="here_url context/@@plone_context_state/object_url"
-                       tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
-                        <span i18n:translate="title_rss_feed">
-                          Subscribe to an always-updated RSS feed of these search terms
-                        </span>
-                    </a>
-                </p>
             </div>
         </div>
         
