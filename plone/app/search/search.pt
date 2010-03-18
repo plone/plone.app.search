@@ -455,7 +455,7 @@
                                       </div>
 
                                       <cite class="documentLocation link-location"
-                                            tal:define="url item/getPath;
+                                            tal:define="url item/getURL;
                                                         section python: view.section(url);"
                                             tal:condition='section'>
                                            Located in <span tal:content="section"/>.
