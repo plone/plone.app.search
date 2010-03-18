@@ -93,7 +93,7 @@
                    i18n:attributes="title title_search_title;"
                    tal:attributes="value request/SearchableText|nothing;"
                    />
-            <input class="searchPage searchButton"
+            <input class="searchPage searchButton allowMultiSubmit"
                    type="submit"
                    value="Search"
                    i18n:attributes="value label_search;"/>
@@ -167,7 +167,7 @@
                                 </tal:items>
                             </div>
                             <div class="visualClear"><!-- --></div>
-                            <input class="searchPage searchButton"
+                            <input class="searchPage searchButton allowMultiSubmit"
                                    type="submit"
                                    value="Search"
                                    i18n:attributes="value label_search;"/>
@@ -392,42 +392,40 @@
 
             </div>
 
-            <div id="search-results-wrapper" class="cell width-16 position-0">
-                
-                <metal:searchresults define-macro="search_results">
-                    <div id="search-results" 
-                         tal:define="results view/results;
-                                     Batch python:modules['Products.CMFPlone'].Batch;
-                                     b_size python:30;
-                                     b_start python:0;
-                                     b_start request/b_start | b_start;">
+            <div id="search-results-wrapper" class="cell width-16 position-0"
+                 tal:define="results view/results;
+                             Batch python:modules['Products.CMFPlone'].Batch;
+                             b_size python:30;
+                             b_start python:0;
+                             b_start request/b_start | b_start;">
                                       
-                        <div id="searchResultsHeading">
-                            <span i18n:translate="batch_x_items_matching_your_criteria" class="discreet">
-                                <strong i18n:name="number"
-                                        tal:content="python:len(results)">234</strong>
-                                <span>items matching your search 
-                                    terms</span><span id="comma">,</span><span id="fullstop" class="hiddenStructure">.</span>
-                            </span>                   
+                <div id="searchResultsHeading">
+                    <span i18n:translate="batch_x_items_matching_your_criteria" class="discreet">
+                        <strong i18n:name="number"
+                                tal:content="python:len(results)">234</strong>
+                        <span>items matching your search 
+                            terms</span><span id="comma">,</span><span id="fullstop" class="hiddenStructure">.</span>
+                    </span>                   
 
-                            <span id="show-search-options" class="discreet" i18n:translate="show_search_options">
-                                you can try narrowing them down.
-                            </span>
-            
-                            <span class="discreet" id="searchResultsSort">
-                              <span i18n:translate="sort_by">Sort by</span>
-                              <span tal:repeat="item view/getSortOptions">
-                                <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
-                                <strong tal:condition="item/selected" tal:content="item/title"></strong>
-                                <span tal:condition="not:repeat/item/end">&middot;</span>
-                              </span>
-                            </span>
-                        </div>
-
+                    <span id="show-search-options" class="discreet" i18n:translate="show_search_options">
+                        you can try narrowing them down.
+                    </span>
+    
+                    <span class="discreet" id="searchResultsSort">
+                      <span i18n:translate="sort_by">Sort by</span>
+                      <span tal:repeat="item view/getSortOptions">
+                        <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
+                        <strong tal:condition="item/selected" tal:content="item/title"></strong>
+                        <span tal:condition="not:repeat/item/end">&middot;</span>
+                      </span>
+                    </span>
+                </div>
+                        
+                <metal:searchresults define-macro="search_results">                        
+                    <div id="search-results">                        
                         <metal:noresults tal:condition="not: results">
                           <p><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
                         </metal:noresults>
-
                         <metal:results tal:condition="results" 
                                        tal:define="batch python:Batch(results, b_size, int(b_start), orphan=1)">
                           <dl class="searchResults" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
@@ -509,20 +507,54 @@
                           </dl>
                           <div metal:use-macro="context/batch_macros/macros/navigation" />
                         </metal:results>
-                                            
                     </div>
                 </metal:searchresults>
                 
                 <script type="text/javascript">
-                    jq('form.searchPage').submit(function() {
-                        var data = jq(this).serialize();
-                        jq('#search-results').load('@@updated_search #search-results', data);
+                    var container = jq('#search-results');
+                    jq("form.searchPage").submit(function() {
+                        var data = jq("form.searchPage").serialize();
+                        jq.ajax({
+                            url: '@@updated_search',
+                            data: data,
+                            success: function(data){
+                                container.html(data);
+                                jq("#search-results-number").text(function(){
+                                    str = jq("#updated-search-results-number").text();
+                                    jq("#updated-search-results-number").remove();
+                                    return str;
+                                });
+                                jq("#sorting-options").html(function(){
+                                    struct = jq("#updated-sorting-options").html();
+                                    jq("#updated-sorting-options").remove();
+                                    return struct;
+                                });
+                            },
+                            error: function(req,error){
+                                if(error === 'error'){error = req.statusText;}
+                                var errormsg = 'There was a communication error: ' + error;
+                                container.html(errormsg);
+                            }
+                        });
                         return false;
-                    });                   
-                    jq('#searchResultsSort a').click(function(event) {
-                        jq('#search-results').load('@@updated_search #search-results');
-                        event.preventDefault();
-                    })
+                    });
+                    jq('#searchResultsSort a').click(function(){
+                        doAjax(jq(this).attr('href'));
+                        return false;
+                    });              
+                    function doAjax(url){
+                      jq.ajax({
+                        url: url,
+                        success: function(data){
+                            container.html(data);
+                        },
+                        error: function(req,error){
+                            if(error === 'error'){error = req.statusText;}
+                            var errormsg = 'There was a communication error: ' + error;
+                            container.html(errormsg);
+                        }
+                      });
+                    }
                     jq('#show-search-options').click(function () {
                         jq('#search-results-wrapper').removeClass('width-16 position-0');
                         jq('#search-results-wrapper').addClass('width-3:4 position-1:4');

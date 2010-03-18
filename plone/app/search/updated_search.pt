@@ -1,7 +1,21 @@
 <html>
-<body>
-    <div id="updated-search-results">
-        <metal:results use-macro="context/@@search/search_results" />
-    </div>
+<body tal:define="results view/results;
+                  Batch python:modules['Products.CMFPlone'].Batch;
+                  b_size python:30;
+                  b_start python:0;
+                  b_start request/b_start | b_start;">
+                  
+    <strong id="updated-search-results-number"
+            tal:content="python:len(results)">234</strong>    
+            
+    <span id="updated-sorting-options">
+       <metal:sorting tal:repeat="item view/getSortOptions">  
+           <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
+           <strong tal:condition="item/selected" tal:content="item/title"></strong>
+           <span tal:condition="not:repeat/item/end">&middot;</span>
+       </metal:sorting>
+    </span>           
+    
+    <metal:results use-macro="context/@@search/search_results" />
 </body>
 </html>
