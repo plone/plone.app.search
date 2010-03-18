@@ -120,7 +120,6 @@ class Search(BrowserView):
         split_query = query_string.split('&')
         
         for item in split_query:
-            
             if item.startswith('portal_type'):
                 if len(item.split(':list=')) != 2:
                     continue;
@@ -151,7 +150,7 @@ class Search(BrowserView):
                 if not item.split('=')[1]:
                     continue;
                 criteria.append({
-                    'criterion_type' : 'author',
+                    'criterion_type' : 'Creator',
                     'criterion_value' : item.split('=')[1],
                     })
        
