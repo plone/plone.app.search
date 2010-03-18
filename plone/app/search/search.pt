@@ -71,6 +71,8 @@
                       field_collapsible_class  python:'field'+(options.collapse() and ' collapsible' or '');
                       first_call  not:request/advanced_search|nothing">           
         
+        <input type="hidden" name="advanced_search" value="True" />
+        
         <fieldset id="search-field">
             <input class="searchPage"
                    name="SearchableText"
@@ -141,6 +143,11 @@
                                     <br />
                                 </tal:items>
                             </div>
+                            <div class="visualClear"><!-- --></div>
+                            <input class="searchPage searchButton"
+                                   type="submit"
+                                   value="Search"
+                                   i18n:attributes="value label_search;"/>
                             <div class="visualClear" id="clear-after-item-type"><!-- --></div>
                         </div>
                     </div>
@@ -464,8 +471,13 @@
                 </metal:searchresults>
                 
                 <script type="text/javascript">
-                    jq("input.searchButton[type='submit']").click(function(event){
-                        jq('#search-results').load('@@updated_search #updated-search-results');
+                    jq('form.searchPage').submit(function() {
+                        var data = jq(this).serialize();
+                        jq('#search-results').load('@@updated_search #search-results', data);
+                        return false;
+                    });                   
+                    jq('#searchResultsSort a').click(function(event) {
+                        jq('#search-results').load('@@updated_search #search-results');
                         event.preventDefault();
                     })
                 </script>
