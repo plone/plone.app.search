@@ -1,0 +1,8 @@
+<html>
+<body>
+    <div id="updated-search-results">
+        <h1>We are coming from the server</h1>
+        <metal:results use-macro="context/@@search/search_results" />
+    </div>
+</body>
+</html>

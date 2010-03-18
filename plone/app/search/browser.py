@@ -1,10 +1,9 @@
 from urlparse import urlsplit
 from os.path import basename
+
 from Products.Five.browser import BrowserView
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
-from config import CRITERION, SORTABLES
-from zope.component import queryMultiAdapter, getMultiAdapter
 from ZTUtils import make_query
 
 
