@@ -104,14 +104,15 @@
                 <fieldset>
                     <div class="field collapsible">
                         <label i18n:translate="label_search_criteria">Your search criteria:</label>
-                        <dl class="search-criteria">
-                            <dd tal:repeat="criterion view/criteria">
+                        <dl class="search-criteria"
+                            tal:define="criteria python:view.criteria(request.QUERY_STRING)">
+                            <dd tal:repeat="criterion criteria">
                                 <a href="#" tal:attributes="href string:#${criterion/criterion_type}">
                                     <img src="delete_icon.gif" alt="remove this criteria"/>
                                     <span tal:content="criterion/criterion_value" />
                                 </a>
                             </dd>
-                        <ul>
+                        </dl>
                     </div>
                     <div class="field collapsible"
                          tal:attributes="class field_collapsible_class" 

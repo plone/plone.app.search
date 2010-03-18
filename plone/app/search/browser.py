@@ -112,24 +112,47 @@ class Search(BrowserView):
         
         return section.title
 
-    def criteria(self):
+    @staticmethod
+    def criteria(query_string):
         """Returns a list of selected search criteria."""
         
         criteria = []
+        split_query = query_string.split('&')
         
-        criteria.append({
-            'criterion_type' : 'portal_type',
-            'criterion_value' : 'Folder',
-        })
-
-        criteria.append({
-            'criterion_type' : 'portal_type',
-            'criterion_value' : 'Page',
-        })
-
-        criteria.append({
-            'criterion_type' : 'author',
-            'criterion_value' : 'The Slovenian Guy',
-        })
-        
+        for item in split_query:
+            
+            if item.startswith('portal_type'):
+                if len(item.split(':list=')) != 2:
+                    continue;
+                criteria.append({
+                    'criterion_type' : 'portal_type',
+                    'criterion_value' : item.split(':list=')[1],
+                    })
+            
+            elif item.startswith('review_state'):
+                if len(item.split(':list=')) != 2:
+                    continue;
+                criteria.append({
+                    'criterion_type' : 'review_state',
+                    'criterion_value' : item.split(':list=')[1],
+                    })
+            
+            elif item.startswith('created'):
+                if len(item.split(':list:date=')) != 2:
+                    continue;
+                criteria.append({
+                    'criterion_type' : 'created',
+                    'criterion_value' : item.split(':list:date=')[1],
+                    })
+            
+            elif item.startswith('Creator'):
+                if len(item.split('=')) != 2:
+                    continue;
+                if not item.split('=')[1]:
+                    continue;
+                criteria.append({
+                    'criterion_type' : 'author',
+                    'criterion_value' : item.split('=')[1],
+                    })
+       
         return criteria
