@@ -1,5 +1,3 @@
-from urlparse import urlsplit
-from os.path import basename
 
 from Products.Five.browser import BrowserView
 from plone.app.contentlisting.interfaces import IContentListing
@@ -8,6 +6,8 @@ from ZTUtils import make_query
 
 
 class Search(BrowserView):
+
+    sections_cache = {}
 
     def results(self, batch=False, b_size=30):
         query = {}
@@ -66,31 +66,48 @@ class Search(BrowserView):
         elif self.request.get('advanced_search', None) == 'True':
             return True
 
-    @staticmethod
-    def truncate_url(url, url_threshold=80, filename_threshold=20):
-        """ Returns a cropped url.
+    def section(self, url):
+        """ Returns a section in which the object at the passed url is contained. 
+        Section is a first-level folder in Plone root.
 
-        The goal is to display only the critical parts of the URL while keeping 
-        the URL short enough to not stand out on the search results page.
+        For objects that are contained in Plone root object, we just return None
+        as we don't want to display anything on the template.
+
+        It does that by first removing the portal url part from the object's url, 
+        including the Plone instance id in non-virtual-hostname environments.
         
-        The url is first split into two parts: path and filename.
+        Then it splits the path with '/', taking the second item which is 
+        the section's id.
         
-        Path truncating happens first. If the lenght of the whole url exceeds
-        the url_threshold, then everything after the first '/' is truncated.
+        Lastly an object is retrieved from the Plone root object that has 
+        the id of the section we are looking for.
         
-        After that we do the filename truncating (only if path truncating already happened).
-        If the lenght of the filename exceeds the filename_threshold, 
-        then everything after the {filename_thresholds}-th character is truncated.
+        Simple caching is put in place to prevent waking up section object for
+        objects under the same section.
         """
+        # plone root object
+        url_tool = getToolByName(self.context, "portal_url")
+        portal = url_tool.getPortalObject()
         
-        # if url is short enough, just return it without any changes
-        if len(url) < url_threshold:
-            return url
+        # truncate away http, domain and plone instance id
+        path = url.split(url_tool.getPortalPath())[1]
         
-        surl = urlsplit(url)    
-        filename = basename(url)
+        # don't show location for first-level objects
+        # -> ['', 'front-page']
+        if len(path.split('/')) < 3:
+            return None
         
-        if len(filename) > filename_threshold:
-            filename = filename[:filename_threshold] + '&hellip;'
+        # get sections's id 
+        section_id = path.split('/')[1]
         
-        return "%s://%s/&hellip;/%s" %(surl.scheme, surl.netloc, filename)
+        # is this section's Title already stored in sections_cache cache dictionary?
+        if section_id in self.sections_cache.keys():
+            return self.sections_cache[section_id]
+        
+        # get section object
+        section = portal[section_id]
+        
+        # store title and id in cache
+        self.sections_cache[section_id] = section.title
+        
+        return section.title

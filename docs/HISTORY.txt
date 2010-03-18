@@ -4,6 +4,11 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Replaced url in search results with a Location -> it displays 
+  the search results item's first-level folder aka. a section. 
+  For first-level items, nothing is displayed.
+  [zupo]
+
 - New view for the fetching search results on the fly.
   Referencese http://dev.plone.org/plone/ticket/9352
   [spliter, witsch]

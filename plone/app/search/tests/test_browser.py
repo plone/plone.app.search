@@ -7,7 +7,7 @@ example.
 
 import unittest
 from base import SearchTestCase
-from plone.app.search.browser import Search        
+
 
 class TestBrowser(SearchTestCase):
     """The name of the class should be meaningful. This may be a class that
@@ -30,23 +30,52 @@ class TestBrowser(SearchTestCase):
         tear things down here.
         """
     
-    def test_truncate_url(self):
-        """Test url truncating."""
-   
-        # Don't do anything with short URLs.
-        self.assertEquals(Search.truncate_url('http://domain.com'), 'http://domain.com')
-        
-        # Truncate too long path
-        original_url = 'http://domain.com/first-level/second/level/some-file'
-        truncated_url = 'http://domain.com/&hellip;/some-file'
-        self.assertEquals(Search.truncate_url(original_url, url_threshold=10), truncated_url)
-        
-        # Truncate too long filename
-        original_url = 'http://domain.com/first-level/second/level/more-than-10-characters'
-        truncated_url = 'http://domain.com/&hellip;/more-than-&hellip;'
-        self.assertEquals(Search.truncate_url(original_url, url_threshold=10, filename_threshold=10), truncated_url)
+    def test_section(self):
+        """Test retrieving section title for search result item."""
 
+        self.setRoles(['Manager', 'Member'])
+        
+        self.portal.invokeFactory('Document', 'first_level_document')
+        self.portal.invokeFactory('Folder', 'first_level_folder', title='First Level Folder')
+    
+        view = self.portal.restrictedTraverse('@@search')
+        
+        # return None for first_level objects
+        section_title = view.section('http://nohost/plone/first_level_document')
+        self.assertEquals(section_title, None)
+        
+        section_title = view.section('http://nohost/plone/first_level_folder')
+        self.assertEquals(section_title, None)
+        
+        # return section for objects deeper in the hierarchy
+        section_title = view.section('http://nohost/plone/first_level_folder/second_level_document')
+        self.assertEquals(section_title, 'First Level Folder')
+        
+        section_title = view.section('http://nohost/plone/first_level_folder/second_level_folder')
+        self.assertEquals(section_title, 'First Level Folder')
+        
+        section_title = view.section('http://nohost/plone/first_level_folder/second_level_folder/third_level_document')
+        self.assertEquals(section_title, 'First Level Folder')
 
+    def test_section_cache(self):
+        """Test that section title is read from sections_cache dict if an entry already exists."""
+        
+        self.setRoles(['Manager', 'Member'])
+        
+        self.portal.invokeFactory('Folder', 'first_level_folder', title='First Level Folder')
+        self.portal.first_level_folder.invokeFactory('Document', 'second_level_document')
+        
+        view = self.portal.restrictedTraverse('@@search')
+
+        # We input an entry for 'first_level_folder' into sections_cache dict and this value should
+        # be returned by section() instead of the real title of first_level_folder.
+        view.sections_cache['first_level_folder'] = "Cached title for first_level_folder"
+
+        section_title = view.section('http://nohost/plone/first_level_folder/second_level_document')
+        self.assertEquals(section_title, 'Cached title for first_level_folder')
+        
+        
+        
 def test_suite():
     """This sets up a test suite that actually runs the tests in the class
     above

@@ -448,11 +448,12 @@
                                       </div>
 
                                       <cite class="documentLocation link-location"
-                                            tal:define="url item/getURL;
-                                                        truncated_url python: view.truncate_url(url);"
-                                           tal:content="structure truncated_url">
-                                          Location
+                                            tal:define="url item/getPath;
+                                                        section python: view.section(url);"
+                                            tal:condition='section'>
+                                           Located in <span tal:content="section"/>.
                                       </cite>
+
                                     </dd>
                               </tal:results>
                           </dl>
