@@ -27,6 +27,17 @@
         #searchResultsHeading strong { 
             color: #000;
         }
+        #show-search-options {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .search-criteria dd {
+            margin-bottom: 0 !important;
+        }
+        .search-criteria img {
+            height:10px;
+            vertical-align:baseline;
+        }
         #searchResultsSort{ float:right }
         #rss-subscription {
             margin: 0.5em 0 1em;
@@ -89,8 +100,19 @@
         </fieldset>
 
         <div class="row">
-            <div id="search-filter" class="cell width-1:4 position-0">
+            <div id="search-filter" class="hiddenStructure cell width-1:4 position-0">
                 <fieldset>
+                    <div class="field collapsible">
+                        <label i18n:translate="label_search_criteria">Your search criteria:</label>
+                        <dl class="search-criteria">
+                            <dd tal:repeat="criterion view/criteria">
+                                <a href="#" tal:attributes="href string:#${criterion/criterion_type}">
+                                    <img src="delete_icon.gif" alt="remove this criteria"/>
+                                    <span tal:content="criterion/criterion_value" />
+                                </a>
+                            </dd>
+                        <ul>
+                    </div>
                     <div class="field collapsible"
                          tal:attributes="class field_collapsible_class" 
                          tal:define="portal_types portal/portal_types;
@@ -369,7 +391,7 @@
 
             </div>
 
-            <div class="cell width-3:4 position-1:4">
+            <div id="search-results-wrapper" class="cell width-16 position-0">
                 
                 <metal:searchresults define-macro="search_results">
                     <div id="search-results" 
@@ -380,11 +402,16 @@
                                      b_start request/b_start | b_start;">
                                       
                         <div id="searchResultsHeading">
-                            <span i18n:translate="batch_x_items_matching_your_criteria">
+                            <span i18n:translate="batch_x_items_matching_your_criteria" class="discreet">
                                 <strong i18n:name="number"
                                         tal:content="python:len(results)">234</strong>
-                                <span class="discreet">items matching your search terms</span>
+                                <span>items matching your search 
+                                    terms</span><span id="comma">,</span><span id="fullstop" class="hiddenStructure">.</span>
                             </span>                   
+
+                            <span id="show-search-options" class="discreet" i18n:translate="show_search_options">
+                                you can try narrowing them down.
+                            </span>
             
                             <span class="discreet" id="searchResultsSort">
                               <span i18n:translate="sort_by">Sort by</span>
@@ -495,6 +522,16 @@
                         jq('#search-results').load('@@updated_search #search-results');
                         event.preventDefault();
                     })
+                    jq('#show-search-options').click(function () {
+                        jq('#search-results-wrapper').removeClass('width-16 position-0');
+                        jq('#search-results-wrapper').addClass('width-3:4 position-1:4');
+                        jq('#show-search-options').addClass("hiddenStructure");
+                        jq('#comma').addClass("hiddenStructure");
+                        jq('#fullstop').removeClass("hiddenStructure");
+
+                        jq('#search-filter').removeClass('hiddenStructure');
+                    });
+
                 </script>
   
             </div>

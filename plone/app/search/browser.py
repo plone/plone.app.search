@@ -111,3 +111,25 @@ class Search(BrowserView):
         self.sections_cache[section_id] = section.title
         
         return section.title
+
+    def criteria(self):
+        """Returns a list of selected search criteria."""
+        
+        criteria = []
+        
+        criteria.append({
+            'criterion_type' : 'portal_type',
+            'criterion_value' : 'Folder',
+        })
+
+        criteria.append({
+            'criterion_type' : 'portal_type',
+            'criterion_value' : 'Page',
+        })
+
+        criteria.append({
+            'criterion_type' : 'author',
+            'criterion_value' : 'The Slovenian Guy',
+        })
+        
+        return criteria
