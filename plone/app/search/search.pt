@@ -401,22 +401,23 @@
                                       
                 <div id="searchResultsHeading">
                     <span i18n:translate="batch_x_items_matching_your_criteria" class="discreet">
-                        <strong i18n:name="number"
+                        <strong i18n:name="number" id="search-results-number"
                                 tal:content="python:len(results)">234</strong>
-                        <span>items matching your search 
-                            terms</span><span id="comma">,</span><span id="fullstop" class="hiddenStructure">.</span>
+                        <span tal:omit-tag="">items matching your search terms.</span>
                     </span>                   
 
                     <span id="show-search-options" class="discreet" i18n:translate="show_search_options">
-                        you can try narrowing them down.
+                        You can try narrowing them down.
                     </span>
     
                     <span class="discreet" id="searchResultsSort">
                       <span i18n:translate="sort_by">Sort by</span>
-                      <span tal:repeat="item view/getSortOptions">
-                        <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
-                        <strong tal:condition="item/selected" tal:content="item/title"></strong>
-                        <span tal:condition="not:repeat/item/end">&middot;</span>
+                      <span id="sorting-options">
+                        <tal:block repeat="item view/getSortOptions">
+                            <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
+                            <strong tal:condition="item/selected" tal:content="item/title"></strong>
+                            <span tal:condition="not:repeat/item/end">&middot;</span>
+                        </tal:block>
                       </span>
                     </span>
                 </div>
@@ -559,9 +560,7 @@
                         jq('#search-results-wrapper').removeClass('width-16 position-0');
                         jq('#search-results-wrapper').addClass('width-3:4 position-1:4');
                         jq('#show-search-options').addClass("hiddenStructure");
-                        jq('#comma').addClass("hiddenStructure");
-                        jq('#fullstop').removeClass("hiddenStructure");
-
+                        
                         jq('#search-filter').removeClass('hiddenStructure');
                     });
 
