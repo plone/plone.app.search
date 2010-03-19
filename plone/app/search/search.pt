@@ -57,10 +57,6 @@
             margin-top: 0;            
             padding: 0.5em 16px;
         }
-        #search-filter fieldset #search-terms {
-            background: #E3E3E3;
-            margin-bottom: 1em
-        }
         #search-filter .formControls {
             text-align:center
         }
@@ -107,39 +103,6 @@
             <div id="search-filter" class="hiddenStructure cell width-1:4 position-0"
                  tal:attributes="class python:view.showAdvancedSearch() and 'cell width-1:4 position-0' or 'hiddenStructure cell width-1:4 position-0'">
                 <fieldset>
-                    <div class="field" id="search-terms">
-                        <h4 i18n:translate="label_search_terms">Your search terms</h4>
-                        <dl>
-                            <dt>Item type</dt>
-                            <dd>
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            <img src="delete_icon.gif" alt="remove this criteria"/>
-                                            <span>Document</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="delete_icon.gif" alt="remove this criteria"/>
-                                            <span>Folder</span>
-                                        </a>
-                                    </li>                                                                     
-                                </ul>
-                            </dd>
-                            <dt>Review status</dt>
-                            <dd>
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            <img src="delete_icon.gif" alt="remove this criteria"/>
-                                            <span>Published</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
-                    </div>
                     <div class="field collapsible"
                          tal:attributes="class field_collapsible_class" 
                          tal:define="portal_types portal/portal_types;
