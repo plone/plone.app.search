@@ -18,7 +18,7 @@
           
     <style type="text/css"> 
         #searchResultsHeading{ 
-            background-color:#E3E3E3;
+            background-color:#efefef;
             font-size:1.1em;
             margin-bottom:1px;
             padding:0.3em 16px;
@@ -34,7 +34,7 @@
         .search-criteria dd {
             margin-bottom: 0 !important;
         }
-        .search-criteria img {
+        #search-terms img {
             height:10px;
             vertical-align:baseline;
         }
@@ -57,8 +57,12 @@
             margin-top: 0;            
             padding: 0.5em 16px;
         }
-        #search-filter fieldset#current-terms {
+        #search-filter fieldset #search-terms {
             background: #E3E3E3;
+            margin-bottom: 1em
+        }
+        #search-filter .formControls {
+            text-align:center
         }
     </style>    
   </metal:block>
@@ -100,19 +104,43 @@
         </fieldset>
 
         <div class="row">
-            <div id="search-filter" class="hiddenStructure cell width-1:4 position-0">
+            <div id="search-filter" class="hiddenStructure cell width-1:4 position-0"
+                 tal:attributes="class python:view.showAdvancedSearch() and 'cell width-1:4 position-0' or 'hiddenStructure cell width-1:4 position-0'">
                 <fieldset>
-                    <div class="field collapsible">
-                        <label i18n:translate="label_search_criteria">Your search criteria:</label>
-                        <dl class="search-criteria"
-                            tal:define="criteria python:view.criteria(request.QUERY_STRING)">
-                            <dd tal:repeat="criterion criteria">
-                                <a href="#" tal:attributes="href string:#${criterion/criterion_type}">
+                    <div class="field" id="search-terms">
+                        <h4 i18n:translate="label_search_terms">Your search terms</h4>
+                        <ul>
+                            <li>
+                                <a href="#">
                                     <img src="delete_icon.gif" alt="remove this criteria"/>
-                                    <span tal:content="criterion/criterion_value" />
+                                    <span>Document</span>
                                 </a>
-                            </dd>
-                        </dl>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="delete_icon.gif" alt="remove this criteria"/>
+                                    <span>Document</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="delete_icon.gif" alt="remove this criteria"/>
+                                    <span>Document</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="delete_icon.gif" alt="remove this criteria"/>
+                                    <span>Document</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src="delete_icon.gif" alt="remove this criteria"/>
+                                    <span>Document</span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="field collapsible"
                          tal:attributes="class field_collapsible_class" 
@@ -167,11 +195,6 @@
                                 </tal:items>
                             </div>
                             <div class="visualClear"><!-- --></div>
-                            <input class="searchPage searchButton allowMultiSubmit"
-                                   type="submit"
-                                   value="Search"
-                                   i18n:attributes="value label_search;"/>
-                            <div class="visualClear" id="clear-after-item-type"><!-- --></div>
                         </div>
                     </div>
         
@@ -366,11 +389,13 @@
                                    tal:attributes="value request/Description|nothing"
                                    />
                         </div>
-                    
-                        <input class="searchButton"
+                    </div>
+        
+                    <div class="formControls">
+                        <input class="searchPage searchButton allowMultiSubmit"
                                type="submit"
                                value="Search"
-                               i18n:attributes="value label_search;"/>
+                               i18n:attributes="value label_search;"/>                           
                     </div>
         
                     <div class="visualClear"><!-- --></div>
@@ -392,7 +417,9 @@
 
             </div>
 
-            <div id="search-results-wrapper" class="cell width-16 position-0"
+            <div id="search-results-wrapper" 
+                 tal:attributes="class python:view.showAdvancedSearch() and 'cell width-3:4 position-1:4' or 'cell width-16 position-0'"
+                 class="cell width-16 position-0"
                  tal:define="results view/results;
                              Batch python:modules['Products.CMFPlone'].Batch;
                              b_size python:30;
@@ -406,9 +433,13 @@
                         <span tal:omit-tag="">items matching your search terms.</span>
                     </span>                   
 
-                    <span id="show-search-options" class="discreet" i18n:translate="show_search_options">
-                        You can try narrowing them down.
-                    </span>
+                    <a href="#"
+                       id="show-search-options" class="discreet" 
+                       i18n:translate="narrow_search_options">
+                       <img src=""
+                            tal:attributes="src string:${portal_url}/maintenance_icon.png" />                       
+                        You can narrow them down.
+                    </a>
     
                     <span class="discreet" id="searchResultsSort">
                       <span i18n:translate="sort_by">Sort by</span>
@@ -514,7 +545,18 @@
                 <script type="text/javascript">
                     var container = jq('#search-results');
                     jq("form.searchPage").submit(function() {
-                        var data = jq("form.searchPage").serialize();
+                        var data = jq(this).serialize();
+                        updateResults(data);
+                        return false;
+                    });
+                    jq('#searchResultsSort a').click(function(){
+                        var data = jq("form.searchPage").serialize();                        
+                        updateResults(data);
+                        return false;
+                    });                    
+                    
+                    
+                    function updateResults(data){
                         jq.ajax({
                             url: '@@updated_search',
                             data: data,
@@ -537,31 +579,31 @@
                                 container.html(errormsg);
                             }
                         });
-                        return false;
-                    });
-                    jq('#searchResultsSort a').click(function(){
-                        doAjax(jq(this).attr('href'));
-                        return false;
-                    });              
-                    function doAjax(url){
-                      jq.ajax({
-                        url: url,
-                        success: function(data){
-                            container.html(data);
-                        },
-                        error: function(req,error){
-                            if(error === 'error'){error = req.statusText;}
-                            var errormsg = 'There was a communication error: ' + error;
-                            container.html(errormsg);
-                        }
-                      });
                     }
-                    jq('#show-search-options').click(function () {
+                    
+                    
+             
+                    function doAjax(url){
+                        var data = jq("form.searchPage").serialize();
+                        jq.ajax({
+                            url: url,
+                            data: data,
+                            success: function(data){
+                                container.html(data);
+                            },
+                            error: function(req,error){
+                                if(error === 'error'){error = req.statusText;}
+                                var errormsg = 'There was a communication error: ' + error;
+                                container.html(errormsg);
+                            }
+                        });
+                    }
+                    jq('#show-search-options').click(function () {                        
                         jq('#search-results-wrapper').removeClass('width-16 position-0');
                         jq('#search-results-wrapper').addClass('width-3:4 position-1:4');
                         jq('#show-search-options').addClass("hiddenStructure");
-                        
                         jq('#search-filter').removeClass('hiddenStructure');
+                        return false;
                     });
 
                 </script>

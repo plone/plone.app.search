@@ -4,6 +4,12 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Moved the duplicate of the search button in search form to the 
+  bottom of the "filter" column in order to have better accessibility
+  when JS is disabled.
+  Referencese http://dev.plone.org/plone/ticket/9352
+  [spliter]
+
 - Ajax calls to update search results on the fly.
   Referencese http://dev.plone.org/plone/ticket/9352
   [spliter]
