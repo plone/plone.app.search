@@ -109,38 +109,36 @@
                 <fieldset>
                     <div class="field" id="search-terms">
                         <h4 i18n:translate="label_search_terms">Your search terms</h4>
-                        <ul>
-                            <li>
-                                <a href="#">
-                                    <img src="delete_icon.gif" alt="remove this criteria"/>
-                                    <span>Document</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="delete_icon.gif" alt="remove this criteria"/>
-                                    <span>Document</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="delete_icon.gif" alt="remove this criteria"/>
-                                    <span>Document</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="delete_icon.gif" alt="remove this criteria"/>
-                                    <span>Document</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="delete_icon.gif" alt="remove this criteria"/>
-                                    <span>Document</span>
-                                </a>
-                            </li>
-                        </ul>
+                        <dl>
+                            <dt>Item type</dt>
+                            <dd>
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <img src="delete_icon.gif" alt="remove this criteria"/>
+                                            <span>Document</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <img src="delete_icon.gif" alt="remove this criteria"/>
+                                            <span>Folder</span>
+                                        </a>
+                                    </li>                                                                     
+                                </ul>
+                            </dd>
+                            <dt>Review status</dt>
+                            <dd>
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <img src="delete_icon.gif" alt="remove this criteria"/>
+                                            <span>Published</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </dd>
+                        </dl>
                     </div>
                     <div class="field collapsible"
                          tal:attributes="class field_collapsible_class" 
@@ -436,8 +434,6 @@
                     <a href="#"
                        id="show-search-options" class="discreet" 
                        i18n:translate="narrow_search_options">
-                       <img src=""
-                            tal:attributes="src string:${portal_url}/maintenance_icon.png" />                       
                         You can narrow them down.
                     </a>
     
@@ -545,13 +541,13 @@
                 <script type="text/javascript">
                     var container = jq('#search-results');
                     jq("form.searchPage").submit(function() {
-                        var data = jq(this).serialize();
+                        var data = jq(this).serialize();    
                         updateResults(data);
                         return false;
                     });
-                    jq('#searchResultsSort a').click(function(){
-                        var data = jq("form.searchPage").serialize();                        
-                        updateResults(data);
+                    jq('#sorting-options a').click(function(){
+                        url = jq(this).attr("href").replace("@@search", "@@updated_search");                            
+                        doAjax(url);
                         return false;
                     });                    
                     
@@ -584,12 +580,20 @@
                     
              
                     function doAjax(url){
-                        var data = jq("form.searchPage").serialize();
                         jq.ajax({
                             url: url,
-                            data: data,
                             success: function(data){
                                 container.html(data);
+                                jq("#search-results-number").text(function(){
+                                    str = jq("#updated-search-results-number").text();
+                                    jq("#updated-search-results-number").remove();
+                                    return str;
+                                });                                
+                                jq("#sorting-options").html(function(){
+                                    struct = jq("#updated-sorting-options").html();
+                                    jq("#updated-sorting-options").remove();
+                                    return struct;
+                                });
                             },
                             error: function(req,error){
                                 if(error === 'error'){error = req.statusText;}

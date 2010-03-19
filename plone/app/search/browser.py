@@ -43,8 +43,11 @@ class Search(BrowserView):
                 
             def url(self):
                 q = {}
-                if self.request.get('SearchableText'):
-                    q = {'SearchableText':self.request.get('SearchableText')}
+                q.update(self.request.form)
+                if q.has_key('sort_on'):
+                    del q['sort_on']
+                if q.has_key('sort_order'):
+                    del q['sort_order']                    
                 if self.sortkey:
                     q['sort_on'] = self.sortkey
                 if self.reverse:
@@ -52,7 +55,7 @@ class Search(BrowserView):
                 return self.request.URL + '?' + make_query(q)
 
         return(
-            sortoption(self.request, 'relevance'),
+            sortoption(self.request, 'relevance',),
             sortoption(self.request, 'date (newest first)', 'Date', reverse=True),
             sortoption(self.request, 'aphabetically', 'sortable_title'),
         )
@@ -112,8 +115,8 @@ class Search(BrowserView):
         
         return section.title
 
-    @staticmethod
-    def criteria(query_string):
+
+    def criteria(self):
         """Returns a list of selected search criteria."""
         
         criteria = []
