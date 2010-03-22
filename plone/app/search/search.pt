@@ -60,6 +60,15 @@
         #search-filter .formControls {
             text-align:center
         }
+        body {
+            position: relative;
+        }
+        body > #kssPortalMessage {
+            position:absolute;
+            top:50%;
+            left: 50%;
+            width:300px;
+        }
     </style>    
   </metal:block>
 
@@ -83,6 +92,7 @@
                       first_call  not:request/advanced_search|nothing">           
         
         <input type="hidden" name="advanced_search" value="True" />
+        <input type="hidden" name="sort_on" value="" />        
         
         <fieldset id="search-field">
             <input class="searchPage"
@@ -394,7 +404,9 @@
                         <span tal:omit-tag="">items matching your search terms.</span>
                     </span>                   
 
-                    <a href="#"
+                    <a href="#" 
+                       tal:condition="not:context/REQUEST/advanced_search|nothing"
+                       tal:attributes="href python:context.REQUEST.get('URL', context.absolute_url()) + '?advanced_search=True'"
                        id="show-search-options" class="discreet" 
                        i18n:translate="narrow_search_options">
                         You can narrow them down.
@@ -531,6 +543,9 @@
                                     jq("#updated-sorting-options").remove();
                                     return struct;
                                 });
+                                jq("#kssPortalMessage").appendTo("body");
+                                jq("body > #kssPortalMessage dd").html("Your search results have been updated");
+                                jq("body > #kssPortalMessage").fadeIn('slow').delay();
                             },
                             error: function(req,error){
                                 if(error === 'error'){error = req.statusText;}
