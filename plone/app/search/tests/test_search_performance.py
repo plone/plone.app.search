@@ -66,7 +66,7 @@ class TestSetup(SearchFunctionalTestCase):
         portal_url = self.portal.absolute_url()
         browser = Browser()
         browser.open(portal_url+'/@@search?SearchableText=spam')
-        self.failUnless("3 items matching your search terms" in browser.contents)
+        self.failUnless('<strong id="search-results-number">3</strong>' in browser.contents)
 
     def test_performance_for_100_items(self):
         """
@@ -98,14 +98,14 @@ class TestSetup(SearchFunctionalTestCase):
         browser.open(portal_url+'/search?SearchableText=spam')
         old_end = time()
         old_time = old_end-old_start
-        self.failUnless("100 items matching your search terms" in browser.contents)
+        self.failUnless('<strong id="search-results-number">100</strong>' in browser.contents)
 
         # then time rendering the new search page
         new_start = time()
         browser2 = Browser()
         browser2.open(portal_url+'/@@search?SearchableText=spam')
         new_end = time()
-        self.failUnless("100 items matching your search terms" in browser2.contents)
+        self.failUnless('<strong id="search-results-number">100</strong>' in browser2.contents)
 
         new_time = new_end-new_start
         print "*" * 20
@@ -143,7 +143,7 @@ class TestSetup(SearchFunctionalTestCase):
         browser = Browser()
         browser.open(portal_url+'/search?SearchableText=spam')
         old_end = time()
-        self.failUnless("1000 items matching your search terms" in browser.contents)
+        self.failUnless('<strong id="search-results-number">1000</strong>' in browser.contents)
         old_time = old_end-old_start
 
         # then time rendering the new search page
@@ -151,7 +151,7 @@ class TestSetup(SearchFunctionalTestCase):
         browser2 = Browser()
         browser2.open(portal_url+'/@@search?SearchableText=spam')
         new_end = time()
-        self.failUnless("1000 items matching your search terms" in browser2.contents)
+        self.failUnless('<strong id="search-results-number">1000</strong>' in browser2.contents)
         
         new_time = new_end-new_start
         print "*" * 20
