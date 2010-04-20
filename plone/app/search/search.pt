@@ -414,13 +414,19 @@
     
                     <span class="discreet" id="searchResultsSort">
                       <span i18n:translate="sort_by">Sort by</span>
-                      <span id="sorting-options">
-                        <tal:block repeat="item view/getSortOptions">
-                            <a tal:condition="not:item/selected" tal:content="item/title" tal:attributes="href item/url"></a>
-                            <strong tal:condition="item/selected" tal:content="item/title"></strong>
-                            <span tal:condition="not:repeat/item/end">&middot;</span>
-                        </tal:block>
-                      </span>
+                          <span id="sorting-options">
+                              <metal:sorting define-macro="sorting">
+                                  <tal:block repeat="item view/getSortOptions">
+                                      <a rel=""
+                                         tal:condition="not:item/selected" 
+                                         tal:content="item/title" 
+                                         tal:attributes="href item/url;
+                                                         rel python:item.sortkey and item.sortkey or None"></a>
+                                      <strong tal:condition="item/selected" tal:content="item/title"></strong>
+                                      <span tal:condition="not:repeat/item/end">&middot;</span>
+                                  </tal:block>
+                              </metal:sorting>
+                          </span>
                     </span>
                 </div>
                         
@@ -519,12 +525,22 @@
                         var data = jq(this).serialize();    
                         updateResults(data);
                         return false;
-                    });
-                    jq('#sorting-options a').click(function(){
-                        url = jq(this).attr("href").replace("@@search", "@@updated_search");                            
-                        doAjax(url);
-                        return false;
-                    });                    
+                    }); 
+                    
+                    jq('#searchResultsHeading').click(function(event) {
+                       if (jq(event.target).is('#sorting-options a')) {
+                           if (jq(event.target).attr('rel')) {
+                               rel = jq(event.target).attr('rel');                               
+                               jq("form.searchPage input[name='sort_on']").val(rel);                               
+                           }
+                           else {
+                               jq("form.searchPage input[name='sort_on']").val("");
+                           }
+                           var data = jq("form.searchPage").serialize();   
+                           updateResults(data);
+                           return false;
+                       }
+                     });
                     
                     
                     function updateResults(data){
@@ -538,11 +554,11 @@
                                     jq("#updated-search-results-number").remove();
                                     return str;
                                 });
-                                jq("#sorting-options").html(function(){
+                                jq("#searchResultsHeading #sorting-options").html(function(){
                                     struct = jq("#updated-sorting-options").html();
                                     jq("#updated-sorting-options").remove();
                                     return struct;
-                                });
+                                });  
                                 jq("#kssPortalMessage").appendTo("body");
                                 jq("body > #kssPortalMessage dd").html("Your search results have been updated");
                                 jq("body > #kssPortalMessage").fadeIn('slow').delay();
@@ -553,33 +569,8 @@
                                 container.html(errormsg);
                             }
                         });
-                    }
+                    }                    
                     
-                    
-             
-                    function doAjax(url){
-                        jq.ajax({
-                            url: url,
-                            success: function(data){
-                                container.html(data);
-                                jq("#search-results-number").text(function(){
-                                    str = jq("#updated-search-results-number").text();
-                                    jq("#updated-search-results-number").remove();
-                                    return str;
-                                });                                
-                                jq("#sorting-options").html(function(){
-                                    struct = jq("#updated-sorting-options").html();
-                                    jq("#updated-sorting-options").remove();
-                                    return struct;
-                                });
-                            },
-                            error: function(req,error){
-                                if(error === 'error'){error = req.statusText;}
-                                var errormsg = 'There was a communication error: ' + error;
-                                container.html(errormsg);
-                            }
-                        });
-                    }
                     jq('#show-search-options').click(function () {                        
                         jq('#search-results-wrapper').removeClass('width-16 position-0');
                         jq('#search-results-wrapper').addClass('width-3:4 position-1:4');
