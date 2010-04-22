@@ -74,52 +74,6 @@ class TestBrowser(SearchTestCase):
         section_title = view.section('http://nohost/plone/first_level_folder/second_level_document')
         self.assertEquals(section_title, 'Cached title for first_level_folder')
         
-    def test_criteria_empty_string(self):
-        """Test if QUERY_STRING is empty an empty list is returned."""
-        
-        view = self.portal.restrictedTraverse('@@search')
-
-        expected = []
-        criteria = view.criteria('')    
-
-        self.assertEquals(criteria, expected)
-
-    def test_criteria_no_criteria_string(self):
-        """Test if QUERY_STRING has no suitable criteria an empty list is returned."""
-        
-        view = self.portal.restrictedTraverse('@@search')
-
-        expected = []
-        criteria = view.criteria('advanced_search=True&SearchableText=e*&pt_toggle=%23&rs_toggle=%23&')
-
-        self.assertEquals(criteria, expected)
-
-    def test_criteria_OK_string(self):
-        """Test if QUERY_STRING is correctly parsed and correct criteria are returned."""
-        
-        view = self.portal.restrictedTraverse('@@search')
-
-        expected = [
-                {
-                    'criterion_type' : 'portal_type',
-                    'criterion_value' : 'Document',
-                },
-                {
-                    'criterion_type' : 'created',
-                    'criterion_value' : '1970/02/01',
-                },
-                {
-                    'criterion_type' : 'review_state',
-                    'criterion_value' : 'published',
-                },
-                {
-                    'criterion_type' : 'Creator',
-                    'criterion_value' : 'admin',
-                },            
-            ]
-        criteria = view.criteria('portal_type:list=Document&created:list:date=1970/02/01&review_state:list=published&Creator=admin')
-
-        self.assertEquals(criteria, expected)
 def test_suite():
     """This sets up a test suite that actually runs the tests in the class
     above

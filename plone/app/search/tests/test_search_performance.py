@@ -98,7 +98,7 @@ class TestSetup(SearchFunctionalTestCase):
         browser.open(portal_url+'/search?SearchableText=spam')
         old_end = time()
         old_time = old_end-old_start
-        self.failUnless('<strong id="search-results-number">100</strong>' in browser.contents)
+        self.failUnless('100 items matching your search terms' in browser.contents)
 
         # then time rendering the new search page
         new_start = time()
@@ -143,7 +143,7 @@ class TestSetup(SearchFunctionalTestCase):
         browser = Browser()
         browser.open(portal_url+'/search?SearchableText=spam')
         old_end = time()
-        self.failUnless('<strong id="search-results-number">1000</strong>' in browser.contents)
+        self.failUnless('1000 items matching your search terms' in browser.contents)
         old_time = old_end-old_start
 
         # then time rendering the new search page
