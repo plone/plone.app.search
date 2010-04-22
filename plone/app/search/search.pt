@@ -506,9 +506,10 @@
 
                                       <cite class="documentLocation link-location"
                                             tal:define="url item/getURL;
-                                                        section python: view.section(url);"
-                                            tal:condition='section'>
-                                           Located in <span tal:content="section"/>.
+                                                        section_title python: view.section(url);"
+                                            tal:condition='section_title'
+                                            i18n:translate="text_searchitem_location">
+                                           Located in <span i18n:name="label_section_title" tal:content="section_title"/>.
                                       </cite>
 
                                     </dd>
