@@ -110,7 +110,7 @@
         </fieldset>
 
         <div class="row">
-            <div id="search-filter" class="hiddenStructure cell width-1:4 position-0"
+            <div id="search-filter" class="hiddenStructure cell"
                  tal:attributes="class python:view.showAdvancedSearch() and 'cell width-1:4 position-0' or 'hiddenStructure cell width-1:4 position-0'">
                 <fieldset>
                     <div class="field collapsible"
@@ -529,6 +529,7 @@
                     }); 
                     
                     jq('#searchResultsHeading').click(function(event) {
+                       //jq("#search-results").fadeOut(300);
                        if (jq(event.target).is('#sorting-options a')) {
                            if (jq(event.target).attr('rel')) {
                                rel = jq(event.target).attr('rel');                               
@@ -539,6 +540,19 @@
                            }
                            var data = jq("form.searchPage").serialize();   
                            updateResults(data);
+                           jq("#search-results").before(jq("#kssPortalMessage"));
+                           jq("#kssPortalMessage dd").html("Your search results have been updated");
+                           
+                           jq("#kssPortalMessage").delay(500).animate({
+                               height: ['toggle', 'swing'],
+                               opacity: 1,
+                               marginBottom: 'toggle',
+                               marginTop: 'toggle'
+                           }, 500, function(){
+                               jq("*").click(function(){
+                                   jq("#kssPortalMessage").fadeOut('slow');
+                               })
+                           })
                            return false;
                        }
                      });
@@ -560,9 +574,6 @@
                                     jq("#updated-sorting-options").remove();
                                     return struct;
                                 });  
-                                jq("#kssPortalMessage").appendTo("body");
-                                jq("body > #kssPortalMessage dd").html("Your search results have been updated");
-                                jq("body > #kssPortalMessage").fadeIn('slow').delay();
                             },
                             error: function(req,error){
                                 if(error === 'error'){error = req.statusText;}
@@ -573,10 +584,21 @@
                     }                    
                     
                     jq('#show-search-options').click(function () {                        
-                        jq('#search-results-wrapper').removeClass('width-16 position-0');
-                        jq('#search-results-wrapper').addClass('width-3:4 position-1:4');
-                        jq('#show-search-options').addClass("hiddenStructure");
+                        jq("#search-results-wrapper").css({"width":"97.75%", "margin-left":"-98.875%"});
+                        jq("#search-results-wrapper").removeClass("width-16");
+                        jq("#search-results-wrapper").removeClass("position-0");
+                        jq('#search-filter').hide();
                         jq('#search-filter').removeClass('hiddenStructure');
+                        
+                        jq("#search-results-wrapper").animate({
+                            width: '72.75%',
+                            marginLeft: '-73.875%'
+                        }, 500, function(){
+                            jq('#search-filter').fadeIn('medium');
+                            jq("#show-search-options").delay(500).fadeOut();
+                        });
+                        jq("#search-results-wrapper").addClass("position-1:4");
+                        jq("#search-results-wrapper").addClass("width-12");                        
                         return false;
                     });
 
