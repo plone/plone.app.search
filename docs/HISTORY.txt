@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- 'Close' button for advanced search filter column
+  [spliter]
+
 - Moved the duplicate of the search button in search form to the 
   bottom of the "filter" column in order to have better accessibility
   when JS is disabled.

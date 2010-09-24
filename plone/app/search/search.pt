@@ -8,7 +8,6 @@
 
 <head>
   <metal:block metal:fill-slot="head_slot">
-  <!-- XXX FIX XXX -->
 
     <link rel="alternate" title="RSS 1.0" type="application/rss+xml"
           tal:define="here_url
@@ -58,6 +57,11 @@
         <div class="row">
             <div id="search-filter" class="hiddenStructure cell"
                  tal:attributes="class python:view.showAdvancedSearch() and 'cell width-1:4 position-0' or 'hiddenStructure cell width-1:4 position-0'">
+
+                 <a href="#" id="close-search-options"
+                    tal:attributes="href view/closeLink"
+                    ><span class="">Close</span></a>
+                 
                 <fieldset>
                     <div class="field collapsible"
                          tal:attributes="class field_collapsible_class" 
@@ -351,8 +355,8 @@
                     </span>                   
 
                     <a href="#" 
-                       tal:condition="not:context/REQUEST/advanced_search|nothing"
-                       tal:attributes="href python:context.REQUEST.get('URL', context.absolute_url()) + '?advanced_search=True'"
+                       tal:condition="not:view/showAdvancedSearch|nothing"
+                       tal:attributes="href python:view.closeLink() + '&advanced_search=True'"
                        id="show-search-options" class="discreet" 
                        i18n:translate="narrow_search_options">
                         You can narrow them down.
