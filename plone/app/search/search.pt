@@ -57,12 +57,13 @@
         <div class="row">
             <div id="search-filter" class="hiddenStructure cell"
                  tal:attributes="class python:view.showAdvancedSearch() and 'cell width-1:4 position-0' or 'hiddenStructure cell width-1:4 position-0'">
-
-                 <a href="#" id="close-search-options"
-                    tal:attributes="href view/closeLink"
-                    ><span class="">Close</span></a>
                  
                 <fieldset>
+                    
+                    <a href="#" id="close-search-options" title="Close the column"
+                       tal:attributes="href view/closeLink"
+                       ><span class="hiddenStructure">Close</span></a>
+                    
                     <div class="field collapsible"
                          tal:attributes="class field_collapsible_class" 
                          tal:define="portal_types portal/portal_types;
