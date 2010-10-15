@@ -9,6 +9,9 @@ from Products.PloneTestCase.layer import onsetup
 
 from collective.testcaselayer.ptc import BasePTCLayer, ptc_layer
 
+from niteoweb.windmill import WindmillTestCase
+
+
 class Layer(BasePTCLayer):
     """Install plone.app.search"""
 
@@ -42,3 +45,11 @@ class SearchFunctionalTestCase(ptc.FunctionalTestCase):
     syntax. Again, we can put basic common utility or setup code in here.
     """
     layer = Installedlayer
+
+# class WindmillTestCase(WindmillTestCase):
+#     """We use this base class for real-browser integration scenario-like
+#     tests. Common utilities and setup code goes in here."""
+#     
+#     # Run afterSetUp from niteoweb.windmill package
+#     super(WindmillTestCase, self).afterSetUp()
+#     

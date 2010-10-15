@@ -4,7 +4,10 @@ Changelog
 1.0 (unreleased)
 ----------------
 
-- 'Close' button for advanced search filter column
+- Added Windmill real-browser tests to test AJAX functionalities.
+  [zupo]
+
+- 'Close' button for advanced search filter column.
   [spliter]
 
 - Moved the duplicate of the search button in search form to the 
@@ -23,7 +26,7 @@ Changelog
   [zupo]
 
 - New view for the fetching search results on the fly.
-  Referencese http://dev.plone.org/plone/ticket/9352
+  References http://dev.plone.org/plone/ticket/9352
   [spliter, witsch]
 
 - Advanced search form a.k.a. Search filter is being merged into 
