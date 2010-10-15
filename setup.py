@@ -3,7 +3,7 @@ import os
 
 version = '1.0'
 
-tests_require = ['collective.testcaselayer']
+tests_require = ['collective.testcaselayer', 'niteoweb.windmill']
 
 setup(name='plone.app.search',
       version=version,
