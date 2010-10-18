@@ -12,7 +12,6 @@ class Search(BrowserView):
     def results(self, batch=False, b_size=30):
         query = {}
         query.update(getattr(self.request, 'form',{}))
-            #query.update(dict(getattr(self.request, 'other',{})))
         if not query:
             return IContentListing([])
         catalog = getToolByName(self.context, 'portal_catalog')
@@ -32,7 +31,7 @@ class Search(BrowserView):
         q.update(self.request.form)
         
         class sortoption(object):
-            def __init__(self, request, title, sortkey=None, reverse=False):
+            def __init__(self, request, title, sortkey='', reverse=False):
                 self.request = request
                 self.title = title
                 self.sortkey = sortkey
@@ -55,7 +54,7 @@ class Search(BrowserView):
                 return self.request.URL + '?' + make_query(q)
 
         return(
-            sortoption(self.request, 'relevance',),
+            sortoption(self.request, 'relevance', ''),
             sortoption(self.request, 'date (newest first)', 'Date', reverse=True),
             sortoption(self.request, 'aphabetically', 'sortable_title'),
         )
