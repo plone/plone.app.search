@@ -5,7 +5,7 @@ You will find lots of examples of this type of test in CMFPlone/tests, for
 example.
 """
 
-import unittest
+import unittest2 as unittest
 from base import SearchFunctionalTestCase, \
                  Search100FunctionalTestCase, \
                  Search1000FunctionalTestCase
