@@ -21,6 +21,17 @@ class SearchLayer(PloneSandboxLayer):
                        plone.app.contentlisting, context=configurationContext)
         xmlconfig.file('configure.zcml',
                        plone.app.search, context=configurationContext)
+                       
+    def setUpPloneSite(self, portal):
+        setRoles(portal, TEST_USER_NAME, ['Manager'])
+        login(portal, TEST_USER_NAME)
+        for i in range(0,100):
+            portal.invokeFactory('Document', 'my-page'+str(i), text='spam spam ham eggs')
+        setRoles(portal, TEST_USER_NAME, ['Member'])
+
+        # Commit so that the test browser sees these objects
+        import transaction
+        transaction.commit()
 
 class SearchPerformance100Layer(SearchLayer):
     

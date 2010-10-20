@@ -19,15 +19,15 @@
 
   <metal:block fill-slot="top_slot"
                tal:define="dummy python:request.set('disable_border',1);
-			               disable_column_one python:request.set('disable_plone.leftcolumn',1);
-			               disable_column_two python:request.set('disable_plone.rightcolumn',1);" />
+                           disable_column_one python:request.set('disable_plone.leftcolumn',1);
+                           disable_column_two python:request.set('disable_plone.rightcolumn',1);" />
 </head>
 
 <body>
 
   <div id="content-core" metal:fill-slot="main">
        
-    <form name="searchform" 
+    <form name="searchform"
           action="@@search"
           class="searchPage enableAutoFocus"
           tal:define="DateTime python:modules['DateTime'].DateTime;
@@ -37,7 +37,7 @@
                       first_call  not:request/advanced_search|nothing">           
         
         <input type="hidden" name="advanced_search" value="True" />
-        <input type="hidden" name="sort_on" value="" />        
+        <input type="hidden" name="sort_on" value="" />
         
         <fieldset id="search-field">
             <input class="searchPage"
@@ -339,7 +339,7 @@
 
             </div>
 
-            <div id="search-results-wrapper" 
+            <div id="search-results-wrapper"
                  tal:attributes="class python:view.showAdvancedSearch() and 'cell width-3:4 position-1:4' or 'cell width-16 position-0'"
                  class="cell width-16 position-0"
                  tal:define="results view/results;

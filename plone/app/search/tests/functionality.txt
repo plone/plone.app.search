@@ -1,3 +1,23 @@
 ======================
 Basic usage
 ======================
+
+First of all we need some initial content for it to appear in the search:
+
+  >>> from plone.testing.z2 import Browser
+  
+  >>> app = self.layer['app']
+  >>> portal = self.layer['portal']
+  
+  >>> browser = Browser(app)
+  >>> browser.open('http://nohost/plone/@@search?SearchableText=spam')
+  >>> '<strong id="search-results-number">100</strong>' in browser.contents
+  True
+  
+First of all, let's test the sorting options.
+When we get search results for the first time, they should be sorted by
+relevance:
+
+  >>> '<strong>relevance</strong>' in browser.contents
+  True
+  
