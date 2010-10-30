@@ -6,7 +6,7 @@ example.
 """
 
 import unittest2 as unittest
-from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
 
@@ -20,7 +20,7 @@ class TestSection(SearchTestCase):
     def test_section(self):
         """Test retrieving section title for search result item."""
         portal = self.layer['portal']
-        setRoles(portal, TEST_USER_NAME, ['Manager'])
+        setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
         
         portal.invokeFactory('Document', 'first_level_document')
@@ -49,7 +49,7 @@ class TestSection(SearchTestCase):
         """Test that section title is read from sections_cache dict if an entry already exists."""
         
         portal = self.layer['portal']
-        setRoles(portal, TEST_USER_NAME, ['Manager'])
+        setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
         
         portal.invokeFactory('Folder', 'first_level_folder', title='First Level Folder')
