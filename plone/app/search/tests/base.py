@@ -8,6 +8,7 @@ from plone.app.testing import IntegrationTesting, FunctionalTesting
 from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
+from plone.app.testing.selenium_layers import SELENIUM_FIXTURE
 
 class SearchLayer(PloneSandboxLayer):
     """Install plone.app.search"""
@@ -33,6 +34,15 @@ class SearchLayer(PloneSandboxLayer):
         import transaction
         transaction.commit()
 
+class SearchSeleniumLayer(SearchLayer):
+    """Install plone.app.search"""
+    
+    defaultBases = (PLONE_FIXTURE,)
+                       
+    def setUpPloneSite(self, portal):
+        """Override setUpPlonesite from SearchLayer"""
+        pass
+        
 class SearchPerformance100Layer(SearchLayer):
     
     def setUpPloneSite(self, portal):
@@ -81,13 +91,19 @@ class SearchPerformance1000Layer(SearchLayer):
              
 
 SEARCH_FIXTURE = SearchLayer()
+SEARCH_SELENIUM_FIXTURE = SearchSeleniumLayer()
 SEARCH_PERFORMANCE100_FIXTURE = SearchPerformance100Layer()
 SEARCH_PERFORMANCE1000_FIXTURE = SearchPerformance1000Layer()
 
 SEARCH_INTEGRATION_TESTING = IntegrationTesting(bases=(SEARCH_FIXTURE,), 
                                                 name="Search:Integration")
+                                                
 SEARCH_FUNCTIONAL_TESTING = FunctionalTesting(bases=(SEARCH_FIXTURE,), 
                                               name="Search:Functional")
+
+SEARCH_SELENIUM_TESTING = FunctionalTesting(bases=(SEARCH_SELENIUM_FIXTURE,SELENIUM_FIXTURE), 
+                                                name="Search:Selenium")
+
 SEARCH_PERFORMANCE100_FUNCTIONAL_TESTING = FunctionalTesting(bases=(SEARCH_PERFORMANCE100_FIXTURE,), name="Search Performance 100:Functional")
 SEARCH_PERFORMANCE1000_FUNCTIONAL_TESTING = FunctionalTesting(bases=(SEARCH_PERFORMANCE1000_FIXTURE,), name="Search Performance 1000:Functional")
 
@@ -103,6 +119,13 @@ class SearchFunctionalTestCase(SearchTestCase):
     syntax. Again, we can put basic common utility or setup code in here.
     """
     layer = SEARCH_FUNCTIONAL_TESTING
+
+class SearchSeleniumTestCase(SearchTestCase):
+    """We use this base class for all tahe tests in this package. If necessary,
+    we can put common utility or setup code in here. This applies to unit 
+    test cases.
+    """
+    layer = SEARCH_SELENIUM_TESTING
     
 class Search100FunctionalTestCase(SearchTestCase):
     """Test layer for performance testing with 100 objects
