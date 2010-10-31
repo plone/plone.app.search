@@ -8,7 +8,7 @@ from plone.app.testing import IntegrationTesting, FunctionalTesting
 from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
-from plone.app.testing.selenium_layers import SELENIUM_FIXTURE
+from plone.app.testing.selenium_layers import SELENIUM_PLONE_FUNCTIONAL_TESTING
 
 class SearchLayer(PloneSandboxLayer):
     """Install plone.app.search"""
@@ -40,8 +40,15 @@ class SearchSeleniumLayer(SearchLayer):
     defaultBases = (PLONE_FIXTURE,)
                        
     def setUpPloneSite(self, portal):
-        """Override setUpPlonesite from SearchLayer"""
-        pass
+        """Add content we can search for."""
+        setRoles(portal, TEST_USER_ID, ['Manager'])        
+        login(portal, TEST_USER_NAME)
+        portal.invokeFactory('Document', 'document1', title='Document 1')
+        portal.invokeFactory('Folder', 'folder1', title='Folder 1')
+        portal.folder1.invokeFactory('Event', 'event1', title='Event 1')
+        portal.folder1.invokeFactory('Folder', 'folder2', title='Folder 2')
+        portal.folder1.folder2.invokeFactory('File', 'file1', title='File 1')
+        setRoles(portal, TEST_USER_ID, ['Member'])
         
 class SearchPerformance100Layer(SearchLayer):
     
@@ -101,7 +108,7 @@ SEARCH_INTEGRATION_TESTING = IntegrationTesting(bases=(SEARCH_FIXTURE,),
 SEARCH_FUNCTIONAL_TESTING = FunctionalTesting(bases=(SEARCH_FIXTURE,), 
                                               name="Search:Functional")
 
-SEARCH_SELENIUM_TESTING = FunctionalTesting(bases=(SEARCH_SELENIUM_FIXTURE,SELENIUM_FIXTURE), 
+SEARCH_SELENIUM_TESTING = FunctionalTesting(bases=(SEARCH_SELENIUM_FIXTURE,SELENIUM_PLONE_FUNCTIONAL_TESTING), 
                                                 name="Search:Selenium")
 
 SEARCH_PERFORMANCE100_FUNCTIONAL_TESTING = FunctionalTesting(bases=(SEARCH_PERFORMANCE100_FIXTURE,), name="Search Performance 100:Functional")
