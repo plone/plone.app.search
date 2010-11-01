@@ -43,12 +43,12 @@ class SearchSeleniumLayer(SearchLayer):
         """Add content we can search for."""
         setRoles(portal, TEST_USER_ID, ['Manager'])        
         login(portal, TEST_USER_NAME)
-        portal.invokeFactory('Document', 'document1', title='Document 1')
-        portal.invokeFactory('Folder', 'folder1', title='Folder 1')
-        portal.folder1.invokeFactory('Event', 'event1', title='Event 1')
-        portal.folder1.invokeFactory('Folder', 'folder2', title='Folder 2')
-        portal.folder1.folder2.invokeFactory('File', 'file1', title='File 1')
-        setRoles(portal, TEST_USER_ID, ['Member'])
+        portal.invokeFactory('Document', 'document1', title='Foo Document 1')
+        portal.invokeFactory('Folder', 'folder1', title='Foo Folder 1')
+        portal.folder1.invokeFactory('Event', 'event1', title='Foo Event 1')
+        portal.folder1.invokeFactory('Folder', 'folder2', title='Foo Folder 2')
+        portal.folder1.folder2.invokeFactory('File', 'file1', title='Foo File 1')
+        setRoles(portal, TEST_USER_ID, ['Member'])        
         
 class SearchPerformance100Layer(SearchLayer):
     
