@@ -29,5 +29,7 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         open(selenium, portal.absolute_url() + '/@@search?SearchableText=Foo')
         # We should get our 5 'Foo' elements:
         self.assertEquals(selenium.find_element_by_id('search-results-number').get_text(), '5')
+        # Filter should still be hidden:
+        self.failUnless('hiddenStructure' in selenium.find_element_by_id('search-filter').get_attribute('class'))        
         
         
