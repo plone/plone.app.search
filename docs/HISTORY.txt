@@ -4,6 +4,12 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Selenium test for standard @@search view without interactions.
+  [spliter]
+
+- Base for Selenium tests and basic test.
+  [zupo]
+
 - 'Close' button for advanced search filter column
   [spliter]
 

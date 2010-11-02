@@ -4,7 +4,8 @@ import os
 version = '1.0'
 
 tests_require = ['collective.testcaselayer',
-                 'plone.app.testing']
+                 'plone.app.testing',
+                 'selenium']
 
 setup(name='plone.app.search',
       version=version,
