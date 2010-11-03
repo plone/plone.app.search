@@ -404,13 +404,14 @@
                                               i18n:translate="label_by_author">
                                           by
                                           <a href="#"
-                                             tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${author/username}"
-                                             tal:content="python:author['fullname'] or author['username']"
+                                             tal:define="author python:context.portal_membership.getMemberById(author)"
+                                             tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${author/id}"
+                                             tal:content="python:author.getProperty('fullname') or author.getProperty('id')"
                                              i18n:name="author">
                                             Bob Dobalina
                                           </a>
                                         </span>
-            
+                                        
                                         <span tal:define="publication_date item/EffectiveDate;
                                                           modification_date item/ModificationDate">
 
