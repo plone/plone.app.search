@@ -13,7 +13,8 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         open(selenium, portal.absolute_url() + '/@@search')
 
         # Is search filter hidden?
-        self.failUnless('hiddenStructure' in selenium.find_element_by_id('search-filter').get_attribute('class'))
+        f = selenium.find_element_by_id('search-filter')
+        self.failUnless('hiddenStructure' in f.get_attribute('class'))
 
         # Is 'relevance' the current/default sorting option and thus
         # is not clickable?
@@ -22,12 +23,16 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
 
         # By default there are no search results because there is no
         # SearchableText specified in request when accessing the form directly:
-        self.assertEquals(selenium.find_element_by_id('search-results-number').get_text(), '0')
-        self.assertEquals(selenium.find_element_by_id('search-results').get_text(), 'No results were found.')
+        res_num = selenium.find_element_by_id('search-results-number')
+        res = selenium.find_element_by_id('search-results')
+        self.assertEquals(res_num.get_text(), '0')
+        self.assertEquals(res.get_text(), 'No results were found.')
 
         # Now we want to get results with all elements in the site:
         open(selenium, portal.absolute_url() + '/@@search?SearchableText=Foo')
         # We should get our 5 'Foo' elements:
-        self.assertEquals(selenium.find_element_by_id('search-results-number').get_text(), '5')
+        res_num = selenium.find_element_by_id('search-results-number')
+        self.assertEquals(res_num.get_text(), '5')
         # Filter should still be hidden:
-        self.failUnless('hiddenStructure' in selenium.find_element_by_id('search-filter').get_attribute('class'))
+        f = selenium.find_element_by_id('search-filter')
+        self.failUnless('hiddenStructure' in f.get_attribute('class'))
