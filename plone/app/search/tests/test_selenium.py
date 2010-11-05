@@ -40,6 +40,8 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         # Make sure we have search results returned after clicking main
         # 'Search' button on the search results form:
         sel.find_elements_by_class_name('searchButton')[1].click()
+        # We should give the view some time in order to finish the animation of
+        # the search results
         import time
         time.sleep(1)
         # And the search results are actually visible, aren't they?:
