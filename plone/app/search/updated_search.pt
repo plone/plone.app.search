@@ -1,5 +1,6 @@
 <html>
 <body tal:define="results view/results;
+                  site_properties context/portal_properties/site_properties;
                   Batch python:modules['Products.CMFPlone'].Batch;
                   b_size python:30;
                   b_start python:0;
