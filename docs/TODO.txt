@@ -11,3 +11,5 @@
 5. Use "Search results per page" field's value in the view.
 
 6. Updated description for "Sort order of search results" to list new options for sorting.
+
+7. As an additional bonus - filtering by section. We need a catalog of the site's sections though so that a user could select items from what sections he is interested in when searching.
