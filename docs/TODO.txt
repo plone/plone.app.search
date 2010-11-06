@@ -1,20 +1,26 @@
-1. Sort out 'relevance' sort option - it is not highlighted as active after coming back to it after Ajax calls. Other options behave as they should.
-[DONE]
+1. Content types disabled in "Define the types to be shown in the site and
+searched" field are still searchable even though they disappear from the
+filter.
 
-2. Content types disabled in "Define the types to be shown in the site and searched" field are still searchable even though they disappear from the filter.
+2. Check for unnecessary dependancies for the package (contentlisting?)
 
-3. Move Selenium and performance tests into separate folder in order to avoid running them in the general testing process of the package.
+3. Fix "Search settings" (@@search-controlpanel):
+    - "Advanced search form settings" should be called something like "Search
+      filter settings";
+    - remove "Collapse rarely used options" field - we don't collapse the
+      fields in the filter.
 
-4. Check for unnecessary dependancies for the package (contentlisting?)
+4. Make sure protection of "Sort order of search results" works and anonymous
+users don't see the 'sorter' if they are not supposed to.
 
-5. Fix "Search settings" (@@search-controlpanel):
-    - "Advanced search form settings" should be called something like "Search filter settings";
-    - remove "Collapse rarely used options" field - we don't collapse the fields in the filter.
+5. Use "Search results per page" field's value in the view.
 
-6. Make sure protection of "Sort order of search results" works and anonymous users don't see the 'sorter' if they are not supposed to.
+6. Updated description for "Sort order of search results" to list new options
+for sorting.
 
-7. Use "Search results per page" field's value in the view.
+7. As an additional bonus - filtering by section. We need a catalog of the
+site's sections though so that a user could select items from what sections he
+is interested in when searching.
 
-8. Updated description for "Sort order of search results" to list new options for sorting.
-
-9. As an additional bonus - filtering by section. We need a catalog of the site's sections though so that a user could select items from what sections he is interested in when searching.
+8. RSS link should be updated in accordance to the request even when using ajax
+calls.

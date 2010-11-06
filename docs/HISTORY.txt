@@ -4,6 +4,14 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Fixed the issue with 'relevance' sorting option when it was not highlighted
+  as the current one after getting back to it after some ajax calls.
+  [spliter]
+
+- Moved performance and selenium tests to dedicated tests folders in order to
+  exclude those from the general testing.
+  [spliter]
+
 - Fixed a bug that prevented @@search to work for authenticated members.
   [zupo]
 
