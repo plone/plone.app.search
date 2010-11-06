@@ -2,7 +2,7 @@
 
 2. Content types disabled in "Define the types to be shown in the site and searched" field are still searchable even though they disappear from the filter.
 
-3. Move Selenium tests into separate folder in order to avoid running them in the general testing process of the package.
+3. Move Selenium and performance tests into separate folder in order to avoid running them in the general testing process of the package.
 
 4. Check for unnecessary dependancies for the package (contentlisting?)
 
