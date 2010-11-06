@@ -1,6 +1,8 @@
 from plone.app.search.tests.base import SearchSeleniumTestCase
 from plone.app.testing.selenium_layers import open
 
+import time
+
 
 class SimpleScenarioTestCase(SearchSeleniumTestCase):
 
@@ -42,7 +44,6 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         sel.find_elements_by_class_name('searchButton')[1].click()
         # We should give the view some time in order to finish the animation of
         # the search results
-        import time
         time.sleep(1)
         # And the search results are actually visible, aren't they?:
         self.assert_(sel.find_element_by_id('search-results').is_displayed(),

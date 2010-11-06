@@ -1,10 +1,10 @@
 1. Sort out 'relevance' sort option - it is not highlighted as active after coming back to it after Ajax calls. Other options behave as they should.
 
-2. Fix "Search settings" (@@search-controlpanel):
+2. Content types disabled in "Define the types to be shown in the site and searched" field are still searchable even though they disappear from the filter.
+
+3. Fix "Search settings" (@@search-controlpanel):
     - "Advanced search form settings" should be called something like "Search filter settings";
     - remove "Collapse rarely used options" field - we don't collapse the fields in the filter.
-
-3. Content types disabled in "Define the types to be shown in the site and searched" field are still searchable even though they disappear from the filter.
 
 4. Make sure protection of "Sort order of search results" works and anonymous users don't see the 'sorter' if they are not supposed to.
 
