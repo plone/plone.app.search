@@ -114,9 +114,6 @@ SEARCH_PERFORMANCE1000_FIXTURE = SearchPerformance1000Layer()
 SEARCH_INTEGRATION_TESTING = IntegrationTesting(bases=(SEARCH_FIXTURE, ),
                                                 name="Search:Integration")
 
-SEARCH_FUNCTIONAL_TESTING = FunctionalTesting(bases=(SEARCH_FIXTURE, ),
-                                              name="Search:Functional")
-
 SEARCH_SELENIUM_TESTING = \
     FunctionalTesting(bases=(SEARCH_SELENIUM_FIXTURE,
                              SELENIUM_PLONE_FUNCTIONAL_TESTING),
@@ -136,13 +133,6 @@ class SearchTestCase(unittest.TestCase):
     test cases.
     """
     layer = SEARCH_INTEGRATION_TESTING
-
-
-class SearchFunctionalTestCase(SearchTestCase):
-    """We use this class for functional integration tests that use doctest
-    syntax. Again, we can put basic common utility or setup code in here.
-    """
-    layer = SEARCH_FUNCTIONAL_TESTING
 
 
 class SearchSeleniumTestCase(SearchTestCase):

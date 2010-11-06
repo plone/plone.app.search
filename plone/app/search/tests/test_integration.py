@@ -1,10 +1,3 @@
-"""This is an integration "unit" test. It uses PloneTestCase, but does not
-use doctest syntax.
-
-You will find lots of examples of this type of test in CMFPlone/tests, for
-example.
-"""
-
 import unittest2 as unittest
 from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login

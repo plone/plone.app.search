@@ -1,13 +1,6 @@
-"""This is an integration "unit" test. It uses PloneTestCase, but does not
-use doctest syntax.
-
-You will find lots of examples of this type of test in CMFPlone/tests, for
-example.
-"""
-
 import unittest2 as unittest
-from base import Search100FunctionalTestCase, \
-                 Search1000FunctionalTestCase
+from plone.app.search.tests.base import Search100FunctionalTestCase, \
+                                        Search1000FunctionalTestCase
 from plone.testing.z2 import Browser
 
 
@@ -29,9 +22,6 @@ class TestPerformance100(Search100FunctionalTestCase):
             performance tests. We make 100 documents, publish them, then search
             for them. Compare the results with the old search results page If
             we are slower the test fails.
-
-            These tests WILL be slow to run.
-            Let's remove or hide these when(if) the PLIP is approved
         """
         from time import time
 
