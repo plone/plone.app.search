@@ -12,7 +12,8 @@ setup(name='plone.app.search',
       description="",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
+      # Get more strings from
+      # http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
         "Programming Language :: Python",
@@ -30,9 +31,9 @@ setup(name='plone.app.search',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
-      ],   
+      ],
       tests_require=tests_require,
-      extras_require={'test': tests_require},      
+      extras_require={'test': tests_require},
       entry_points = '''
           [z3c.autoinclude.plugin]
           target = plone
