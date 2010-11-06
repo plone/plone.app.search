@@ -1,3 +1,5 @@
+from selenium.common.exceptions import NoSuchElementException
+
 from plone.app.search.tests.base import SearchSeleniumTestCase
 from plone.app.testing.selenium_layers import open
 
@@ -48,3 +50,40 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         # And the search results are actually visible, aren't they?:
         self.assert_(sel.find_element_by_id('search-results').is_displayed(),
                      "Search results are not visible.")
+
+    def test_relevance_sorting_after_ajax(self):
+
+        """The reason to test this - weird behavior of the link to 'relevance'
+           sorting option after some ajax calls.
+        """
+
+        # First we test default sorting that should be 'relevance':
+        portal = self.layer['portal']
+        sel = self.layer['selenium']
+        open(sel, portal.absolute_url() + '/@@search?SearchableText=Foo')
+        s = sel.find_element_by_id('sorting-options')
+        curr = s.find_element_by_tag_name('strong')
+        self.assert_('relevance' in curr.get_text(),
+                     'Relevance is not default sorting option')
+
+        # Now we try to change sorting and come back to 'relevance' to see that
+        # getting back to it highlights the corresponding item # in the sorting
+        # bar:
+        s.find_element_by_partial_link_text('date').click()
+        # At this point we make an ajax call so it's better to wait for it to
+        # be finished:
+        time.sleep(1)
+        curr = s.find_element_by_tag_name('strong')
+        self.assert_('date' in curr.get_text(),
+                     'Date is not highlighted sorting option after sorting.')
+
+        s.find_element_by_partial_link_text('relevance').click()
+        # At this point we make an ajax call so it's better to wait for it to
+        # be finished:
+        time.sleep(1)
+        try:
+            curr = s.find_element_by_tag_name('strong')
+            self.assert_('relevance' in curr.get_text(),
+                         'Relevance is not highlighted sorting option.')
+        except NoSuchElementException:
+            self.fail("No highlighted element found after ajax call.")

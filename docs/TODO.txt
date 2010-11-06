@@ -1,4 +1,5 @@
 1. Sort out 'relevance' sort option - it is not highlighted as active after coming back to it after Ajax calls. Other options behave as they should.
+[DONE]
 
 2. Content types disabled in "Define the types to be shown in the site and searched" field are still searchable even though they disappear from the filter.
 

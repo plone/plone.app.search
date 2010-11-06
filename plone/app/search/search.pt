@@ -344,13 +344,15 @@
                           <span id="sorting-options">
                               <metal:sorting define-macro="sorting">
                                   <tal:block repeat="item view/getSortOptions">
+                                      <tal:item define="selected item/selected">
                                       <a rel=""
-                                         tal:condition="not:item/selected" 
+                                         tal:condition="not:selected" 
                                          tal:content="item/title" 
                                          tal:attributes="href item/url;
                                                          rel python:item.sortkey and item.sortkey or None"></a>
-                                      <strong tal:condition="item/selected" tal:content="item/title"></strong>
+                                      <strong tal:condition="selected" tal:content="item/title"></strong>
                                       <span tal:condition="not:repeat/item/end">&middot;</span>
+                                      </tal:item>
                                   </tal:block>
                               </metal:sorting>
                           </span>

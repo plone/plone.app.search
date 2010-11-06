@@ -25,21 +25,24 @@ class Search(BrowserView):
         return IContentListing(results)
 
     def getSortOptions(self):
-        """ options for sorting in the search result template, also for marking
-        selected """
+        """ Sorting options for search results view. """
+
         q = {}
         q.update(self.request.form)
 
         class sortoption(object):
 
-            def __init__(self, request, title, sortkey=None, reverse=False):
+            def __init__(self, request, title, sortkey='', reverse=False):
                 self.request = request
                 self.title = title
                 self.sortkey = sortkey
                 self.reverse = reverse
 
             def selected(self):
-                return self.request.get('sort_on') == self.sortkey
+                sort_on = self.request.get('sort_on') and \
+                          self.request.get('sort_on') or \
+                          ''
+                return sort_on == self.sortkey
 
             def url(self):
                 q = {}
@@ -48,14 +51,12 @@ class Search(BrowserView):
                     del q['sort_on']
                 if 'sort_order' in q.keys():
                     del q['sort_order']
-                if self.sortkey:
-                    q['sort_on'] = self.sortkey
-                if self.reverse:
-                    q['sort_order'] = 'reverse'
+                q['sort_on'] = self.sortkey
+                q['sort_order'] = 'reverse'
                 return self.request.URL + '?' + make_query(q)
 
         return(
-            sortoption(self.request, 'relevance'),
+            sortoption(self.request, 'relevance', ''),
             sortoption(self.request, 'date (newest first)',
                                      'Date',
                                      reverse=True),
