@@ -1,24 +1,24 @@
-1. Content types disabled in "Define the types to be shown in the site and
-searched" field are still searchable even though they disappear from the
-filter.
-
-2. Fix "Search settings" (@@search-controlpanel):
+1. Fix "Search settings" (@@search-controlpanel):
     - "Advanced search form settings" should be called something like "Search
       filter settings";
     - remove "Collapse rarely used options" field - we don't collapse the
       fields in the filter.
 
-3. Make sure protection of "Sort order of search results" works and anonymous
+2. Make sure protection of "Sort order of search results" works and anonymous
 users don't see the 'sorter' if they are not supposed to.
 
-4. Use "Search results per page" field's value in the view.
+3. Use "Search results per page" field's value in the view.
 
-5. Updated description for "Sort order of search results" to list new options
+4. Updated description for "Sort order of search results" to list new options
 for sorting.
 
-6. As an additional bonus - filtering by section. We need a catalog of the
+5. As an additional bonus - filtering by section. We need a catalog of the
 site's sections though so that a user could select items from what sections he
 is interested in when searching.
 
-7. RSS link should be updated in accordance to the request even when using ajax
+6. RSS link should be updated in accordance to the request even when using ajax
 calls.
+
+7. Search only in current section. Plone gives the opportunity to search within current section. When checked, the result page doesn't give any feedback that the results are only from the certain section. It also doesn't give the opportunity to search again within this section. Adding a simple line states “searched in <section>” and a checkbox to search within it again could solve this.
+
+8. Easy-to-read dates: "Last modified Nov 10, 2007 10:43 PM" is painful to read. "Last modified 2 weeks ago" makes sense when you read results and is more scannable.
