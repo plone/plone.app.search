@@ -1,28 +1,56 @@
-
 from Products.Five.browser import BrowserView
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from ZTUtils import make_query
+
+import types
 
 
 class Search(BrowserView):
 
     sections_cache = {}
 
-    def results(self, batch=False, b_size=30):
-        query = {}
+    def results(self, query=None, batch=False, b_size=30, b_start=0, **kw):
+        """ Get properly wrapped search results from the catalog.
+        Everything in Plone that performs searches should go through this view.
+        'query' (optional) should be a dictionary of catalog parameters.
+        You can also pass catalog parameters as individual named keywords.
+        """
+        if query is None:
+            query = {}
         query.update(getattr(self.request, 'form', {}))
         if not query:
             return IContentListing([])
-        catalog = getToolByName(self.context, 'portal_catalog')
-        results = catalog(query)
 
+        catalog = getToolByName(self.context, 'portal_catalog')
+
+        query = self.ensureFriendlyTypes(query)
+
+        results = IContentListing(catalog(query))
         if batch:
             from Products.CMFPlone import Batch
-            b_start = self.request.get('b_start', 0)
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return IContentListing(batch)
-        return IContentListing(results)
+        return results
+
+    def ensureFriendlyTypes(self, query):
+        # ported from Plone's queryCatalog. It hurts to bring this one along.
+        # The fact that it is needed at all tells us that we currently abuse
+        # the concept of types in Plone
+        # please remove this one when it is no longer needed.
+
+        ploneUtils = getToolByName(self.context, 'plone_utils')
+        portal_type = query.get('portal_type', [])
+        if not type(portal_type) is types.ListType:
+            portal_type = [portal_type]
+        Type = query.get('Type', [])
+        if not type(Type) is types.ListType:
+            Type = [Type]
+        typesList = portal_type + Type
+        if not typesList:
+            friendlyTypes = ploneUtils.getUserFriendlyTypes(typesList)
+            query['portal_type'] = friendlyTypes
+        return query
 
     def getSortOptions(self):
         """ Sorting options for search results view. """
