@@ -3,6 +3,8 @@ from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
 
+from Products.CMFCore.utils import getToolByName
+
 from base import SearchTestCase
 
 
@@ -68,6 +70,27 @@ class TestSection(SearchTestCase):
         fl_path = 'http://nohost/plone/first_level_folder/'
         section_title = view.section(fl_path + 'second_level_document')
         self.assertEquals(section_title, 'Cached title for first_level_folder')
+
+    def test_blacklisted_types_in_results(self):
+        """Make sure we don't break types' blacklisting in the new search
+        results view.
+        """
+        portal = self.layer['portal']
+        sp = getToolByName(portal, "portal_properties").site_properties
+        # not_searched = sp.getProperty('types_not_searched', [])
+        q = {'SearchableText': 'spam'}
+        res = portal.restrictedTraverse('@@search').results(query=q)
+        self.failUnless('my-page1' in [r.getId() for r in res],
+                        'Test document is not found in the results.')
+
+        # Now let's exclude 'Document' from the search results:
+        # new_blacklist = not_searched + ('Document', )
+        # sp.manage_changeProperties(types_not_searched=new_blacklist)
+        sp.types_not_searched += ('Document', )
+        res = portal.restrictedTraverse('@@search').results(query=q)
+        self.failIf('my-page1' in [r.getId() for r in res],
+                    'Blacklisted type "Document" has been found in search \
+                     results.')
 
 
 def test_suite():
