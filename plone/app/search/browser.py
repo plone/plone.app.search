@@ -16,17 +16,17 @@ class Search(BrowserView):
         'query' (optional) should be a dictionary of catalog parameters.
         You can also pass catalog parameters as individual named keywords.
         """
-        if query is None:
-            query = {}
-        query.update(getattr(self.request, 'form', {}))
-        if not query:
+        if query is not None:
+            kw.update(query)
+        kw.update(getattr(self.request, 'form', {}))
+        if not kw:
             return IContentListing([])
 
         catalog = getToolByName(self.context, 'portal_catalog')
 
-        query = self.ensureFriendlyTypes(query)
+        kw = self.ensureFriendlyTypes(kw)
 
-        results = IContentListing(catalog(query))
+        results = IContentListing(catalog(kw))
         if batch:
             from Products.CMFPlone import Batch
             batch = Batch(results, b_size, int(b_start), orphan=0)
