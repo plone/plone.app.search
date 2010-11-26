@@ -5,7 +5,7 @@ version = '1.0'
 
 tests_require = ['collective.testcaselayer',
                  'plone.app.testing',
-                 'selenium']
+                 'selenium>=2.0a5']
 
 setup(name='plone.app.search',
       version=version,
