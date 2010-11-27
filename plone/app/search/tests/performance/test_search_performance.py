@@ -28,6 +28,7 @@ class TestPerformance100(Search100FunctionalTestCase):
         heatup_browser = Browser(self.app)
         portal_url = self.portal.absolute_url()
         heatup_browser.open(portal_url+'/search?SearchableText=spam')
+        heatup_browser.open(portal_url+'/@@search?SearchableText=spam')
 
         # time rendering the old search page
         browser = Browser(self.app)
@@ -87,7 +88,7 @@ class TestPerformance1000(Search1000FunctionalTestCase):
         heatup_browser = Browser(self.app)
         portal_url = self.portal.absolute_url()
         heatup_browser.open(portal_url+'/search?SearchableText=spam')
-
+        heatup_browser.open(portal_url+'/@@search?SearchableText=spam')
 
         # time rendering the old search page
         browser = Browser(self.app)
