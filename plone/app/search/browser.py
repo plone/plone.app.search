@@ -55,34 +55,6 @@ class Search(BrowserView):
     def getSortOptions(self):
         """ Sorting options for search results view. """
 
-        q = {}
-        q.update(self.request.form)
-
-        class sortoption(object):
-
-            def __init__(self, request, title, sortkey='', reverse=False):
-                self.request = request
-                self.title = title
-                self.sortkey = sortkey
-                self.reverse = reverse
-
-            def selected(self):
-                sort_on = self.request.get('sort_on') and \
-                          self.request.get('sort_on') or \
-                          ''
-                return sort_on == self.sortkey
-
-            def url(self):
-                q = {}
-                q.update(self.request.form)
-                if 'sort_on' in q.keys():
-                    del q['sort_on']
-                if 'sort_order' in q.keys():
-                    del q['sort_order']
-                q['sort_on'] = self.sortkey
-                q['sort_order'] = 'reverse'
-                return self.request.URL + '?' + make_query(q)
-
         return(
             sortoption(self.request, 'relevance', ''),
             sortoption(self.request, 'date (newest first)',
@@ -161,3 +133,29 @@ class Search(BrowserView):
         self.sections_cache[section_id] = section.title
 
         return section.title
+
+
+class sortoption(object):
+
+    def __init__(self, request, title, sortkey='', reverse=False):
+        self.request = request
+        self.title = title
+        self.sortkey = sortkey
+        self.reverse = reverse
+
+    def selected(self):
+        sort_on = self.request.get('sort_on') and \
+                  self.request.get('sort_on') or \
+                  ''
+        return sort_on == self.sortkey
+
+    def url(self):
+        q = {}
+        q.update(self.request.form)
+        if 'sort_on' in q.keys():
+            del q['sort_on']
+        if 'sort_order' in q.keys():
+            del q['sort_order']
+        q['sort_on'] = self.sortkey
+        q['sort_order'] = 'reverse'
+        return self.request.URL + '?' + make_query(q)
