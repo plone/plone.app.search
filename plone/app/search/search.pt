@@ -126,7 +126,7 @@
                         <tal:datetime define="today python:DateTime().earliestTime();
                                               isAnon context/@@plone_portal_state/anonymous;
                                               member context/@@plone_portal_state/member;">
-                            <select name="created:list:date"
+                            <select name="created.query:record:list:date"
                                     id="created"
                                     tal:define="yesterday python:(today-1).Date();
                                                 lastweek python:(today-7).Date();
@@ -159,7 +159,7 @@
                             </select>
                         </tal:datetime>
 
-                        <input type="hidden" name="created_usage" value="range:min" />
+                        <input type="hidden" name="created.range:record" value="min" />
                     </div>
         
                     <div class="field"
