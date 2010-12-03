@@ -220,7 +220,7 @@
                     </div>
         
                     <div class="field">
-                        <label for="Creator"
+                        <label for="Creator:ignore_empty"
                                i18n:translate="label_author">Author</label>
         
                         <div class="formHelp" i18n:translate="help_search_author">
@@ -229,7 +229,7 @@
     
                         <tal:creators tal:define="creators python:portal.portal_catalog.uniqueValuesFor('Creator');
                                                   selected request/Creator|nothing">
-                            <select name="Creator"
+                            <select name="Creator:ignore_empty"
                                     id="Creator"
                                     tal:condition="python: len(creators) &lt;= 30">
                                 <option value="" 
@@ -243,7 +243,7 @@
                                 </metal:block>
                             </select>
     
-                            <input name="Creator"
+                            <input name="Creator:ignore_empty"
                                    tal:condition="python: len(creators) &gt; 30 "
                                    tal:attributes="value selected" />
                         </tal:creators>
