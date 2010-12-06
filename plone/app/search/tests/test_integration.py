@@ -8,6 +8,18 @@ from Products.CMFCore.utils import getToolByName
 from base import SearchTestCase
 
 
+class TestIntegration(SearchTestCase):
+    """ Check that all bits of the package are inplace and work.
+    """
+
+    def test_searchjs_is_available(self):
+        """Make sure search.js is available."""
+        portal = self.layer['portal']
+        js = getToolByName(portal, 'portal_javascripts')
+        ids = js.getResourcesDict().keys()
+        self.assert_('++resource++search.js' in ids)
+
+
 class TestSection(SearchTestCase):
     """The name of the class should be meaningful. This may be a class that
     tests the installation of a particular product.
@@ -98,5 +110,6 @@ def test_suite():
     above
     """
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestIntegration))
     suite.addTest(unittest.makeSuite(TestSection))
     return suite

@@ -3,6 +3,7 @@ import unittest2 as unittest
 from zope.configuration import xmlconfig
 
 from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import applyProfile
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting, FunctionalTesting
 from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
@@ -25,6 +26,8 @@ class SearchLayer(PloneSandboxLayer):
                        plone.app.search, context=configurationContext)
 
     def setUpPloneSite(self, portal):
+        # Install into Plone site using portal_setup
+        applyProfile(portal, 'plone.app.search:default')
         setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
         for i in range(0, 100):

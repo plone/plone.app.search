@@ -1,9 +1,21 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
-    i18n_domain="plone.app.search"
-    xmlns:browser="http://namespaces.zope.org/browser">
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="plone.app.search">
 
+   <genericsetup:registerProfile
+       name="default"
+       title="plone.app.search profile"
+       directory="profiles/default"
+       provides="Products.GenericSetup.interfaces.EXTENSION"
+       />
+      
+    <browser:resource
+        name="search.js"
+        file="search.js"
+        />
 
     <browser:page
         name="search"
