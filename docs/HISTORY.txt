@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Added plone.app.contentlisting as a dependency for the package.
+  [spliter]
+
 - Added title and description to the GS profile.
   [spliter]
 
