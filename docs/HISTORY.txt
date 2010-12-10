@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Added title and description to the GS profile.
+  [spliter]
+
 - Moved search.js from CMFPlone into the package.
   [spliter]
 
