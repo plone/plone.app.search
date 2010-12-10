@@ -4,6 +4,9 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Moved search.js from CMFPlone into the package.
+  [spliter]
+
 - Fixed catalog query to treat 'use_types_blacklist' parameter properly so that
   types excluded from search at @@search-controlpanel would not show up in the
   search results page.
