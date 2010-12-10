@@ -7,8 +7,8 @@
 
    <genericsetup:registerProfile
        name="default"
-       title="plone.app.search integration."
-       description="Profile for Plone's dynamic search."
+       title="Plone's Advanced Search Form"
+       description="Installs Plone's dynamic advanced search form."
        directory="profiles/default"
        provides="Products.GenericSetup.interfaces.EXTENSION"
        />
