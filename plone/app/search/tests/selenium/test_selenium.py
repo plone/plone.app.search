@@ -87,3 +87,30 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
                          'Relevance is not highlighted sorting option.')
         except NoSuchElementException:
             self.fail("No highlighted element found after ajax call.")
+
+    def test_search_field(self):
+
+        """ We need to make sure links in livesearch are updated and link to
+            correct search results view.
+        """
+
+        portal = self.layer['portal']
+        sel = self.layer['selenium']
+        open(sel, portal.absolute_url())
+        search_form = sel.find_element_by_id('portal-searchbox')
+
+        # Of course the form is linked to @@search, isn't it?
+        form = search_form.find_element_by_name('searchform')
+        self.assert_(form.get_attribute('action') ==
+                     'http://localhost:55001/plone/@@search')
+
+        search_field = search_form.find_element_by_id('searchGadget')
+        search_field.send_keys('wel')
+        time.sleep(1)
+        # livesearch should be visible now...
+        self.assert_(search_form.find_element_by_id('LSResult').is_displayed())
+        # ... and we should have at least 2 'Advanced Search' links
+        adv = search_form.find_elements_by_partial_link_text('Advanced Search')
+        for link in adv:
+            href = link.get_attribute('href')
+            self.assert_(href == 'http://localhost:55001/plone/@@search')
