@@ -26,3 +26,9 @@ calls.
 9. In search field at the top right, if one starts searching for anything
 ('foo') and then clicks 'Advanced Search', @@search should be loaded with
 ?SearchableText=foo.
+
+10. Because of performance reasons there has to be one of the following:
+    - plone.app.registry setting which can disable the ajax feature for the
+      search results view;
+    - setting to not submit search form on every field's change in filter but
+      only after a user explicitly clicked 'Search'
