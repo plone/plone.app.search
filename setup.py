@@ -9,7 +9,7 @@ tests_require = ['collective.testcaselayer',
 
 setup(name='plone.app.search',
       version=version,
-      description="",
+      description="Search user interface for Plone CMS.",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
