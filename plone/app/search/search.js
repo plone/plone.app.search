@@ -1,4 +1,4 @@
-/* The following line defines gliobal variables defined elsewhere. */
+/* The following line defines global variables defined elsewhere. */
 /*global jQuery:false*/
 
 (function ($) {
