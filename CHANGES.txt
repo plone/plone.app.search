@@ -1,8 +1,12 @@
 Changelog
 =========
 
+
 1.0 (unreleased)
 ----------------
+
+- Add MANIFEST.in.
+  [WouterVH]
 
 - Added plone.app.contentlisting as a dependency for the package.
   [spliter]
