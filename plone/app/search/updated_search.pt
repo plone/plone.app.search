@@ -4,7 +4,8 @@
                   Batch python:modules['Products.CMFPlone'].Batch;
                   b_size python:30;
                   b_start python:0;
-                  b_start request/b_start | b_start;">
+                  b_start request/b_start | b_start;
+                  st python:request.get('SearchableText', '')">
 
     <strong id="updated-search-results-number"
             tal:content="python:len(results)">234</strong>

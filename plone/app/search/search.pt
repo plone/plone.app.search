@@ -33,7 +33,8 @@
           tal:define="DateTime python:modules['DateTime'].DateTime;
                       portal context/@@plone_portal_state/portal;
                       options context/@@searchform-options;
-                      first_call  not:request/advanced_search|nothing">
+                      first_call  not:request/advanced_search|nothing;
+                      st python:request.get('SearchableText', '')">
 
         <input type="hidden" name="advanced_search" value="True" />
         <input type="hidden" name="sort_on" value="" />
@@ -45,7 +46,7 @@
                    size="25"
                    title="Search Site"
                    i18n:attributes="title title_search_title;"
-                   tal:attributes="value request/SearchableText|nothing;"
+                   tal:attributes="value st;"
                    />
             <input class="searchPage searchButton allowMultiSubmit"
                    type="submit"
@@ -432,7 +433,7 @@
                                                class="link-category"
                                                rel="tag"
                                                tal:content="category"
-                                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/search?Subject%3Alist=${category}">
+                                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?SearchableText=${st}&Subject%3Alist=${category}">
                                               Category
                                             </a><tal:separator condition="not: repeat/category/end">,</tal:separator>
                                           </span>
