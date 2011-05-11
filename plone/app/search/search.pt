@@ -14,7 +14,7 @@
           context/@@plone_context_state/object_url;"
           tal:condition="request/SearchableText|nothing"
           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
-          
+
   </metal:block>
 
   <metal:block fill-slot="top_slot"
@@ -26,18 +26,18 @@
 <body>
 
   <div id="content-core" metal:fill-slot="main">
-       
+
     <form name="searchform"
           action="@@search"
           class="searchPage enableAutoFocus"
           tal:define="DateTime python:modules['DateTime'].DateTime;
                       portal context/@@plone_portal_state/portal;
                       options context/@@searchform-options;
-                      first_call  not:request/advanced_search|nothing">           
-        
+                      first_call  not:request/advanced_search|nothing">
+
         <input type="hidden" name="advanced_search" value="True" />
         <input type="hidden" name="sort_on" value="" />
-        
+
         <fieldset id="search-field">
             <input class="searchPage"
                    name="SearchableText"
@@ -56,13 +56,13 @@
         <div class="row">
             <div id="search-filter" class="hiddenStructure cell"
                  tal:attributes="class python:view.showAdvancedSearch() and 'cell width-1:4 position-0' or 'hiddenStructure cell width-1:4 position-0'">
-                 
+
                 <fieldset>
-                    
+
                     <a href="#" id="close-search-options" title="Close the column"
                        tal:attributes="href view/closeLink"
                        ><span class="hiddenStructure">Close</span></a>
-                    
+
                     <div class="field"
                          tal:define="portal_types portal/portal_types;
                                      all_used_types  python:context.portal_catalog.uniqueValuesFor('portal_type');
@@ -70,11 +70,11 @@
                                      all_checked python:(len(used_types) == len(request.get('portal_type', []))) or first_call;
                                      toggle_select_state python:all_checked and 'true' or 'false';">
                         <label i18n:translate="label_item_type">Item type</label>
-        
+
                         <div class="formHelp" i18n:translate="help_search_item_type">
                         Return items of a specific type.
                         </div>
-    
+
                         <span class="optionsToggle">
                             <input type="checkbox"
                                    onclick=""
@@ -114,15 +114,15 @@
                         </div>
                         <div class="visualClear"><!-- --></div>
                     </div>
-        
+
                     <div class="field">
                         <label for="created"
                                i18n:translate="label_new_items_since">New items since</label>
-        
+
                         <div class="formHelp" i18n:translate="help_search_new_items_since">
                         Return items added since you were last logged on, the last week, etc.
                         </div>
-    
+
                         <tal:datetime define="today python:DateTime().earliestTime();
                                               isAnon context/@@plone_portal_state/anonymous;
                                               member context/@@plone_portal_state/member;">
@@ -161,7 +161,7 @@
 
                         <input type="hidden" name="created.range:record" value="min" />
                     </div>
-        
+
                     <div class="field"
                          tal:condition="options/show_review_state"
                          tal:define="navtree_props portal/portal_properties/navtree_properties;
@@ -170,10 +170,10 @@
                                       filtered_states python:[state for state in states if state[1] in used_states];
                                       all_checked python:(len(filtered_states) == len(request.get('review_state', []))) or first_call;
                                       toggle_select_state python:all_checked and 'true' or 'false';">
-        
+
                         <label for="review_state"
                                i18n:translate="label_review_status">Review status</label>
-        
+
                         <div class="formHelp" i18n:translate="help_search_review_status">
                         You may search for items based on their
                         review state. If you wish to constrain results to items
@@ -218,15 +218,15 @@
                             </tal:items>
                         </tal:states>
                     </div>
-        
+
                     <div class="field">
                         <label for="Creator:ignore_empty"
                                i18n:translate="label_author">Author</label>
-        
+
                         <div class="formHelp" i18n:translate="help_search_author">
                         Return items created by a particular person.
                         </div>
-    
+
                         <tal:creators tal:define="creators python:portal.portal_catalog.uniqueValuesFor('Creator');
                                                   selected request/Creator|nothing">
                             <select name="Creator:ignore_empty"
@@ -242,22 +242,22 @@
                                             tal:content="creator">username </option>
                                 </metal:block>
                             </select>
-    
+
                             <input name="Creator:ignore_empty"
                                    tal:condition="python: len(creators) &gt; 30 "
                                    tal:attributes="value selected" />
                         </tal:creators>
                     </div>
-        
+
                     <div class="field"
                          tal:condition="options/show_title">
                         <label for="Title"
                                i18n:translate="label_title">Title</label>
-        
+
                         <div class="formHelp" i18n:translate="help_search_title">
                         Return items matching this title.
                         </div>
-    
+
                         <input type="text"
                                id="Title"
                                name="Title"
@@ -266,19 +266,19 @@
                                tal:attributes="value request/Title|nothing"
                                />
                     </div>
-        
+
                     <div class="field"
                          tal:condition="options/show_description">
-        
+
                         <label for="Description"
                                i18n:translate="label_description">Description</label>
-        
+
                         <div class="formHelp" i18n:translate="help_search_description">
                         Return items matching this description.
                         Multiple words may be found
                         by combining them with <strong>AND</strong> and <strong>OR</strong>.
                         </div>
-    
+
                         <input type="text"
                                id="Description"
                                name="Description"
@@ -287,21 +287,21 @@
                                tal:attributes="value request/Description|nothing"
                                />
                     </div>
-        
+
                     <div class="formControls">
                         <input class="searchPage searchButton allowMultiSubmit"
                                type="submit"
                                value="Search"
-                               i18n:attributes="value label_search;"/>                           
+                               i18n:attributes="value label_search;"/>
                     </div>
-        
+
                     <div class="visualClear"><!-- --></div>
                 </fieldset>
-                
+
                 <p class="discreet" id="rss-subscription"
                    tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
                    	<img src="" alt="RSS"
-                   	     tal:attributes="src string:${portal_url}/rss.gif"/>       
+                   	     tal:attributes="src string:${portal_url}/rss.gif"/>
                     <a href=""
                        class="link-feed"
                        tal:define="here_url context/@@plone_context_state/object_url"
@@ -323,13 +323,13 @@
                              b_size python:30;
                              b_start python:0;
                              b_start request/b_start | b_start;">
-                                      
+
                 <div id="searchResultsHeading">
                     <span i18n:translate="batch_x_items_matching_your_criteria" class="discreet">
                         <strong i18n:name="number" id="search-results-number"
                                 tal:content="python:len(results)">234</strong>
                         <span tal:omit-tag="">items matching your search terms.</span>
-                    </span>                   
+                    </span>
 
                     <a href="#" 
                        tal:condition="not:view/showAdvancedSearch|nothing"
@@ -338,7 +338,7 @@
                        i18n:translate="narrow_search_options">
                         You can narrow them down.
                     </a>
-    
+
                     <span class="discreet" id="searchResultsSort">
                       <span i18n:translate="sort_by">Sort by</span>
                           <span id="sorting-options">
@@ -358,14 +358,14 @@
                           </span>
                     </span>
                 </div>
-                        
-                <metal:searchresults define-macro="search_results">                        
-                    <div id="search-results">                        
-                        
+
+                <metal:searchresults define-macro="search_results">
+                    <div id="search-results">
+
                         <metal:noresults tal:condition="not: results">
                           <p><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
                         </metal:noresults>
-                        
+
                         <metal:results tal:condition="results"
                                        tal:define="normalizeString nocall: context/plone_utils/normalizeString;
                                                    isAnon context/@@plone_portal_state/anonymous;
@@ -395,9 +395,9 @@
                                                  i18n:name="author">
                                                 Bob Dobalina
                                               </a>
-                                            </tal:block>  
+                                            </tal:block>
                                         </span>
-                                        
+
                                         <span tal:define="publication_date item/EffectiveDate;
                                                           modification_date item/ModificationDate">
 
@@ -457,15 +457,15 @@
                         </metal:results>
                     </div>
                 </metal:searchresults>
-  
+
             </div>
         </div>
-        
+
         <div class="visualClear"><!-- --></div>
     </form>
-  
+
   </div>
-  
+
 </body>
 </html>
 
