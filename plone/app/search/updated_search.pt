@@ -5,15 +5,15 @@
                   b_size python:30;
                   b_start python:0;
                   b_start request/b_start | b_start;">
-                  
+
     <strong id="updated-search-results-number"
-            tal:content="python:len(results)">234</strong>    
-            
-    <span id="updated-sorting-options">      
+            tal:content="python:len(results)">234</strong>
+
+    <span id="updated-sorting-options">
         <metal:results use-macro="context/@@search/sorting" />
     </span>
-    
+
     <metal:results use-macro="context/@@search/search_results" />
-    
+
 </body>
 </html>
