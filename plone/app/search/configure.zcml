@@ -12,7 +12,7 @@
        directory="profiles/default"
        provides="Products.GenericSetup.interfaces.EXTENSION"
        />
-      
+
     <browser:resource
         name="search.js"
         file="search.js"
@@ -25,13 +25,13 @@
         for="Products.CMFCore.interfaces.IFolderish"
         template="search.pt"
         />
-    
+
     <browser:page
         name="updated_search"
         class=".browser.Search"
         permission="zope2.View"
         for="Products.CMFCore.interfaces.IFolderish"
         template="updated_search.pt"
-        />    
+        />
 
 </configure>
