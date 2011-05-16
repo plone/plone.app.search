@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"POT-Creation-Date: 2011-05-16 14:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,5 +12,32 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
+"Domain: plone.app.search\n"
+
+#: ./browser.py:66
+msgid "aphabetically"
+msgstr ""
+
+#: ./browser.py:63
+msgid "date (newest first)"
+msgstr ""
+
+#. Default: "Filter the results."
+#: ./search.pt:112
+msgid "narrow_search_options"
+msgstr ""
+
+#: ./browser.py:62
+msgid "relevance"
+msgstr ""
+
+#. Default: "Sort by"
+#: ./search.pt:76
+msgid "sort_by"
+msgstr ""
+
+#. Default: "Located in ${label_section_title}."
+#: ./search.pt:457
+msgid "text_searchitem_location"
+msgstr ""
 

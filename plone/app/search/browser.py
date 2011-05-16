@@ -3,6 +3,9 @@ from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from ZTUtils import make_query
 
+from zope.i18nmessageid import MessageFactory
+_ = MessageFactory('plone.app.search')
+
 import types
 
 
@@ -56,11 +59,11 @@ class Search(BrowserView):
         """ Sorting options for search results view. """
 
         return(
-            sortoption(self.request, 'relevance', ''),
-            sortoption(self.request, 'date (newest first)',
+            sortoption(self.request, _(u'relevance'), ''),
+            sortoption(self.request, _(u'date (newest first)'),
                                      'Date',
                                      reverse=True),
-            sortoption(self.request, 'aphabetically', 'sortable_title'),
+            sortoption(self.request, _(u'aphabetically'), 'sortable_title'),
         )
 
     def showAdvancedSearch(self):
