@@ -1,43 +1,38 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: plone.app.search\n"
 "POT-Creation-Date: 2011-05-16 14:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Tormod Mansaker <tormod@jarn.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: no\n"
-"Language-Name: Norsk\n"
-"Preferred-Encodings: utf-8 latin1\n"
-"Domain: plone.app.search\n"
 
 #: ./browser.py:66
 msgid "aphabetically"
-msgstr ""
+msgstr "alfabetisk"
 
 #: ./browser.py:63
 msgid "date (newest first)"
-msgstr ""
+msgstr "dato (siste først)"
 
 #. Default: "Filter the results."
 #: ./search.pt:112
 msgid "narrow_search_options"
-msgstr ""
+msgstr "Filtrèr søket"
 
 #: ./browser.py:62
 msgid "relevance"
-msgstr ""
+msgstr "relevans"
 
 #. Default: "Sort by"
 #: ./search.pt:76
 msgid "sort_by"
-msgstr ""
+msgstr "Sortèr etter"
 
 #. Default: "Located in ${label_section_title}."
 #: ./search.pt:457
 msgid "text_searchitem_location"
-msgstr ""
-
+msgstr "Lokalisert i ${label_section_title}."
