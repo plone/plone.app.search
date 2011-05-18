@@ -4,7 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from ZTUtils import make_query
 
 from zope.i18nmessageid import MessageFactory
-_ = MessageFactory('plone.app.search')
+_ = MessageFactory('plone')
 
 import types
 
@@ -63,7 +63,7 @@ class Search(BrowserView):
             sortoption(self.request, _(u'date (newest first)'),
                                      'Date',
                                      reverse=True),
-            sortoption(self.request, _(u'aphabetically'), 'sortable_title'),
+            sortoption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
 
     def showAdvancedSearch(self):

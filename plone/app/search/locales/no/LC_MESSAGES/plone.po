@@ -15,7 +15,7 @@ msgstr ""
 "Domain: plone\n"
 
 #: ../browser.py:66
-msgid "aphabetically"
+msgid "alphabetically"
 msgstr "alfabetisk"
 
 #. Default: "published"
