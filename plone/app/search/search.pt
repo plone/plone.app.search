@@ -120,7 +120,7 @@
                   <dd class="actionMenuContent">
                       <div id="search-filter" i18n:domain="plone">
 
-                          <fieldset>
+                          <fieldset class="noborder">
 
                               <!-- <a href="#" id="close-search-options" title="Close the column"
                                  tal:attributes="href view/closeLink"
