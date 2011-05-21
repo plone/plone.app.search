@@ -39,7 +39,7 @@
         <input type="hidden" name="advanced_search" value="True" />
         <input type="hidden" name="sort_on" value="" />
 
-        <fieldset id="search-field" i18n:domain="plone">
+        <fieldset id="search-field" i18n:domain="plone" class="noborder">
             <input class="searchPage"
                    name="SearchableText"
                    type="text"
