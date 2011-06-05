@@ -32,7 +32,6 @@
           class="searchPage enableAutoFocus"
           tal:define="DateTime python:modules['DateTime'].DateTime;
                       portal context/@@plone_portal_state/portal;
-                      options context/@@searchform-options;
                       first_call  not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '')">
 
@@ -226,7 +225,6 @@
                               </div>
 
                               <div class="field"
-                                   tal:condition="options/show_review_state"
                                    tal:define="navtree_props portal/portal_properties/navtree_properties;
                                                 states python:portal.portal_workflow.listWFStatesByTitle(filter_similar=1);
                                                 used_states python:portal.portal_catalog.uniqueValuesFor('review_state');
@@ -312,8 +310,7 @@
                                   </tal:creators>
                               </div>
 
-                              <div class="field"
-                                   tal:condition="options/show_title">
+                              <div class="field">
                                   <label for="Title"
                                          i18n:translate="label_title">Title</label>
 
@@ -330,8 +327,7 @@
                                          />
                               </div>
 
-                              <div class="field"
-                                   tal:condition="options/show_description">
+                              <div class="field">
 
                                   <label for="Description"
                                          i18n:translate="label_description">Description</label>
