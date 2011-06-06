@@ -1,33 +1,16 @@
-1. Fix "Search settings" (@@search-controlpanel):
-    - "Advanced search form settings" should be called something like "Search
-      filter settings";
-    - remove "Collapse rarely used options" field - we don't collapse the
-      fields in the filter.
-
-2. Make sure protection of "Sort order of search results" works and anonymous
-users don't see the 'sorter' if they are not supposed to.
-
-3. Use "Search results per page" field's value in the view.
-
-4. Updated description for "Sort order of search results" to list new options
-for sorting.
-
-5. As an additional bonus - filtering by section. We need a catalog of the
+1. As an additional bonus - filtering by section. We need a catalog of the
 site's sections though so that a user could select items from what sections he
 is interested in when searching.
 
-6. RSS link should be updated in accordance to the request even when using ajax
-calls.
+2. Search only in current section. Plone gives the opportunity to search within current section. When checked, the result page doesn't give any feedback that the results are only from the certain section. It also doesn't give the opportunity to search again within this section. Adding a simple line states “searched in <section>” and a checkbox to search within it again could solve this.
 
-7. Search only in current section. Plone gives the opportunity to search within current section. When checked, the result page doesn't give any feedback that the results are only from the certain section. It also doesn't give the opportunity to search again within this section. Adding a simple line states “searched in <section>” and a checkbox to search within it again could solve this.
+3. Easy-to-read dates: "Last modified Nov 10, 2007 10:43 PM" is painful to read. "Last modified 2 weeks ago" makes sense when you read results and is more scannable.
 
-8. Easy-to-read dates: "Last modified Nov 10, 2007 10:43 PM" is painful to read. "Last modified 2 weeks ago" makes sense when you read results and is more scannable.
-
-9. In search field at the top right, if one starts searching for anything
+4. In search field at the top right, if one starts searching for anything
 ('foo') and then clicks 'Advanced Search', @@search should be loaded with
 ?SearchableText=foo.
 
-10. Because of performance reasons there has to be one of the following:
+5. Because of performance reasons there has to be one of the following:
     - plone.app.registry setting which can disable the ajax feature for the
       search results view;
     - setting to not submit search form on every field's change in filter but
