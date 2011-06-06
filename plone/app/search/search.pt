@@ -54,6 +54,27 @@
         </fieldset>
 
         <div class="row">
+
+            <div class="cell width-16 position-0">
+                <h1 class="documentFirstHeading">Search results for
+                    <strong tal:content="st">Search Term</strong>
+                </h1>
+
+                <p id="rss-subscription" i18n:domain="plone"
+                   tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
+                      <img src="" alt="RSS"
+                           tal:attributes="src string:${portal_url}/rss.gif"/>
+                    <a href=""
+                       class="link-feed"
+                       tal:define="here_url context/@@plone_context_state/object_url"
+                       tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
+                        <span i18n:translate="title_rss_feed">
+                          Subscribe to an always-updated RSS feed.
+                        </span>
+                    </a>
+                </p>
+            </div>
+            <div class="visualClear"><!-- --></div>
             <div id="search-results-wrapper"
                  tal:attributes="class python:view.showAdvancedSearch() and 'cell width-3:4 position-1:4' or 'cell width-16 position-0'"
                  class="cell width-16 position-0"
@@ -65,13 +86,266 @@
                              b_start request/b_start | b_start;">
 
                 <div id="search-results-bar">
-                    <span i18n:translate="batch_x_items_matching_your_criteria" class="discreet" i18n:domain="plone">
+                    <span i18n:translate="batch_x_items_matching_your_criteria" i18n:domain="plone">
                         <strong i18n:name="number" id="search-results-number"
                                 tal:content="python:len(results)">234</strong>
-                        <span tal:omit-tag="">items matching your search terms.</span>
+                        items matching your search terms.
                     </span>
 
-                    <span class="discreet" id="searchResultsSort">
+                    <dl class="actionMenu deactivated">
+
+                      <dt class="actionMenuHeader">
+                          <a href="#" 
+                             tal:condition="not:view/showAdvancedSearch|nothing"
+                             tal:attributes="href python:view.closeLink() + '&advanced_search=True'"
+                             id="search-filter-toggle"
+                             i18n:translate="narrow_search_options">
+                              Filter the results.
+                          </a>
+                      </dt>
+                      <dd class="actionMenuContent">
+                          <div id="search-filter" i18n:domain="plone">
+
+                              <fieldset class="noborder">
+
+                                  <div class="field"
+                                       tal:define="portal_types portal/portal_types;
+                                                   all_used_types  python:context.portal_catalog.uniqueValuesFor('portal_type');
+                                                   used_types  python:context.plone_utils.getUserFriendlyTypes(all_used_types);
+                                                   all_checked python:(len(used_types) == len(request.get('portal_type', []))) or first_call;
+                                                   toggle_select_state python:all_checked and 'true' or 'false';">
+                                      <label i18n:translate="label_item_type">Item type</label>
+
+                                      <div class="formHelp" i18n:translate="help_search_item_type">
+                                      Return items of a specific type.
+                                      </div>
+
+                                      <span class="optionsToggle">
+                                          <input type="checkbox"
+                                                 onclick=""
+                                                 name="pt_toggle"
+                                                 value="#"
+                                                 id="pt_toggle"
+                                                 class="noborder"
+                                                 checked="checked" 
+                                                 tal:attributes="checked python:all_checked and 'checked' or '';
+                                                                 onclick string:javascript:toggleSelect(this, 'portal_type:list', ${toggle_select_state});"/>
+                                          <label for="pt_toggle"
+                                                 i18n:translate="label_toggle"
+                                                 >Select All/None
+                                          </label>
+                                      </span>
+                                      <br />
+                                      <div style="float:left; margin-right: 2em;"
+                                           tal:define="typeLists python:context.createMultiColumnList(used_types, numCols=2, sort_on='self');"
+                                           tal:attributes="style python:isRTL and 'float: right;; margin-left: 2em;;' or 'float: left;; margin-right: 2em;;';"
+                                           tal:repeat="sublist typeLists">
+                                          <tal:items repeat="type sublist">
+                                              <input type="checkbox"
+                                                     name="portal_type:list"
+                                                     value="#"
+                                                     class="noborder"
+                                                     checked="checked"
+                                                     tal:attributes="value type;
+                                                                     id string:portal_type_${repeat/sublist/number}_${repeat/type/number};
+                                                                     checked python:((type in request.get('portal_type', [])) or first_call) and 'checked' or ''"/>
+                                              <label for=""
+                                                     i18n:translate=""
+                                                     tal:attributes="for string:portal_type_${repeat/sublist/number}_${repeat/type/number}"
+                                                     tal:content="python: portal_types.getTypeInfo(type).Title()"
+                                                     />
+                                              <br />
+                                          </tal:items>
+                                      </div>
+                                      <div class="visualClear"><!-- --></div>
+                                  </div>
+
+                                  <div class="field">
+                                      <label for="created"
+                                             i18n:translate="label_new_items_since">New items since</label>
+
+                                      <div class="formHelp" i18n:translate="help_search_new_items_since">
+                                      Return items added since you were last logged on, the last week, etc.
+                                      </div>
+
+                                      <tal:datetime define="today python:DateTime().earliestTime();
+                                                            isAnon context/@@plone_portal_state/anonymous;
+                                                            member context/@@plone_portal_state/member;">
+                                          <select name="created.query:record:list:date"
+                                                  id="created"
+                                                  tal:define="yesterday python:(today-1).Date();
+                                                              lastweek python:(today-7).Date();
+                                                              lastmonth python:(today-31).Date();
+                                                              ever string:1970/02/01;
+                                                              selected python:request.get('created', []);
+                                                              selected python:(len(selected) == 1) and selected[0] or ever">
+                                              <option value="#"
+                                                      tal:condition="not: isAnon"
+                                                      tal:define="value python:member is not None and member.getProperty('last_login_time') or today"
+                                                      tal:attributes="value value;
+                                                                      selected python:selected==value and 'selected' or '';" 
+                                                      i18n:translate="last_login">Last log-in</option>
+                                              <option value="#" 
+                                                      tal:attributes="value yesterday;
+                                                                      selected python:selected==yesterday and 'selected' or '';" 
+                                                      i18n:translate="time_yesterday"> Yesterday </option>
+                                              <option value="#" 
+                                                      tal:attributes="value lastweek;
+                                                                      selected python:selected==lastweek and 'selected' or '';" 
+                                                      i18n:translate="time_last_week"> Last week </option>
+                                              <option value="#" tal:attributes="value lastmonth;
+                                                                                selected python:selected==lastmonth and 'selected' or '';" 
+                                                      i18n:translate="time_last_month"> Last month </option>
+                                              <option value="#"
+                                        class="default_option"
+                                                      tal:attributes="value ever;
+                                                                      selected python:selected==ever and 'selected' or '';" 
+                                                      i18n:translate="time_ever"> Ever </option>
+                                          </select>
+                                      </tal:datetime>
+
+                                      <input type="hidden" name="created.range:record" value="min" />
+                                  </div>
+
+                                  <div class="field"
+                                       tal:define="navtree_props portal/portal_properties/navtree_properties;
+                                                    states python:portal.portal_workflow.listWFStatesByTitle(filter_similar=1);
+                                                    used_states python:portal.portal_catalog.uniqueValuesFor('review_state');
+                                                    filtered_states python:[state for state in states if state[1] in used_states];
+                                                    all_checked python:(len(filtered_states) == len(request.get('review_state', []))) or first_call;
+                                                    toggle_select_state python:all_checked and 'true' or 'false';">
+
+                                      <label for="review_state"
+                                             i18n:translate="label_review_status">Review status</label>
+
+                                      <div class="formHelp" i18n:translate="help_search_review_status">
+                                      You may search for items based on their
+                                      review state. If you wish to constrain results to items
+                                      in certain states, select them from this list.
+                                      </div>
+
+                                      <span class="optionsToggle">
+                                      <input type="checkbox"
+                                             onclick="javascript:toggleSelect(this, 'review_state:list', true);"
+                                             name="rs_toggle"
+                                             value="#"
+                                             id="rs_toggle"
+                                             class="noborder"
+                                             checked="checked" 
+                                             tal:attributes="checked python:all_checked and 'checked' or '';
+                                                             onclick string:javascript:toggleSelect(this, 'review_state:list', ${toggle_select_state});"/>
+                                      <label for="rs_toggle"
+                                             i18n:translate="label_toggle"
+                                             >Select All/None
+                                      </label>
+                                      <br />
+                                      </span>
+
+                                      <tal:states define="
+                                                      state_lists python:context.createMultiColumnList(filtered_states, numCols=1, sort_on='self');
+                                                      normalizeString nocall:context/@@plone/normalizeString;"
+                                                  repeat="sublist state_lists">
+                                          <tal:items repeat="state sublist">
+                                          <input class="noborder"
+                                                 type="checkbox"
+                                                 name="review_state:list"
+                                                 checked="checked"
+                                                 tal:attributes="value python:state[1];
+                                                                 id python:normalizeString(state[1]);
+                                                                 checked python:((state[1] in request.get('review_state', [])) or first_call) and 'checked' or ''" />
+                                          <label for=""
+                                                 tal:attributes="for python:normalizeString(state[1])"
+                                                 i18n:translate=""
+                                                 tal:content="python:state[0] or state[1]"
+                                                 />
+                                          <br />
+                                          </tal:items>
+                                      </tal:states>
+                                  </div>
+
+                                  <div class="field">
+                                      <label for="Creator:ignore_empty"
+                                             i18n:translate="label_author">Author</label>
+
+                                      <div class="formHelp" i18n:translate="help_search_author">
+                                      Return items created by a particular person.
+                                      </div>
+
+                                      <tal:creators tal:define="creators python:portal.portal_catalog.uniqueValuesFor('Creator');
+                                                                selected request/Creator|nothing">
+                                          <select name="Creator:ignore_empty"
+                                                  id="Creator"
+                                                  tal:condition="python: len(creators) &lt;= 30">
+                                              <option value="" 
+                                    class="default_option" 
+                                    i18n:translate="label_any_author">Any Author</option>
+                                              <metal:block tal:repeat="creator creators">
+                                                  <option value="" 
+                                                          tal:attributes="value creator;
+                                                                          selected python:selected == creator and 'selected' or '';" 
+                                                          tal:content="creator">username </option>
+                                              </metal:block>
+                                          </select>
+
+                                          <input name="Creator:ignore_empty"
+                                                 tal:condition="python: len(creators) &gt; 30 "
+                                                 tal:attributes="value selected" />
+                                      </tal:creators>
+                                  </div>
+
+                                  <div class="field">
+                                      <label for="Title"
+                                             i18n:translate="label_title">Title</label>
+
+                                      <div class="formHelp" i18n:translate="help_search_title">
+                                      Return items matching this title.
+                                      </div>
+
+                                      <input type="text"
+                                             id="Title"
+                                             name="Title"
+                                             size="25"
+                                             value=""
+                                             tal:attributes="value request/Title|nothing"
+                                             />
+                                  </div>
+
+                                  <div class="field">
+
+                                      <label for="Description"
+                                             i18n:translate="label_description">Description</label>
+
+                                      <div class="formHelp" i18n:translate="help_search_description">
+                                      Return items matching this description.
+                                      Multiple words may be found
+                                      by combining them with <strong>AND</strong> and <strong>OR</strong>.
+                                      </div>
+
+                                      <input type="text"
+                                             id="Description"
+                                             name="Description"
+                                             size="25"
+                                             value=""
+                                             tal:attributes="value request/Description|nothing"
+                                             />
+                                  </div>
+
+                                  <div class="formControls">
+                                      <input class="searchPage searchButton allowMultiSubmit"
+                                             type="submit"
+                                             value="Search"
+                                             i18n:attributes="value label_search;"/>
+                                  </div>
+
+                                  <div class="visualClear"><!-- --></div>
+                              </fieldset>
+
+                          </div>
+                      </dd>
+
+                    </dl>
+
+                    <span id="searchResultsSort">
                       <span i18n:translate="sort_by">Sort by</span>
                           <span id="sorting-options">
                               <metal:sorting define-macro="sorting">
@@ -91,276 +365,7 @@
                     </span>
                 </div>
 
-                <p id="rss-subscription" i18n:domain="plone"
-                   tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
-                      <img src="" alt="RSS"
-                           tal:attributes="src string:${portal_url}/rss.gif"/>
-                    <a href=""
-                       class="link-feed"
-                       tal:define="here_url context/@@plone_context_state/object_url"
-                       tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
-                        <span i18n:translate="title_rss_feed">
-                          Subscribe to an always-updated RSS feed of these search terms
-                        </span>
-                    </a>
-                </p>
-
-                <dl class="actionMenu deactivated">
-
-                  <dt class="actionMenuHeader">
-                      <a href="#" 
-                         tal:condition="not:view/showAdvancedSearch|nothing"
-                         tal:attributes="href python:view.closeLink() + '&advanced_search=True'"
-                         id="search-filter-toggle"
-                         i18n:translate="narrow_search_options">
-                          Filter the results.
-                      </a>
-                  </dt>
-                  <dd class="actionMenuContent">
-                      <div id="search-filter" i18n:domain="plone">
-
-                          <fieldset class="noborder">
-
-                              <!-- <a href="#" id="close-search-options" title="Close the column"
-                                 tal:attributes="href view/closeLink"
-                                 ><span class="hiddenStructure">Close</span></a> -->
-
-                              <div class="field"
-                                   tal:define="portal_types portal/portal_types;
-                                               all_used_types  python:context.portal_catalog.uniqueValuesFor('portal_type');
-                                               used_types  python:context.plone_utils.getUserFriendlyTypes(all_used_types);
-                                               all_checked python:(len(used_types) == len(request.get('portal_type', []))) or first_call;
-                                               toggle_select_state python:all_checked and 'true' or 'false';">
-                                  <label i18n:translate="label_item_type">Item type</label>
-
-                                  <div class="formHelp" i18n:translate="help_search_item_type">
-                                  Return items of a specific type.
-                                  </div>
-
-                                  <span class="optionsToggle">
-                                      <input type="checkbox"
-                                             onclick=""
-                                             name="pt_toggle"
-                                             value="#"
-                                             id="pt_toggle"
-                                             class="noborder"
-                                             checked="checked" 
-                                             tal:attributes="checked python:all_checked and 'checked' or '';
-                                                             onclick string:javascript:toggleSelect(this, 'portal_type:list', ${toggle_select_state});"/>
-                                      <label for="pt_toggle"
-                                             i18n:translate="label_toggle"
-                                             >Select All/None
-                                      </label>
-                                  </span>
-                                  <br />
-                                  <div style="float:left; margin-right: 2em;"
-                                       tal:define="typeLists python:context.createMultiColumnList(used_types, numCols=2, sort_on='self');"
-                                       tal:attributes="style python:isRTL and 'float: right;; margin-left: 2em;;' or 'float: left;; margin-right: 2em;;';"
-                                       tal:repeat="sublist typeLists">
-                                      <tal:items repeat="type sublist">
-                                          <input type="checkbox"
-                                                 name="portal_type:list"
-                                                 value="#"
-                                                 class="noborder"
-                                                 checked="checked"
-                                                 tal:attributes="value type;
-                                                                 id string:portal_type_${repeat/sublist/number}_${repeat/type/number};
-                                                                 checked python:((type in request.get('portal_type', [])) or first_call) and 'checked' or ''"/>
-                                          <label for=""
-                                                 i18n:translate=""
-                                                 tal:attributes="for string:portal_type_${repeat/sublist/number}_${repeat/type/number}"
-                                                 tal:content="python: portal_types.getTypeInfo(type).Title()"
-                                                 />
-                                          <br />
-                                      </tal:items>
-                                  </div>
-                                  <div class="visualClear"><!-- --></div>
-                              </div>
-
-                              <div class="field">
-                                  <label for="created"
-                                         i18n:translate="label_new_items_since">New items since</label>
-
-                                  <div class="formHelp" i18n:translate="help_search_new_items_since">
-                                  Return items added since you were last logged on, the last week, etc.
-                                  </div>
-
-                                  <tal:datetime define="today python:DateTime().earliestTime();
-                                                        isAnon context/@@plone_portal_state/anonymous;
-                                                        member context/@@plone_portal_state/member;">
-                                      <select name="created.query:record:list:date"
-                                              id="created"
-                                              tal:define="yesterday python:(today-1).Date();
-                                                          lastweek python:(today-7).Date();
-                                                          lastmonth python:(today-31).Date();
-                                                          ever string:1970/02/01;
-                                                          selected python:request.get('created', []);
-                                                          selected python:(len(selected) == 1) and selected[0] or ever">
-                                          <option value="#"
-                                                  tal:condition="not: isAnon"
-                                                  tal:define="value python:member is not None and member.getProperty('last_login_time') or today"
-                                                  tal:attributes="value value;
-                                                                  selected python:selected==value and 'selected' or '';" 
-                                                  i18n:translate="last_login">Last log-in</option>
-                                          <option value="#" 
-                                                  tal:attributes="value yesterday;
-                                                                  selected python:selected==yesterday and 'selected' or '';" 
-                                                  i18n:translate="time_yesterday"> Yesterday </option>
-                                          <option value="#" 
-                                                  tal:attributes="value lastweek;
-                                                                  selected python:selected==lastweek and 'selected' or '';" 
-                                                  i18n:translate="time_last_week"> Last week </option>
-                                          <option value="#" tal:attributes="value lastmonth;
-                                                                            selected python:selected==lastmonth and 'selected' or '';" 
-                                                  i18n:translate="time_last_month"> Last month </option>
-                                          <option value="#"
-                                    class="default_option"
-                                                  tal:attributes="value ever;
-                                                                  selected python:selected==ever and 'selected' or '';" 
-                                                  i18n:translate="time_ever"> Ever </option>
-                                      </select>
-                                  </tal:datetime>
-
-                                  <input type="hidden" name="created.range:record" value="min" />
-                              </div>
-
-                              <div class="field"
-                                   tal:define="navtree_props portal/portal_properties/navtree_properties;
-                                                states python:portal.portal_workflow.listWFStatesByTitle(filter_similar=1);
-                                                used_states python:portal.portal_catalog.uniqueValuesFor('review_state');
-                                                filtered_states python:[state for state in states if state[1] in used_states];
-                                                all_checked python:(len(filtered_states) == len(request.get('review_state', []))) or first_call;
-                                                toggle_select_state python:all_checked and 'true' or 'false';">
-
-                                  <label for="review_state"
-                                         i18n:translate="label_review_status">Review status</label>
-
-                                  <div class="formHelp" i18n:translate="help_search_review_status">
-                                  You may search for items based on their
-                                  review state. If you wish to constrain results to items
-                                  in certain states, select them from this list.
-                                  </div>
-
-                                  <span class="optionsToggle">
-                                  <input type="checkbox"
-                                         onclick="javascript:toggleSelect(this, 'review_state:list', true);"
-                                         name="rs_toggle"
-                                         value="#"
-                                         id="rs_toggle"
-                                         class="noborder"
-                                         checked="checked" 
-                                         tal:attributes="checked python:all_checked and 'checked' or '';
-                                                         onclick string:javascript:toggleSelect(this, 'review_state:list', ${toggle_select_state});"/>
-                                  <label for="rs_toggle"
-                                         i18n:translate="label_toggle"
-                                         >Select All/None
-                                  </label>
-                                  <br />
-                                  </span>
-
-                                  <tal:states define="
-                                                  state_lists python:context.createMultiColumnList(filtered_states, numCols=1, sort_on='self');
-                                                  normalizeString nocall:context/@@plone/normalizeString;"
-                                              repeat="sublist state_lists">
-                                      <tal:items repeat="state sublist">
-                                      <input class="noborder"
-                                             type="checkbox"
-                                             name="review_state:list"
-                                             checked="checked"
-                                             tal:attributes="value python:state[1];
-                                                             id python:normalizeString(state[1]);
-                                                             checked python:((state[1] in request.get('review_state', [])) or first_call) and 'checked' or ''" />
-                                      <label for=""
-                                             tal:attributes="for python:normalizeString(state[1])"
-                                             i18n:translate=""
-                                             tal:content="python:state[0] or state[1]"
-                                             />
-                                      <br />
-                                      </tal:items>
-                                  </tal:states>
-                              </div>
-
-                              <div class="field">
-                                  <label for="Creator:ignore_empty"
-                                         i18n:translate="label_author">Author</label>
-
-                                  <div class="formHelp" i18n:translate="help_search_author">
-                                  Return items created by a particular person.
-                                  </div>
-
-                                  <tal:creators tal:define="creators python:portal.portal_catalog.uniqueValuesFor('Creator');
-                                                            selected request/Creator|nothing">
-                                      <select name="Creator:ignore_empty"
-                                              id="Creator"
-                                              tal:condition="python: len(creators) &lt;= 30">
-                                          <option value="" 
-                                class="default_option" 
-                                i18n:translate="label_any_author">Any Author</option>
-                                          <metal:block tal:repeat="creator creators">
-                                              <option value="" 
-                                                      tal:attributes="value creator;
-                                                                      selected python:selected == creator and 'selected' or '';" 
-                                                      tal:content="creator">username </option>
-                                          </metal:block>
-                                      </select>
-
-                                      <input name="Creator:ignore_empty"
-                                             tal:condition="python: len(creators) &gt; 30 "
-                                             tal:attributes="value selected" />
-                                  </tal:creators>
-                              </div>
-
-                              <div class="field">
-                                  <label for="Title"
-                                         i18n:translate="label_title">Title</label>
-
-                                  <div class="formHelp" i18n:translate="help_search_title">
-                                  Return items matching this title.
-                                  </div>
-
-                                  <input type="text"
-                                         id="Title"
-                                         name="Title"
-                                         size="25"
-                                         value=""
-                                         tal:attributes="value request/Title|nothing"
-                                         />
-                              </div>
-
-                              <div class="field">
-
-                                  <label for="Description"
-                                         i18n:translate="label_description">Description</label>
-
-                                  <div class="formHelp" i18n:translate="help_search_description">
-                                  Return items matching this description.
-                                  Multiple words may be found
-                                  by combining them with <strong>AND</strong> and <strong>OR</strong>.
-                                  </div>
-
-                                  <input type="text"
-                                         id="Description"
-                                         name="Description"
-                                         size="25"
-                                         value=""
-                                         tal:attributes="value request/Description|nothing"
-                                         />
-                              </div>
-
-                              <div class="formControls">
-                                  <input class="searchPage searchButton allowMultiSubmit"
-                                         type="submit"
-                                         value="Search"
-                                         i18n:attributes="value label_search;"/>
-                              </div>
-
-                              <div class="visualClear"><!-- --></div>
-                          </fieldset>
-
-                      </div>
-                  </dd>
-
-                </dl>
+                <div class="visualClear"><!-- --></div>
 
                 <metal:searchresults define-macro="search_results">
                     <div id="search-results">
