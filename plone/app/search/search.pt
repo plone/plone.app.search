@@ -57,7 +57,7 @@
 
             <div class="cell width-16 position-0">
                 <h1 class="documentFirstHeading">Search results for
-                    <strong tal:content="st">Search Term</strong>
+                    <strong id="search-term" tal:content="st">Search Term</strong>
                 </h1>
 
                 <p id="rss-subscription" i18n:domain="plone"

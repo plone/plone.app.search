@@ -5,6 +5,13 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- RSS link is being updated after changing search term and updating the
+  results with ajax call.
+  [spliter]
+
+- Search term is updated after ajax calls
+  [spliter]
+
 - Add MANIFEST.in.
   [WouterVH]
 

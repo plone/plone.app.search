@@ -1,5 +1,5 @@
 /* The following line defines global variables defined elsewhere. */
-/*global jQuery:false*/
+/*global jQuery:false, portal_url:false*/
 
 (function ($) {
 
@@ -11,7 +11,7 @@
         $('#search-filter input.searchPage[type="submit"]').hide();
 
         function updateResults(data) {
-            var str, struct;
+            var str, struct, st;
             $.ajax({
                 url: '@@updated_search',
                 data: data,
@@ -19,8 +19,9 @@
                     container.hide();
                     container.html(data);
                     $(container).fadeIn('medium');
+                    st = $('#updated-search-term').text();
                     $('#search-term').text(function () {
-                        str = $('#updated-search-term').text();
+                        str = st;
                         $('#updated-search-term').remove();
                         return str;
                     });
@@ -36,6 +37,9 @@
                             return struct;
                         }
                     );
+                    $('#rss-subscription a.link-feed').attr('href', function () {
+                        return portal_url + '/search_rss?SearchableText=' + st;
+                    });
                 },
                 error: function (req, error) {
                     return true;

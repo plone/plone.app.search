@@ -7,6 +7,8 @@
                   b_start request/b_start | b_start;
                   st python:request.get('SearchableText', '')">
 
+    <span id="updated-search-term" tal:content="st">Search Term</span>
+
     <strong id="updated-search-results-number"
             tal:content="python:len(results)">234</strong>
 
