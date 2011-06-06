@@ -19,6 +19,11 @@
                     container.hide();
                     container.html(data);
                     $(container).fadeIn('medium');
+                    $('#search-term').text(function () {
+                        str = $('#updated-search-term').text();
+                        $('#updated-search-term').remove();
+                        return str;
+                    });
                     $('#search-results-number').text(function () {
                         str = $('#updated-search-results-number').text();
                         $('#updated-search-results-number').remove();
