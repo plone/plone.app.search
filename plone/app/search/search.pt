@@ -76,7 +76,6 @@
             </div>
             <div class="visualClear"><!-- --></div>
             <div id="search-results-wrapper"
-                 tal:attributes="class python:view.showAdvancedSearch() and 'cell width-3:4 position-1:4' or 'cell width-16 position-0'"
                  class="cell width-16 position-0"
                  tal:define="results view/results;
                              site_properties context/portal_properties/site_properties;
@@ -95,15 +94,15 @@
                     <dl class="actionMenu deactivated">
 
                       <dt class="actionMenuHeader">
-                          <a href="#" 
-                             tal:condition="not:view/showAdvancedSearch|nothing"
+                          <a href="#"
                              tal:attributes="href python:view.closeLink() + '&advanced_search=True'"
                              id="search-filter-toggle"
                              i18n:translate="narrow_search_options">
                               Filter the results.
                           </a>
                       </dt>
-                      <dd class="actionMenuContent">
+                      <dd class="actionMenuContent"
+                          tal:attributes="style python:view.showAdvancedSearch() and 'display: block' or None">
                           <div id="search-filter" i18n:domain="plone">
 
                               <fieldset class="noborder">
@@ -351,11 +350,11 @@
                               <metal:sorting define-macro="sorting">
                                   <tal:block repeat="item view/getSortOptions">
                                       <tal:item define="selected item/selected">
-                                      <a rel=""
+                                      <a data-sort=""
                                          tal:condition="not:selected" 
                                          tal:content="item/title" 
                                          tal:attributes="href item/url;
-                                                         rel python:item.sortkey and item.sortkey or None"></a>
+                                                         data-sort python:item.sortkey and item.sortkey or None"></a>
                                       <strong tal:condition="selected" tal:content="item/title"></strong>
                                       <span tal:condition="not:repeat/item/end">&middot;</span>
                                       </tal:item>
