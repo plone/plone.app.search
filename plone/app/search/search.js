@@ -64,8 +64,8 @@
         );
 
         $('#sorting-options a').live('click', function () {
-            if ($(this).attr('rel')) {
-                $("form.searchPage input[name='sort_on']").val($(this).attr('rel'));
+            if ($(this).attr('data-sort')) {
+                $("form.searchPage input[name='sort_on']").val($(this).attr('data-sort'));
             }
             else {
                 $("form.searchPage input[name='sort_on']").val('');
