@@ -17,8 +17,6 @@
                 data: data,
                 success: function (data) {
                     container.hide();
-                    container.html(data);
-                    $(container).fadeIn('medium');
                     st = $('#updated-search-term').text();
                     $('#search-term').text(function () {
                         str = st;
@@ -37,6 +35,8 @@
                             return struct;
                         }
                     );
+                    container.html(data);
+                    $(container).fadeIn('medium');
                     $('#rss-subscription a.link-feed').attr('href', function () {
                         return portal_url + '/search_rss?SearchableText=' + st;
                     });
