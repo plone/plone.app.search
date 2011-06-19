@@ -27,11 +27,18 @@
                     container.fadeIn();
 
                     st = $('#updated-search-term').text();
+                    if ($('#search-term').length === 0) {
+                        // Until now we had queries with empty search term. So
+                        // we need a placeholder for the search term in 
+                        // result's title.
+                        $('h1.documentFirstHeading').append('<strong id="search-term" />');
+                    }
                     $('#search-term').text(function () {
                         str = st;
                         $('#updated-search-term').remove();
                         return str;
                     });
+
                     $('#search-results-number').text(function () {
                         str = $('#updated-search-results-number').text();
                         $('#updated-search-results-number').remove();
@@ -134,6 +141,10 @@
             e.preventDefault();
         });
 
+        // No need to wrap 'popstate' event handler for window object with
+        // Modernizr check up since popstate event will contain any data only if
+        // a state has been created with history.pushState() that is wrapped in
+        // Modernizr checkup above
         $(window).bind('popstate', function () {
             data = location.search.split('?')[1];
             // We need to make sure we update the search field with the search
