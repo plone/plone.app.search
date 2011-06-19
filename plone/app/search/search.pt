@@ -35,7 +35,7 @@
                       first_call  not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '')">
 
-        <input type="hidden" name="advanced_search" value="True" />
+        <input type="hidden" name="advanced_search" value="False" />
         <input type="hidden" name="sort_on" value="" />
 
         <fieldset id="search-field" i18n:domain="plone" class="noborder">
@@ -91,18 +91,18 @@
                         items matching your search terms.
                     </span>
 
-                    <dl class="actionMenu deactivated">
+                    <dl class="actionMenu deactivated"
+                        tal:attributes="class python:view.showAdvancedSearch() and 'actionMenu activated' or 'actionMenu deactivated'">
 
                       <dt class="actionMenuHeader">
                           <a href="#"
-                             tal:attributes="href python:view.closeLink() + '&advanced_search=True'"
+                             tal:attributes="href python:view.advancedSearchTrigger()"
                              id="search-filter-toggle"
                              i18n:translate="narrow_search_options">
                               Filter the results.
                           </a>
                       </dt>
-                      <dd class="actionMenuContent"
-                          tal:attributes="style python:view.showAdvancedSearch() and 'display: block' or None">
+                      <dd class="actionMenuContent">
                           <div id="search-filter" i18n:domain="plone">
 
                               <fieldset class="noborder">

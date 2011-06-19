@@ -75,7 +75,7 @@ class Search(BrowserView):
         elif self.request.get('advanced_search', None) == 'True':
             return True
 
-    def closeLink(self):
+    def advancedSearchTrigger(self):
         """URL builder for show/close advanced search filters."""
         query = self.request.get('QUERY_STRING', None)
         if not query:
@@ -85,6 +85,8 @@ class Search(BrowserView):
                 query = query.replace('advanced_search=True', '')
             if 'advanced_search=False' in query:
                 query = query.replace('advanced_search=False', '')
+        else:
+            query = query + '&advanced_search=True'
 
         return self.request.get('ACTUAL_URL',
                                 self.context.absolute_url()) + '?' + query
