@@ -6,8 +6,6 @@ from ZTUtils import make_query
 from zope.i18nmessageid import MessageFactory
 _ = MessageFactory('plone')
 
-import types
-
 
 class Search(BrowserView):
 
@@ -36,25 +34,6 @@ class Search(BrowserView):
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return IContentListing(batch)
         return results
-
-    def ensureFriendlyTypes(self, query):
-        # ported from Plone's queryCatalog. It hurts to bring this one along.
-        # The fact that it is needed at all tells us that we currently abuse
-        # the concept of types in Plone
-        # please remove this one when it is no longer needed.
-
-        ploneUtils = getToolByName(self.context, 'plone_utils')
-        portal_type = query.get('portal_type', [])
-        if not type(portal_type) is types.ListType:
-            portal_type = [portal_type]
-        Type = query.get('Type', [])
-        if not type(Type) is types.ListType:
-            Type = [Type]
-        typesList = portal_type + Type
-        if not typesList:
-            friendlyTypes = ploneUtils.getUserFriendlyTypes(typesList)
-            query['portal_type'] = friendlyTypes
-        return query
 
     def getSortOptions(self):
         """ Sorting options for search results view. """
@@ -168,7 +147,7 @@ class sortOption(object):
 
         base_url = self.request.URL
         # After the AJAX call the request is changed and thus the URL part of
-        # it as well. In this case we need to tweak the URL to point to have 
+        # it as well. In this case we need to tweak the URL to point to have
         # correct URLs
         if '@@updated_search' in base_url:
             base_url = base_url.replace('@@updated_search', '@@search')
