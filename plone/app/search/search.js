@@ -1,7 +1,17 @@
 /* The following line defines global variables defined elsewhere. */
-/*global jQuery:false, portal_url:false*/
+/*globals jQuery, portal_url, Modernizr, alert, history*/
+
 
 (function ($) {
+
+    // $.fn.EnableHistory = function () {
+    //     history.pushState(null, null, $(this).attr('href'));
+    // };
+
+    // $(window).bind('popstate', function (event) {
+    //     data = location.pathname.serialize();
+    //     updateResults(data);
+    // });
 
     $(function () {
 
@@ -11,12 +21,16 @@
         $('#search-filter input.searchPage[type="submit"]').hide();
 
         function updateResults(data) {
-            var str, struct, st;
+            var str, struct, st, initData;
+            initData = data;
             $.ajax({
                 url: '@@updated_search',
                 data: data,
                 success: function (data) {
                     container.hide();
+                    container.html(data);
+                    $(container).fadeIn('medium');
+
                     st = $('#updated-search-term').text();
                     $('#search-term').text(function () {
                         str = st;
@@ -35,11 +49,22 @@
                             return struct;
                         }
                     );
-                    container.html(data);
-                    $(container).fadeIn('medium');
                     $('#rss-subscription a.link-feed').attr('href', function () {
                         return portal_url + '/search_rss?SearchableText=' + st;
                     });
+
+                    // Now we need to update the browser's path bar to reflect
+                    // the URL we are at now and to push a history state change
+                    // in the browser's history. We are using Modernizr
+                    // library to check whether browser supports HTML5 History
+                    // API natively or it needs a polyfill, that provides
+                    // hash-change events to the older browser
+                    if (Modernizr.history) {
+                        // portal_url is the global JS variable available
+                        // everywhere in Plone
+                        var url = portal_url + '/@@search?' + initData;
+                        history.pushState(null, null, url);
+                    }
                 },
                 error: function (req, error) {
                     return true;
@@ -70,7 +95,7 @@
             else {
                 $("form.searchPage input[name='sort_on']").val('');
             }
-            data = $('form.searchPage').serialize();
+            data = this.search.split('?')[1];
             updateResults(data);
             return false;
         });
