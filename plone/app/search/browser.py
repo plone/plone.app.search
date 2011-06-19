@@ -59,11 +59,11 @@ class Search(BrowserView):
         """ Sorting options for search results view. """
 
         return(
-            sortoption(self.request, _(u'relevance'), ''),
-            sortoption(self.request, _(u'date (newest first)'),
+            sortOption(self.request, _(u'relevance'), ''),
+            sortOption(self.request, _(u'date (newest first)'),
                                      'Date',
                                      reverse=True),
-            sortoption(self.request, _(u'alphabetically'), 'sortable_title'),
+            sortOption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
 
     def showAdvancedSearch(self):
@@ -138,7 +138,7 @@ class Search(BrowserView):
         return section.title
 
 
-class sortoption(object):
+class sortOption(object):
 
     def __init__(self, request, title, sortkey='', reverse=False):
         self.request = request
