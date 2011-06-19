@@ -160,5 +160,13 @@ class sortoption(object):
         if 'sort_order' in q.keys():
             del q['sort_order']
         q['sort_on'] = self.sortkey
-        q['sort_order'] = 'reverse'
-        return self.request.URL + '?' + make_query(q)
+        if self.reverse:
+            q['sort_order'] = 'reverse'
+
+        base_url = self.request.URL
+        # After the AJAX call the request is changed and thus the URL part of
+        # it as well. In this case we need to tweak the URL to point to have 
+        # correct URLs
+        if '@@updated_search' in base_url:
+            base_url = base_url.replace('@@updated_search', '@@search')
+        return base_url + '?' + make_query(q)
