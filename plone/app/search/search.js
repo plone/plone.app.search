@@ -91,6 +91,12 @@
             e.preventDefault();
         });
 
+        // We need to update the site-wide search field (at the top right in
+        // stock Plone) when the main search field is updated
+        $('#search-field input[name="SearchableText"]').keyup(function () {
+            $('input#searchGadget').val($(this).val());
+        });
+
 
         // When we click any option in the Filter menu, we need to prevent the
         // menu from being closed as it is dictaded by dropdown.js for all
