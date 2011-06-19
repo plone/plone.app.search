@@ -25,11 +25,12 @@ class Search(BrowserView):
         if not kw:
             return IContentListing([])
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-
         kw = self.ensureFriendlyTypes(kw)
 
-        results = IContentListing(catalog(kw))
+        # In order to wrap the catalog results with some checkups like prevent
+        # site error when searching for '*' we don't call catalog directly, but
+        # queryCatalog instead
+        results = IContentListing(self.context.queryCatalog(kw))
         if batch:
             from Products.CMFPlone import Batch
             batch = Batch(results, b_size, int(b_start), orphan=0)
