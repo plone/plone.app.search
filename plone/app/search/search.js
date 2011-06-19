@@ -1,17 +1,17 @@
 /* The following line defines global variables defined elsewhere. */
-/*globals jQuery, portal_url, Modernizr, alert, history*/
+/*globals jQuery, portal_url, Modernizr, alert, history, window, location*/
 
 
 (function ($) {
 
     $(function () {
 
-        var container, data;
+        var container, data, updateResults, pushState;
         container = $('#search-results');
 
         $('#search-filter input.searchPage[type="submit"]').hide();
 
-        function updateResults(data) {
+        updateResults = function (data) {
             var str, struct, st, initData;
             initData = data;
             $.ajax({
@@ -43,30 +43,33 @@
                     $('#rss-subscription a.link-feed').attr('href', function () {
                         return portal_url + '/search_rss?SearchableText=' + st;
                     });
-
-                    // Now we need to update the browser's path bar to reflect
-                    // the URL we are at now and to push a history state change
-                    // in the browser's history. We are using Modernizr
-                    // library to check whether browser supports HTML5 History
-                    // API natively or it needs a polyfill, that provides
-                    // hash-change events to the older browser
-                    if (Modernizr.history) {
-                        // portal_url is the global JS variable available
-                        // everywhere in Plone
-                        var url = portal_url + '/@@search?' + initData;
-                        history.pushState(null, null, url);
-                    }
                 },
                 error: function (req, error) {
                     return true;
                 }
             });
-        }
+        };
+
+        pushState = function (initData) {
+            // Now we need to update the browser's path bar to reflect
+            // the URL we are at now and to push a history state change
+            // in the browser's history. We are using Modernizr
+            // library to check whether browser supports HTML5 History
+            // API natively or it needs a polyfill, that provides
+            // hash-change events to the older browser
+            if (Modernizr.history) {
+                // portal_url is the global JS variable available
+                // everywhere in Plone
+                var url = portal_url + '/@@search?' + initData;
+                history.pushState(null, null, url);
+            }
+        };
 
         $('form.searchPage').submit(function (e) {
             data = $('form.searchPage').serialize();
             $(container).fadeOut('fast');
             updateResults(data);
+            pushState(data);
             e.preventDefault();
         });
 
@@ -75,6 +78,7 @@
                 data = $('form.searchPage').serialize();
                 $(container).fadeOut('fast');
                 updateResults(data);
+                pushState(data);
                 e.preventDefault();
             }
         );
@@ -88,8 +92,15 @@
             }
             data = this.search.split('?')[1];
             updateResults(data);
+            pushState(data);
             e.preventDefault();
         });
 
+        $(window).bind('popstate', function () {
+            data = location.search.split('?')[1];
+            updateResults(data);
+        });
+
     });
+
 }(jQuery));
