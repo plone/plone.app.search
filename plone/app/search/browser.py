@@ -29,13 +29,21 @@ class Search(BrowserView):
         # script's ensureFriendlyTypes() in order to get rid of unwanted content
         # types (like different Criteria types) in the output, hence:
         # show_all=1, use_types_blacklist=True parameters in the call.
-        results = IContentListing(self.context.queryCatalog(kw, show_all=1, use_types_blacklist=True))
+        # 
+        # We also want to get items starting from the navigation root, that is
+        # not necessary the site's root. This lets us build language folders
+        # structures like en/ no/ and make sure the search results we are
+        # getting within no/ don't show the ones coming from en/.
+        # use_navigation_root=True takes care of this.
+        results = IContentListing(self.context.queryCatalog(kw,
+                                                            show_all=1,
+                                                            use_types_blacklist=True,
+                                                            use_navigation_root=True))
         if batch:
             from Products.CMFPlone import Batch
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return IContentListing(batch)
         return results
-
 
     def getSortOptions(self):
         """ Sorting options for search results view. """
