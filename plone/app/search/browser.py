@@ -23,17 +23,19 @@ class Search(BrowserView):
         if not kw:
             return IContentListing([])
 
-        kw = self.ensureFriendlyTypes(kw)
-
         # In order to wrap the catalog results with some checkups like prevent
         # site error when searching for '*' we don't call catalog directly, but
-        # queryCatalog instead
-        results = IContentListing(self.context.queryCatalog(kw))
+        # queryCatalog instead. We also want to filter the results through the
+        # script's ensureFriendlyTypes() in order to get rid of unwanted content
+        # types (like different Criteria types) in the output, hence:
+        # show_all=1, use_types_blacklist=True parameters in the call.
+        results = IContentListing(self.context.queryCatalog(kw, show_all=1, use_types_blacklist=True))
         if batch:
             from Products.CMFPlone import Batch
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return IContentListing(batch)
         return results
+
 
     def getSortOptions(self):
         """ Sorting options for search results view. """
