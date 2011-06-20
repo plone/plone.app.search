@@ -1,10 +1,60 @@
-from Products.Five.browser import BrowserView
-from plone.app.contentlisting.interfaces import IContentListing
-from Products.CMFCore.utils import getToolByName
+import json
 from ZTUtils import make_query
 
+from zope.component import getMultiAdapter
+from zope.interface.interfaces import IMethod
 from zope.i18nmessageid import MessageFactory
+
+from plone.app.contentlisting.interfaces import IContentListing
+from plone.app.contentlisting.interfaces import IContentListingObject
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+
 _ = MessageFactory('plone')
+
+
+def jsonSerialize(obj):
+    if IContentListing.providedBy(obj):
+        return list(obj)
+    if IContentListingObject.providedBy(obj):
+        res = {}
+        for name in IContentListingObject:
+            if name == 'getObject':
+                continue
+            if IMethod.providedBy(IContentListingObject.get(name)):
+                try:
+                    res[name] = getattr(obj, name)()
+                except NotImplementedError:
+                    pass
+        return res
+    if isinstance(obj, sortOption):
+        return dict(
+            title= obj.title,
+            sortkey=obj.sortkey,
+            reverse=obj.reverse,
+            selected=obj.selected(),
+            url=obj.url(),
+        )
+    raise TypeError(obj)
+
+
+class UpdatedSearch(BrowserView):
+    """
+    """
+
+    def __call__(self, REQUEST, RESPONSE):
+        search = getMultiAdapter((self.context, self.request), name=u'search')
+        res = search.results()
+        searchOptions = search.getSortOptions()
+        updated_results = {}
+
+        updated_results['results'] = res
+        updated_results['search_term'] = self.request.form['SearchableText']
+        updated_results['results_number'] = res.actual_result_count
+        updated_results['search_options'] = [opt for opt in searchOptions]
+
+        RESPONSE.setHeader('Content-Type', 'application/javascript')
+        return json.dumps(updated_results, default=jsonSerialize)
 
 
 class Search(BrowserView):
@@ -34,6 +84,25 @@ class Search(BrowserView):
             batch = Batch(results, b_size, int(b_start), orphan=0)
             return IContentListing(batch)
         return results
+
+    def ensureFriendlyTypes(self, query):
+        # ported from Plone's queryCatalog. It hurts to bring this one along.
+        # The fact that it is needed at all tells us that we currently abuse
+        # the concept of types in Plone
+        # please remove this one when it is no longer needed.
+
+        ploneUtils = getToolByName(self.context, 'plone_utils')
+        portal_type = query.get('portal_type', [])
+        if not isinstance(portal_type, list):
+            portal_type = [portal_type]
+        Type = query.get('Type', [])
+        if not isinstance(Type, list):
+            Type = [Type]
+        typesList = portal_type + Type
+        if not typesList:
+            friendlyTypes = ploneUtils.getUserFriendlyTypes(typesList)
+            query['portal_type'] = friendlyTypes
+        return query
 
     def getSortOptions(self):
         """ Sorting options for search results view. """

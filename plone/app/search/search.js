@@ -1,58 +1,110 @@
 /* The following line defines global variables defined elsewhere. */
-/*globals jQuery, portal_url, Modernizr, alert, history, window, location*/
+/*globals jQuery, portal_url, Modernizr, alert, history, window,
+location, document*/
 
 
 (function ($) {
 
     $(function () {
 
-        var container, data, updateResults, pushState;
+        var container, data, i, updateResults, pushState;
         container = $('#search-results');
 
+        // We hide the 'Search' button in the filter in order to not confuse
+        // the end users with JS enabled. The button is still in HTML for the
+        // accessibility reasons for those with JS disabled browsers
         $('#search-filter input.searchPage[type="submit"]').hide();
 
         updateResults = function (data) {
-            var str, struct, st;
+            var results, current_sorting, new_sorting, unwrapped;
             $.ajax({
                 url: '@@updated_search',
                 data: data,
+                dataType: 'json',
                 success: function (data) {
+                    // Update the Search term
+                    $('#search-term').text(data.search_term);
+
+                    // Update the number of the search results
+                    $('#search-results-number').text(data.results_number);
+
+                    // Remove link from the clicked sorting option and wrap
+                    // the previous sorting into an <a/>:
+                    current_sorting = $('#sorting-options strong');
+                    for (i = 0; i < data.search_options.length; i += 1) {
+                        if (data.search_options[i].selected) {
+                            new_sorting = $('#sorting-options').children().filter('strong, a')[i];
+                            $(new_sorting).wrapInner('<strong />');
+                            $(new_sorting).children('strong').unwrap();
+                        }
+                        if (data.search_options[i].title === $(current_sorting).text()) {
+                            current_sorting.wrapInner('<a />');
+                            unwrapped = current_sorting.children('a').unwrap();
+                            unwrapped.attr('href', data.search_options[i].url);
+                            unwrapped.attr('data-sort', data.search_options[i].sortkey);
+                        }
+                    }
+
+                    // Get the updated results. Attributes are based on what
+                    // we are getting from IContentListingObject, since this is
+                    // the main wrapper around the listings in Plone 4.2+.
+                    // Check that interface to figure out what other information
+                    // can be got for any particular listing item — we are
+                    // getting all methods except getObject()
+
                     // We don't simply hide() the container, but change it's
                     // opacity in order for the container keep it's place in the
                     // elements' flow while we make AJAX call and are getting the
                     // updated results. This gives us smoother transition from
                     // one results to another.
                     container.hide();
-                    container.html(data);
+
+                    results = function () {
+                        var dl_elem, template;
+
+                        // We initialize the wrapping DL element that holds
+                        // all the search results
+                        dl_elem = document.createElement('dl');
+                        dl_elem.setAttribute('class', 'searchResults');
+
+                        for (i = 0; i < data.results.length; i += 1) {
+                            // var link_elem = document.createElement('a');
+                            // link_elem.setAttribute('href', data.results[i].getURL);
+                            // link_elem.setAttribute('class', 'state-' + data.results[i].review_state);
+                            // link_elem.innerHTML = data.results[i].Title;
+                            // 
+                            // var dt_elem = document.createElement('dt');
+                            // dt_elem.setAttribute('class', 'contenttype-' + data.results[i].Type.toLowerCase());
+                            // $(dt_elem).html(link_elem);
+
+                            // var div_elem = document.createElement('div');
+                            // div_elem.innerHTML = data.results[i].CroppedDescription;
+
+                            template = '<dt class="contenttype-%portal_type%">' +
+                                       '    <a class="state-%workflow_state%" href="%item_url%">%Title%</a>' +
+                                       '</dt>' +
+                                       '<dd>' +
+                                       '     <div>%Description%</div>' +
+                                       '</dd>';
+
+                            template = template.replace('%portal_type%', data.results[i].Type.toLowerCase());
+                            template = template.replace('%workflow_state%', data.results[i].review_state);
+                            template = template.replace('%item_url%', data.results[i].getURL);
+                            template = template.replace('%Title%', data.results[i].Title);
+                            template = template.replace('%Description%', data.results[i].Description);
+
+                            $(dl_elem).append(template);
+                        }
+
+                        return dl_elem;
+                    };
+
+                    container.html(results());
                     container.fadeIn();
 
-                    st = $('#updated-search-term').text();
-                    if ($('#search-term').length === 0) {
-                        // Until now we had queries with empty search term. So
-                        // we need a placeholder for the search term in 
-                        // result's title.
-                        $('h1.documentFirstHeading').append('<strong id="search-term" />');
-                    }
-                    $('#search-term').text(function () {
-                        str = st;
-                        $('#updated-search-term').remove();
-                        return str;
-                    });
-
-                    $('#search-results-number').text(function () {
-                        str = $('#updated-search-results-number').text();
-                        $('#updated-search-results-number').remove();
-                        return str;
-                    });
-                    $('#search-results-bar #sorting-options').html(
-                        function () {
-                            struct = $('#updated-sorting-options').html();
-                            $('#updated-sorting-options').remove();
-                            return struct;
-                        }
-                    );
+                    // Update RSS link
                     $('#rss-subscription a.link-feed').attr('href', function () {
-                        return portal_url + '/search_rss?SearchableText=' + st;
+                        return portal_url + '/search_rss?SearchableText=' + data.search_term;
                     });
                 },
                 error: function (req, error) {

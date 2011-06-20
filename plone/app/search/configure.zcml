@@ -31,10 +31,9 @@
 
     <browser:page
         name="updated_search"
-        class=".browser.Search"
+        class=".browser.UpdatedSearch"
         permission="zope2.View"
         for="Products.CMFCore.interfaces.IFolderish"
-        template="updated_search.pt"
         />
 
 </configure>
