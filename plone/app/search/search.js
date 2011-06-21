@@ -6,7 +6,7 @@
 
     $(function () {
 
-        var container, data, updateResults, pushState;
+        var container, data, updateResults, pushState, popped, initialURL;
         container = $('#search-results');
 
         $('#search-filter input.searchPage[type="submit"]').hide();
@@ -29,7 +29,7 @@
                     st = $('#updated-search-term').text();
                     if ($('#search-term').length === 0) {
                         // Until now we had queries with empty search term. So
-                        // we need a placeholder for the search term in 
+                        // we need a placeholder for the search term in
                         // result's title.
                         $('h1.documentFirstHeading').append('<strong id="search-term" />');
                     }
@@ -108,13 +108,13 @@
         // When we click any option in the Filter menu, we need to prevent the
         // menu from being closed as it is dictaded by dropdown.js for all
         // dl.actionMenu > dd.actionMenuContent
-        $("#search-results-bar dl.actionMenu > dd.actionMenuContent").click(function (e) {
+        $('#search-results-bar dl.actionMenu > dd.actionMenuContent').click(function (e) {
             e.stopImmediatePropagation();
         });
 
         // Now we can handle the actual menu options and update the search
         // results after any of them has been chosen.
-        $('#search-filter input, #search-filter select').bind('change', 
+        $('#search-filter input, #search-filter select').bind('change',
             function (e) {
                 data = $('form.searchPage').serialize();
                 $(container).fadeOut('fast');
@@ -141,16 +141,35 @@
             e.preventDefault();
         });
 
+        // THE HANDLER FOR 'POPSTATE' EVENT IS COPIED FROM PJAX.JS
+        // https://github.com/defunkt/jquery-pjax
+
+        // Used to detect initial (useless) popstate.
+        // If history.state exists, assume browser isn't going to fire initial popstate.
+        popped = ('state' in window.history);
+        initialURL = location.href;
+
+
+        // popstate handler takes care of the back and forward buttons
+        //
         // No need to wrap 'popstate' event handler for window object with
         // Modernizr check up since popstate event will contain any data only if
         // a state has been created with history.pushState() that is wrapped in
-        // Modernizr checkup above
-        $(window).bind('popstate', function () {
+        // Modernizr checkup above.
+        $(window).bind('popstate', function (event) {
+            var initialPop, str;
+            // Ignore inital popstate that some browsers fire on page load
+            initialPop = !popped && location.href === initialURL;
+            popped = true;
+            if (initialPop) {
+                return;
+            }
+
             data = location.search.split('?')[1];
             // We need to make sure we update the search field with the search
             // term from previous query when going back in history
-            var str = data.match(/SearchableText=[^&]*/)[0];
-            str = str.replace(/\+/g, ' '); // we remove '+' used between words 
+            str = data.match(/SearchableText=[^&]*/)[0];
+            str = str.replace(/\+/g, ' '); // we remove '+' used between words
             // in search queries.
 
             // Now we have something like 'SearchableText=test' in str
@@ -160,7 +179,6 @@
 
             updateResults(data);
         });
-
     });
 
 }(jQuery));
