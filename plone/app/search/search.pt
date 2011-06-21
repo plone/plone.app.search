@@ -124,14 +124,15 @@
 
                                       <span class="optionsToggle">
                                           <input type="checkbox"
-                                                 onclick=""
+                                                 onchange=""
                                                  name="pt_toggle"
                                                  value="#"
                                                  id="pt_toggle"
                                                  class="noborder"
                                                  checked="checked" 
                                                  tal:attributes="checked python:all_checked and 'checked' or '';
-                                                                 onclick string:javascript:toggleSelect(this, 'portal_type:list', ${toggle_select_state});"/>
+                                                                 onchange string:javascript:toggleSelect(this, 'portal_type:list', ${toggle_select_state});"/>
+
                                           <label for="pt_toggle"
                                                  i18n:translate="label_toggle"
                                                  >Select All/None

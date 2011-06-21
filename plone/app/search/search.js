@@ -114,7 +114,7 @@
 
         // Now we can handle the actual menu options and update the search
         // results after any of them has been chosen.
-        $('#search-filter input, #search-filter select').bind('change',
+        $('#search-filter input, #search-filter select').not('input#pt_toggle').live('change',
             function (e) {
                 data = $('form.searchPage').serialize();
                 $(container).fadeOut('fast');
