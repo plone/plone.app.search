@@ -11,7 +11,7 @@
    <genericsetup:registerProfile
        name="default"
        title="Plone's Advanced Search Form"
-       description="Installs Plone's dynamic advanced search form."
+       description="Dynamic, ajax-driven search results view with filtering and sorting support."
        directory="profiles/default"
        provides="Products.GenericSetup.interfaces.EXTENSION"
        />
