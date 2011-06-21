@@ -12,7 +12,10 @@
         $('#search-filter input.searchPage[type="submit"]').hide();
 
         updateResults = function (data) {
-            var str, struct, st;
+            var str, struct, st, initData;
+            // We save original query string for the RSS link's update further
+            // down
+            initData = data;
             $.ajax({
                 url: '@@updated_search',
                 data: data,
@@ -52,7 +55,7 @@
                         }
                     );
                     $('#rss-subscription a.link-feed').attr('href', function () {
-                        return portal_url + '/search_rss?SearchableText=' + st;
+                        return portal_url + '/search_rss?' + initData;
                     });
                 },
                 error: function (req, error) {
