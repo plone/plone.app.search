@@ -117,16 +117,16 @@ class Search(BrowserView):
 
         # is this section's Title already stored in sections_cache cache
         # dictionary?
-        if section_id in self.sections_cache.keys():
-            return self.sections_cache[section_id]
+        section = self.sections_cache.get(section_id, None)
+        if section is not None:
+            return section
 
         # get section object
         section = portal[section_id]
 
         # store title and id in cache
-        self.sections_cache[section_id] = section.title
-
-        return section.title
+        self.sections_cache[section_id] = title = section.Title()
+        return title
 
 
 class SortOption(object):
