@@ -10,8 +10,7 @@
   <metal:block metal:fill-slot="head_slot">
 
     <link rel="alternate" title="RSS 1.0" type="application/rss+xml"
-          tal:define="here_url
-          context/@@plone_context_state/object_url;"
+          tal:define="here_url context/@@plone_context_state/object_url;"
           tal:condition="request/SearchableText|nothing"
           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
 
@@ -32,7 +31,7 @@
           class="searchPage enableAutoFocus"
           tal:define="DateTime python:modules['DateTime'].DateTime;
                       portal context/@@plone_portal_state/portal;
-                      first_call  not:request/advanced_search|nothing;
+                      first_call not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '')">
 
         <input type="hidden" name="advanced_search" value="False" />
@@ -56,11 +55,18 @@
         <div class="row">
 
             <div class="cell width-16 position-0">
-                <h1 class="documentFirstHeading">Search results
-                    <tal:hazsearchterm condition="st">
-                        for
-                        <strong id="search-term" tal:content="st">Search Term</strong>
-                    </tal:hazsearchterm>
+                <h1 class="documentFirstHeading"
+                    i18n:translate=""
+                    condition="not:st">
+                    Search results
+                </h1>
+                <h1 class="documentFirstHeading"
+                    i18n:translate=""
+                    tal:condition="st">
+                    Search results for
+                    <strong id="search-term" tal:content="st" i18n:name="term">
+                        Search Term
+                    </strong>
                 </h1>
 
                 <p id="rss-subscription" i18n:domain="plone"
@@ -439,7 +445,7 @@
                                                class="link-category"
                                                rel="tag"
                                                tal:content="category"
-                                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?SearchableText=${st}&Subject%3Alist=${category}">
+                                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?SearchableText=${st}&amp;Subject%3Alist=${category}">
                                               Category
                                             </a><tal:separator condition="not: repeat/category/end">,</tal:separator>
                                           </span>
