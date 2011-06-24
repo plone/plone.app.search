@@ -1,26 +1,25 @@
-from Products.Five.browser import BrowserView
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.PloneBatch import Batch
+from zope.i18nmessageid import MessageFactory
+from zope.publisher.browser import BrowserView
 from ZTUtils import make_query
 
-from zope.i18nmessageid import MessageFactory
 _ = MessageFactory('plone')
 
 
 class Search(BrowserView):
 
-    sections_cache = {}
+    def __init__(self, context, request):
+        super(Search, self).__init__(context, request)
+        self.sections_cache = {}
 
-    def results(self, query=None, batch=False, b_size=30, b_start=0, **kw):
+    def results(self, query, batch=False, b_size=30, b_start=0, orphan=1):
         """ Get properly wrapped search results from the catalog.
         Everything in Plone that performs searches should go through this view.
-        'query' (optional) should be a dictionary of catalog parameters.
-        You can also pass catalog parameters as individual named keywords.
+        'query' should be a dictionary of catalog parameters.
         """
-        if query is not None:
-            kw.update(query)
-        kw.update(getattr(self.request, 'form', {}))
-        if not kw:
+        if not query:
             return IContentListing([])
 
         # In order to wrap the catalog results with some checkups like prevent
@@ -35,35 +34,33 @@ class Search(BrowserView):
         # structures like en/ no/ and make sure the search results we are
         # getting within no/ don't show the ones coming from en/.
         # use_navigation_root=True takes care of this.
-        results = IContentListing(self.context.queryCatalog(kw,
-                                                            show_all=1,
-                                                            use_types_blacklist=True,
-                                                            use_navigation_root=True))
         if batch:
-            from Products.CMFPlone import Batch
-            batch = Batch(results, b_size, int(b_start), orphan=0)
+            b_start = int(b_start)
+            query['b_start'] = b_start
+            query['b_size'] = b_size + orphan
+            results = IContentListing(self.context.queryCatalog(query,
+                show_all=1, use_types_blacklist=True, use_navigation_root=True))
+            batch = Batch(results, b_size, b_start, orphan=orphan)
             return IContentListing(batch)
-        return results
+
+        return IContentListing(self.context.queryCatalog(query, show_all=1,
+            use_types_blacklist=True, use_navigation_root=True))
 
     def getSortOptions(self):
         """ Sorting options for search results view. """
-
-        return(
-            sortOption(self.request, _(u'relevance'), ''),
-            sortOption(self.request, _(u'date (newest first)'),
-                                     'Date',
-                                     reverse=True),
-            sortOption(self.request, _(u'alphabetically'), 'sortable_title'),
+        return (
+            SortOption(self.request, _(u'relevance'), ''),
+            SortOption(self.request, _(u'date (newest first)'),
+                'Date', reverse=True),
+            SortOption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
 
     def showAdvancedSearch(self):
         """Whether we need to show advanced search options a.k.a. filters?"""
-        if not self.request.get('advanced_search', None):
+        show = self.request.get('advanced_search', None)
+        if not show or show == 'False':
             return False
-        elif self.request.get('advanced_search', None) == 'False':
-            return False
-        elif self.request.get('advanced_search', None) == 'True':
-            return True
+        return True
 
     def advancedSearchTrigger(self):
         """URL builder for show/close advanced search filters."""
@@ -130,7 +127,7 @@ class Search(BrowserView):
         return section.title
 
 
-class sortOption(object):
+class SortOption(object):
 
     def __init__(self, request, title, sortkey='', reverse=False):
         self.request = request
@@ -139,9 +136,7 @@ class sortOption(object):
         self.reverse = reverse
 
     def selected(self):
-        sort_on = self.request.get('sort_on') and \
-                  self.request.get('sort_on') or \
-                  ''
+        sort_on = self.request.get('sort_on', '')
         return sort_on == self.sortkey
 
     def url(self):
