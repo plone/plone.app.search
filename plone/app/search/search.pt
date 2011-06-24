@@ -95,11 +95,11 @@
                     </span>
 
                     <dl class="actionMenu deactivated"
-                        tal:attributes="class python:view.showAdvancedSearch() and 'actionMenu activated' or 'actionMenu deactivated'">
+                        tal:attributes="class python:view.show_advanced_search() and 'actionMenu activated' or 'actionMenu deactivated'">
 
                       <dt class="actionMenuHeader">
                           <a href="#"
-                             tal:attributes="href python:view.advancedSearchTrigger()"
+                             tal:attributes="href view/advanced_search_trigger"
                              id="search-filter-toggle"
                              i18n:translate="narrow_search_options">
                               Filter the results.
@@ -352,7 +352,7 @@
                       <span i18n:translate="sort_by">Sort by</span>
                           <span id="sorting-options">
                               <metal:sorting define-macro="sorting">
-                                  <tal:block repeat="item view/getSortOptions">
+                                  <tal:block repeat="item view/sort_options">
                                       <tal:item define="selected item/selected">
                                       <a data-sort=""
                                          tal:condition="not:selected" 

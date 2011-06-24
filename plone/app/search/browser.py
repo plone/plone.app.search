@@ -46,7 +46,7 @@ class Search(BrowserView):
         return IContentListing(self.context.queryCatalog(query, show_all=1,
             use_types_blacklist=True, use_navigation_root=True))
 
-    def getSortOptions(self):
+    def sort_options(self):
         """ Sorting options for search results view. """
         return (
             SortOption(self.request, _(u'relevance'), ''),
@@ -55,14 +55,14 @@ class Search(BrowserView):
             SortOption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
 
-    def showAdvancedSearch(self):
+    def show_advanced_search(self):
         """Whether we need to show advanced search options a.k.a. filters?"""
         show = self.request.get('advanced_search', None)
         if not show or show == 'False':
             return False
         return True
 
-    def advancedSearchTrigger(self):
+    def advanced_search_trigger(self):
         """URL builder for show/close advanced search filters."""
         query = self.request.get('QUERY_STRING', None)
         if not query:
