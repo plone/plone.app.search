@@ -1,10 +1,7 @@
 <html>
-<body tal:define="results view/results;
-                  site_properties context/portal_properties/site_properties;
-                  Batch python:modules['Products.CMFPlone'].Batch;
-                  b_size python:30;
-                  b_start python:0;
+<body tal:define="b_start python:0;
                   b_start request/b_start | b_start;
+                  results python:view.results(b_start=b_start);
                   st python:request.get('SearchableText', '')">
 
     <span id="updated-search-term" tal:content="st">Search Term</span>
