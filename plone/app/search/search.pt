@@ -93,7 +93,7 @@
                 <div id="search-results-bar">
                     <span i18n:translate="batch_x_items_matching_your_criteria" i18n:domain="plone">
                         <strong i18n:name="number" id="search-results-number"
-                                tal:content="python:results/actual_result_count">234</strong>
+                                tal:content="results/actual_result_count">234</strong>
                         items matching your search terms.
                     </span>
 
