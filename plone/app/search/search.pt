@@ -80,17 +80,14 @@
             <div class="visualClear"><!-- --></div>
             <div id="search-results-wrapper"
                  class="cell width-16 position-0"
-                 tal:define="results view/results;
-                             site_properties context/portal_properties/site_properties;
-                             Batch python:modules['Products.CMFPlone'].Batch;
-                             b_size python:30;
-                             b_start python:0;
-                             b_start request/b_start | b_start;">
+                 tal:define="b_start python:0;
+                             b_start request/b_start | b_start;
+                             results python: view.results(b_start=b_start);">
 
                 <div id="search-results-bar">
                     <span i18n:translate="batch_x_items_matching_your_criteria" i18n:domain="plone">
                         <strong i18n:name="number" id="search-results-number"
-                                tal:content="python:len(results)">234</strong>
+                                tal:content="python:results/actual_result_count">234</strong>
                         items matching your search terms.
                     </span>
 
@@ -381,9 +378,11 @@
                                        tal:define="normalizeString nocall: context/plone_utils/normalizeString;
                                                    isAnon context/@@plone_portal_state/anonymous;
                                                    toLocalizedTime nocall: context/@@plone/toLocalizedTime;
-                                                   batch python:Batch(results, b_size, int(b_start), orphan=1);">
+                                                   site_properties context/portal_properties/site_properties;
+                                                   allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
+                                                   show_about python:not isAnon or allowAnonymousViewAbout;">
                           <dl class="searchResults" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
-                              <tal:results repeat="item batch">
+                              <tal:results repeat="item results">
                                     <dt tal:attributes="class item/ContentTypeClass">
                                       <img tal:replace="structure item/getIcon" />
                                       <a href="#" 
@@ -393,7 +392,7 @@
                                     </dt>
                                     <dd>
                                       <span class="discreet" i18n:domain="plone"
-                                        tal:condition="python:not isAnon or site_properties.allowAnonymousViewAbout">
+                                        tal:condition="show_about">
                                         <span class="documentAuthor"
                                             i18n:translate="label_by_author">
                                         by
