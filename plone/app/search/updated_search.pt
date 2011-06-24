@@ -1,13 +1,13 @@
 <html>
 <body tal:define="b_start python:0;
                   b_start request/b_start | b_start;
-                  results python:view.results(b_start=b_start);
+                  batch python:view.results(b_start=b_start);
                   st python:request.get('SearchableText', '')">
 
     <span id="updated-search-term" tal:content="st">Search Term</span>
 
     <strong id="updated-search-results-number"
-            tal:content="python:len(results)">234</strong>
+            tal:content="batch/sequence_length">234</strong>
 
     <span id="updated-sorting-options">
         <metal:results use-macro="context/@@search/sorting" />

@@ -14,14 +14,13 @@ class Search(BrowserView):
         super(Search, self).__init__(context, request)
         self.sections_cache = {}
 
-    def results(self, query=None, batch=True, b_size=10, b_start=0, orphan=1):
+    def results(self, query=None, b_size=10, b_start=0, orphan=1):
         """ Get properly wrapped search results from the catalog.
         Everything in Plone that performs searches should go through this view.
         'query' should be a dictionary of catalog parameters.
         """
-        if not query:
-            return IContentListing([])
-
+        if query is None:
+            query = {}
         # In order to wrap the catalog results with some checkups like prevent
         # site error when searching for '*' we don't call catalog directly, but
         # queryCatalog instead. We also want to filter the results through the
@@ -34,17 +33,12 @@ class Search(BrowserView):
         # structures like en/ no/ and make sure the search results we are
         # getting within no/ don't show the ones coming from en/.
         # use_navigation_root=True takes care of this.
-        if batch:
-            b_start = int(b_start)
-            query['b_start'] = b_start
-            query['b_size'] = b_size + orphan
-            results = IContentListing(self.context.queryCatalog(query,
-                show_all=1, use_types_blacklist=True, use_navigation_root=True))
-            batch = Batch(results, b_size, b_start, orphan=orphan)
-            return IContentListing(batch)
 
-        return IContentListing(self.context.queryCatalog(query, show_all=1,
-            use_types_blacklist=True, use_navigation_root=True))
+        query['b_start'] = b_start = int(b_start)
+        query['b_size'] = b_size + orphan
+        results = IContentListing(self.context.queryCatalog(query,
+            show_all=1, use_types_blacklist=True, use_navigation_root=True))
+        return Batch(results, b_size, b_start, orphan=orphan)
 
     def sort_options(self):
         """ Sorting options for search results view. """

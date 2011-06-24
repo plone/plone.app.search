@@ -87,13 +87,13 @@
                  class="cell width-16 position-0"
                  tal:define="b_start python:0;
                              b_start request/b_start | b_start;
-                             results python: view.results(b_start=b_start);
+                             batch python: view.results(b_start=b_start);
                              normalizeString nocall:context/@@plone/normalizeString;">
 
                 <div id="search-results-bar">
                     <span i18n:translate="batch_x_items_matching_your_criteria" i18n:domain="plone">
                         <strong i18n:name="number" id="search-results-number"
-                                tal:content="results/actual_result_count">234</strong>
+                                tal:content="batch/sequence_length">234</strong>
                         items matching your search terms.
                     </span>
 
@@ -288,18 +288,18 @@
                 <metal:searchresults define-macro="search_results">
                     <div id="search-results">
 
-                        <metal:noresults tal:condition="not: results">
+                        <metal:noresults tal:condition="not: batch">
                           <p i18n:domain="plone"><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
                         </metal:noresults>
 
-                        <metal:results tal:condition="results"
+                        <metal:results tal:condition="batch"
                                        tal:define="isAnon context/@@plone_portal_state/anonymous;
                                                    toLocalizedTime nocall: context/@@plone/toLocalizedTime;
                                                    site_properties context/portal_properties/site_properties;
                                                    allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
                                                    show_about python:not isAnon or allowAnonymousViewAbout;">
-                          <dl class="searchResults" tal:define="toLocalizedTime nocall: context/@@plone/toLocalizedTime">
-                              <tal:results repeat="item results">
+                          <dl class="searchResults">
+                              <tal:results repeat="item batch">
                                     <dt tal:attributes="class item/ContentTypeClass">
                                       <img tal:replace="structure item/getIcon" />
                                       <a href="#"
