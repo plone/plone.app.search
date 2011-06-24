@@ -116,8 +116,7 @@
 
                                   <div class="field"
                                        tal:define="portal_types portal/portal_types;
-                                                   all_used_types  python:context.portal_catalog.uniqueValuesFor('portal_type');
-                                                   used_types  python:context.plone_utils.getUserFriendlyTypes(all_used_types);
+                                                   used_types context/plone_utils/getUserFriendlyTypes;
                                                    all_checked python:(len(used_types) == len(request.get('portal_type', []))) or first_call;
                                                    toggle_select_state python:all_checked and 'true' or 'false';">
                                       <label i18n:translate="label_item_type">Item type</label>
