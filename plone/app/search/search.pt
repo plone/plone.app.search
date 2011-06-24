@@ -248,43 +248,6 @@
                                       </tal:creators>
                                   </div>
 
-                                  <div class="field">
-                                      <label for="Title"
-                                             i18n:translate="label_title">Title</label>
-
-                                      <div class="formHelp" i18n:translate="help_search_title">
-                                      Return items matching this title.
-                                      </div>
-
-                                      <input type="text"
-                                             id="Title"
-                                             name="Title"
-                                             size="25"
-                                             value=""
-                                             tal:attributes="value request/Title|nothing"
-                                             />
-                                  </div>
-
-                                  <div class="field">
-
-                                      <label for="Description"
-                                             i18n:translate="label_description">Description</label>
-
-                                      <div class="formHelp" i18n:translate="help_search_description">
-                                      Return items matching this description.
-                                      Multiple words may be found
-                                      by combining them with <strong>AND</strong> and <strong>OR</strong>.
-                                      </div>
-
-                                      <input type="text"
-                                             id="Description"
-                                             name="Description"
-                                             size="25"
-                                             value=""
-                                             tal:attributes="value request/Description|nothing"
-                                             />
-                                  </div>
-
                                   <div class="formControls">
                                       <input class="searchPage searchButton allowMultiSubmit"
                                              type="submit"
