@@ -277,14 +277,13 @@
                                                   id="Creator"
                                                   tal:condition="python: len(creators) &lt;= 30">
                                               <option value="" 
-                                    class="default_option" 
-                                    i18n:translate="label_any_author">Any Author</option>
-                                              <metal:block tal:repeat="creator creators">
-                                                  <option value="" 
-                                                          tal:attributes="value creator;
-                                                                          selected python:selected == creator and 'selected' or '';" 
-                                                          tal:content="creator">username </option>
-                                              </metal:block>
+                                                      class="default_option" 
+                                                      i18n:translate="label_any_author">Any Author</option>
+                                              <option tal:repeat="creator creators"
+                                                      value="" 
+                                                      tal:attributes="value creator;
+                                                                      selected python:selected == creator and 'selected' or '';"
+                                                      tal:content="creator">username</option>
                                           </select>
 
                                           <input name="Creator:ignore_empty"
