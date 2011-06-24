@@ -82,7 +82,8 @@
                  class="cell width-16 position-0"
                  tal:define="b_start python:0;
                              b_start request/b_start | b_start;
-                             results python: view.results(b_start=b_start);">
+                             results python: view.results(b_start=b_start);
+                             normalizeString nocall:context/@@plone/normalizeString;">
 
                 <div id="search-results-bar">
                     <span i18n:translate="batch_x_items_matching_your_criteria" i18n:domain="plone">
@@ -126,7 +127,7 @@
                                                  value="#"
                                                  id="pt_toggle"
                                                  class="noborder"
-                                                 checked="checked" 
+                                                 checked="checked"
                                                  tal:attributes="checked python:all_checked and 'checked' or '';
                                                                  onchange string:javascript:toggleSelect(this, 'portal_type:list', ${toggle_select_state});"/>
 
@@ -183,23 +184,23 @@
                                                       tal:condition="not: isAnon"
                                                       tal:define="value python:member is not None and member.getProperty('last_login_time') or today"
                                                       tal:attributes="value value;
-                                                                      selected python:selected==value and 'selected' or '';" 
+                                                                      selected python:selected==value and 'selected' or '';"
                                                       i18n:translate="last_login">Last log-in</option>
-                                              <option value="#" 
+                                              <option value="#"
                                                       tal:attributes="value yesterday;
-                                                                      selected python:selected==yesterday and 'selected' or '';" 
+                                                                      selected python:selected==yesterday and 'selected' or '';"
                                                       i18n:translate="time_yesterday"> Yesterday </option>
-                                              <option value="#" 
+                                              <option value="#"
                                                       tal:attributes="value lastweek;
-                                                                      selected python:selected==lastweek and 'selected' or '';" 
+                                                                      selected python:selected==lastweek and 'selected' or '';"
                                                       i18n:translate="time_last_week"> Last week </option>
                                               <option value="#" tal:attributes="value lastmonth;
-                                                                                selected python:selected==lastmonth and 'selected' or '';" 
+                                                                                selected python:selected==lastmonth and 'selected' or '';"
                                                       i18n:translate="time_last_month"> Last month </option>
                                               <option value="#"
                                         class="default_option"
                                                       tal:attributes="value ever;
-                                                                      selected python:selected==ever and 'selected' or '';" 
+                                                                      selected python:selected==ever and 'selected' or '';"
                                                       i18n:translate="time_ever"> Ever </option>
                                           </select>
                                       </tal:datetime>
@@ -231,7 +232,7 @@
                                              value="#"
                                              id="rs_toggle"
                                              class="noborder"
-                                             checked="checked" 
+                                             checked="checked"
                                              tal:attributes="checked python:all_checked and 'checked' or '';
                                                              onclick string:javascript:toggleSelect(this, 'review_state:list', ${toggle_select_state});"/>
                                       <label for="rs_toggle"
@@ -241,9 +242,7 @@
                                       <br />
                                       </span>
 
-                                      <tal:states define="
-                                                      state_lists python:context.createMultiColumnList(filtered_states, numCols=1, sort_on='self');
-                                                      normalizeString nocall:context/@@plone/normalizeString;"
+                                      <tal:states define="state_lists python:context.createMultiColumnList(filtered_states, numCols=1, sort_on='self');"
                                                   repeat="sublist state_lists">
                                           <tal:items repeat="state sublist">
                                           <input class="noborder"
@@ -276,11 +275,11 @@
                                           <select name="Creator:ignore_empty"
                                                   id="Creator"
                                                   tal:condition="python: len(creators) &lt;= 30">
-                                              <option value="" 
-                                                      class="default_option" 
+                                              <option value=""
+                                                      class="default_option"
                                                       i18n:translate="label_any_author">Any Author</option>
                                               <option tal:repeat="creator creators"
-                                                      value="" 
+                                                      value=""
                                                       tal:attributes="value creator;
                                                                       selected python:selected == creator and 'selected' or '';"
                                                       tal:content="creator">username</option>
@@ -351,8 +350,8 @@
                                   <tal:block repeat="item view/sort_options">
                                       <tal:item define="selected item/selected">
                                       <a data-sort=""
-                                         tal:condition="not:selected" 
-                                         tal:content="item/title" 
+                                         tal:condition="not:selected"
+                                         tal:content="item/title"
                                          tal:attributes="href item/url;
                                                          data-sort python:item.sortkey and item.sortkey or None"></a>
                                       <strong tal:condition="selected" tal:content="item/title"></strong>
@@ -374,8 +373,7 @@
                         </metal:noresults>
 
                         <metal:results tal:condition="results"
-                                       tal:define="normalizeString nocall: context/plone_utils/normalizeString;
-                                                   isAnon context/@@plone_portal_state/anonymous;
+                                       tal:define="isAnon context/@@plone_portal_state/anonymous;
                                                    toLocalizedTime nocall: context/@@plone/toLocalizedTime;
                                                    site_properties context/portal_properties/site_properties;
                                                    allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
@@ -384,7 +382,7 @@
                               <tal:results repeat="item results">
                                     <dt tal:attributes="class item/ContentTypeClass">
                                       <img tal:replace="structure item/getIcon" />
-                                      <a href="#" 
+                                      <a href="#"
                                          tal:attributes="href item/getURL;
                                                          class string:state-${item/review_state}"
                                          tal:content="item/Title" />
@@ -477,7 +475,3 @@
 
 </body>
 </html>
-
-
-
-
