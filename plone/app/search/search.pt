@@ -29,8 +29,7 @@
     <form name="searchform"
           action="@@search"
           class="searchPage enableAutoFocus"
-          tal:define="DateTime python:modules['DateTime'].DateTime;
-                      portal context/@@plone_portal_state/portal;
+          tal:define="portal context/@@plone_portal_state/portal;
                       first_call not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '')">
 
@@ -164,53 +163,6 @@
                                           </tal:items>
                                       </div>
                                       <div class="visualClear"><!-- --></div>
-                                  </div>
-
-                                  <div class="field">
-                                      <label for="created"
-                                             i18n:translate="label_new_items_since">New items since</label>
-
-                                      <div class="formHelp" i18n:translate="help_search_new_items_since">
-                                      Return items added since you were last logged on, the last week, etc.
-                                      </div>
-
-                                      <tal:datetime define="today python:DateTime().earliestTime();
-                                                            isAnon context/@@plone_portal_state/anonymous;
-                                                            member context/@@plone_portal_state/member;">
-                                          <select name="created.query:record:list:date"
-                                                  id="created"
-                                                  tal:define="yesterday python:(today-1).Date();
-                                                              lastweek python:(today-7).Date();
-                                                              lastmonth python:(today-31).Date();
-                                                              ever string:1970/02/01;
-                                                              selected python:request.get('created', []);
-                                                              selected python:(len(selected) == 1) and selected[0] or ever">
-                                              <option value="#"
-                                                      tal:condition="not: isAnon"
-                                                      tal:define="value python:member is not None and member.getProperty('last_login_time') or today"
-                                                      tal:attributes="value value;
-                                                                      selected python:selected==value and 'selected' or '';"
-                                                      i18n:translate="last_login">Last log-in</option>
-                                              <option value="#"
-                                                      tal:attributes="value yesterday;
-                                                                      selected python:selected==yesterday and 'selected' or '';"
-                                                      i18n:translate="time_yesterday"> Yesterday </option>
-                                              <option value="#"
-                                                      tal:attributes="value lastweek;
-                                                                      selected python:selected==lastweek and 'selected' or '';"
-                                                      i18n:translate="time_last_week"> Last week </option>
-                                              <option value="#" tal:attributes="value lastmonth;
-                                                                                selected python:selected==lastmonth and 'selected' or '';"
-                                                      i18n:translate="time_last_month"> Last month </option>
-                                              <option value="#"
-                                        class="default_option"
-                                                      tal:attributes="value ever;
-                                                                      selected python:selected==ever and 'selected' or '';"
-                                                      i18n:translate="time_ever"> Ever </option>
-                                          </select>
-                                      </tal:datetime>
-
-                                      <input type="hidden" name="created.range:record" value="min" />
                                   </div>
 
                                   <div class="field"
