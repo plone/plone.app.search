@@ -96,6 +96,9 @@ class Search(BrowserView):
 
         Simple caching is put in place to prevent waking up section object for
         objects under the same section.
+
+        TODO: Review how this interacts with navigation root and virtual
+        hosting (hannosch)
         """
         # plone root object
         url_tool = getToolByName(self.context, "portal_url")
