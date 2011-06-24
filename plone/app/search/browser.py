@@ -14,7 +14,7 @@ class Search(BrowserView):
         super(Search, self).__init__(context, request)
         self.sections_cache = {}
 
-    def results(self, query, batch=True, b_size=10, b_start=0, orphan=1):
+    def results(self, query=None, batch=True, b_size=10, b_start=0, orphan=1):
         """ Get properly wrapped search results from the catalog.
         Everything in Plone that performs searches should go through this view.
         'query' should be a dictionary of catalog parameters.
