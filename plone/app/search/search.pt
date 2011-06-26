@@ -121,9 +121,7 @@
                                                    toggle_select_state python:all_checked and 'true' or 'false';">
                                       <label i18n:translate="label_item_type">Item type</label>
 
-                                      <div class="formHelp" i18n:translate="help_search_item_type">
-                                      Return items of a specific type.
-                                      </div>
+                                      <div class="formHelp"></div>
 
                                       <span class="optionsToggle">
                                           <input type="checkbox"
@@ -169,10 +167,6 @@
                                   <div class="field">
                                       <label for="created"
                                              i18n:translate="label_new_items_since">New items since</label>
-
-                                      <div class="formHelp" i18n:translate="help_search_new_items_since">
-                                      Return items added since you were last logged on, the last week, etc.
-                                      </div>
 
                                       <tal:datetime define="today python:DateTime().earliestTime();
                                                             isAnon context/@@plone_portal_state/anonymous;
