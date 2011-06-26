@@ -46,14 +46,13 @@ class Search(BrowserView):
         return Batch(results, b_size, b_start, orphan=orphan)
 
     def query(self, query):
-        context = self.context
         request = self.request
-        catalog = getToolByName(context, 'portal_catalog')
-        valid_keys = self.valid_keys + tuple(catalog.indexes())
-
         text = request.form.get('SearchableText', '')
         if not text:
             return []
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        valid_keys = self.valid_keys + tuple(catalog.indexes())
 
         for k, v in request.form.items():
             if v and (k in valid_keys):
@@ -67,7 +66,7 @@ class Search(BrowserView):
         query['show_inactive'] = False
         # respect navigation root
         if 'path' not in query:
-            query['path'] = getNavigationRoot(context)
+            query['path'] = getNavigationRoot(self.context)
 
         try:
             results = catalog(**query)
