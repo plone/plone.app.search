@@ -51,10 +51,7 @@ class Search(BrowserView):
         second_pass = {}
 
         # Avoid creating a session implicitly.
-        for k in request.keys():
-            if k in ('SESSION',):
-                continue
-            v = request.get(k)
+        for k, v in request.form.items():
             if v and k in indexes:
                 if k == 'SearchableText':
                     v = quote_bad_chars(v)
