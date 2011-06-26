@@ -36,9 +36,12 @@ class Search(BrowserView):
 
         query['b_start'] = b_start = int(b_start)
         query['b_size'] = b_size + orphan
-        results = IContentListing(self.context.queryCatalog(query,
-            show_all=1, use_types_blacklist=True, use_navigation_root=True))
+        results = IContentListing(self.query(query))
         return Batch(results, b_size, b_start, orphan=orphan)
+
+    def query(self, query):
+        return self.context.queryCatalog(query, show_all=1,
+            use_types_blacklist=True, use_navigation_root=True)
 
     def sort_options(self):
         """ Sorting options for search results view. """
