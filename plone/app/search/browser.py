@@ -50,7 +50,6 @@ class Search(BrowserView):
         indexes = catalog.indexes()
         second_pass = {}
 
-        # Avoid creating a session implicitly.
         for k, v in request.form.items():
             if v and k in indexes:
                 if k == 'SearchableText':
