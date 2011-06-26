@@ -12,6 +12,8 @@ _ = MessageFactory('plone')
 # We should accept both a simple space, unicode u'\u0020 but also a
 # multi-space, so called 'waji-kankaku', unicode u'\u3000'
 MULTISPACE = u'\u3000'.encode('utf-8')
+TOKENS = ('OR', 'AND', 'NOT')
+S_TOKENS = ('OR', 'AND')
 
 
 def quotestring(s):
@@ -25,24 +27,21 @@ def quotequery(s):
         terms = s.split()
     except Exception:
         return s
-    tokens = ('OR', 'AND', 'NOT')
-    s_tokens = ('OR', 'AND')
-    check = (0, -1)
-    for idx in check:
-        if terms[idx].upper() in tokens:
-            terms[idx] = quotestring(terms[idx])
+    for idx in (0, -1):
+        value = terms[idx]
+        if value.upper() in TOKENS:
+            terms[idx] = quotestring(value)
     for idx in range(1, len(terms)):
-        if (terms[idx].upper() in s_tokens and
-            terms[idx-1].upper() in tokens):
-            terms[idx] = quotestring(terms[idx])
+        value = terms[idx]
+        if (value.upper() in S_TOKENS and
+            terms[idx-1].upper() in TOKENS):
+            terms[idx] = quotestring(value)
     return ' '.join(terms)
 
 
 def quote_bad_chars(s):
-    # We need to quote parentheses when searching text indices (we use
-    # quote_logic_indexes as the list of text indices)
-    bad_chars = ["(", ")"]
-    for char in bad_chars:
+    # We need to quote parentheses when searching text indices
+    for char in ("(", ")"):
         s = s.replace(char, quotestring(char))
     return s
 
