@@ -36,19 +36,6 @@ class Search(BrowserView):
         """
         if query is None:
             query = {}
-        # In order to wrap the catalog results with some checkups like prevent
-        # site error when searching for '*' we don't call catalog directly, but
-        # queryCatalog instead. We also want to filter the results through the
-        # script's ensureFriendlyTypes() in order to get rid of unwanted content
-        # types (like different Criteria types) in the output, hence:
-        # show_all=1, use_types_blacklist=True parameters in the call.
-        # 
-        # We also want to get items starting from the navigation root, that is
-        # not necessary the site's root. This lets us build language folders
-        # structures like en/ no/ and make sure the search results we are
-        # getting within no/ don't show the ones coming from en/.
-        # use_navigation_root=True takes care of this.
-
         query['b_start'] = b_start = int(b_start)
         query['b_size'] = b_size + orphan
         results = IContentListing(self.query(query))
@@ -58,11 +45,7 @@ class Search(BrowserView):
         context = self.context
         request = self.request
 
-        show_query = True
         quote_logic_indexes = ['SearchableText', 'Description', 'Title']
-        use_types_blacklist = True
-        show_inactive = False
-        use_navigation_root = True
 
         results = []
         catalog = getToolByName(context, 'portal_catalog')
@@ -97,7 +80,6 @@ class Search(BrowserView):
                     if MULTISPACE in v:
                         v = v.replace(MULTISPACE, ' ')
                 query[k] = v
-                show_query = 1
             elif k.endswith('_usage'):
                 key = k[:-6]
                 param, value = v.split(':')
@@ -115,19 +97,13 @@ class Search(BrowserView):
             query[k] = q = {'query':qs}
             q.update(v)
 
-        # doesn't normal call catalog unless some field has been queried
-        # against. if you want to call the catalog _regardless_ of whether
-        # any items were found, then you can pass show_all=1.
-        if show_query:
-            try:
-                if use_types_blacklist:
-                    ensureFriendlyTypes(query)
-                if use_navigation_root:
-                    rootAtNavigationRoot(query)
-                query['show_inactive'] = show_inactive
-                results = catalog(**query)
-            except ParseError:
-                pass
+        ensureFriendlyTypes(query)
+        rootAtNavigationRoot(query)
+        query['show_inactive'] = False
+        try:
+            results = catalog(**query)
+        except ParseError:
+            pass
 
         return results
 
