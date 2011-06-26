@@ -50,7 +50,7 @@ class Search(BrowserView):
         indexes = catalog.indexes()
 
         for k, v in request.form.items():
-            if v and k in indexes:
+            if v and (k in indexes):
                 if k == 'SearchableText':
                     v = quote_bad_chars(v)
                     if MULTISPACE in v:
