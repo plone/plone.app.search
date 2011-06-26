@@ -12,31 +12,6 @@ _ = MessageFactory('plone')
 # We should accept both a simple space, unicode u'\u0020 but also a
 # multi-space, so called 'waji-kankaku', unicode u'\u3000'
 MULTISPACE = u'\u3000'.encode('utf-8')
-TOKENS = ('OR', 'AND', 'NOT')
-S_TOKENS = ('OR', 'AND')
-
-
-def quotestring(s):
-    return '"%s"' % s
-
-
-def quotequery(s):
-    if not s:
-        return s
-    try:
-        terms = s.split()
-    except Exception:
-        return s
-    for idx in (0, -1):
-        value = terms[idx]
-        if value.upper() in TOKENS:
-            terms[idx] = quotestring(value)
-    for idx in xrange(1, len(terms)):
-        value = terms[idx]
-        if (value.upper() in S_TOKENS and
-            terms[idx-1].upper() in TOKENS):
-            terms[idx] = quotestring(value)
-    return ' '.join(terms)
 
 
 def quote_bad_chars(s):
@@ -84,7 +59,6 @@ class Search(BrowserView):
         request = self.request
 
         show_query = True
-        quote_logic = False
         quote_logic_indexes = ['SearchableText', 'Description', 'Title']
         use_types_blacklist = True
         show_inactive = False
@@ -122,8 +96,6 @@ class Search(BrowserView):
                     v = quote_bad_chars(v)
                     if MULTISPACE in v:
                         v = v.replace(MULTISPACE, ' ')
-                    if quote_logic:
-                        v = quotequery(v)
                 query[k] = v
                 show_query = 1
             elif k.endswith('_usage'):
