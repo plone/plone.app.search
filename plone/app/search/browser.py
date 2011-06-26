@@ -57,9 +57,8 @@ class Search(BrowserView):
 
         for k, v in request.form.items():
             if v and (k in valid_keys):
-                if k == 'SearchableText':
-                    v = quote_chars(v)
                 query[k] = v
+        query['SearchableText'] = quote_chars(text)
 
         # respect `types_not_searched` setting
         types = query.get('portal_type', [])
