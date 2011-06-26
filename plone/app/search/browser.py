@@ -27,7 +27,7 @@ def quote_chars(s):
 
 class Search(BrowserView):
 
-    valid_keys = ('sort_on', 'sort_order', 'sort_limit')
+    valid_keys = ('sort_on', 'sort_order', 'sort_limit', 'fq', 'fl', 'facet')
 
     def __init__(self, context, request):
         super(Search, self).__init__(context, request)
@@ -63,7 +63,7 @@ class Search(BrowserView):
         valid_keys = self.valid_keys + tuple(catalog.indexes())
 
         for k, v in request.form.items():
-            if v and (k in valid_keys):
+            if v and ((k in valid_keys) or k.startswith('facet.')):
                 query[k] = v
         query['SearchableText'] = quote_chars(text)
 
