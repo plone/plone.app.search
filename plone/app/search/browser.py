@@ -32,7 +32,7 @@ def quotequery(s):
         value = terms[idx]
         if value.upper() in TOKENS:
             terms[idx] = quotestring(value)
-    for idx in range(1, len(terms)):
+    for idx in xrange(1, len(terms)):
         value = terms[idx]
         if (value.upper() in S_TOKENS and
             terms[idx-1].upper() in TOKENS):
