@@ -50,10 +50,6 @@ class Search(BrowserView):
         indexes = catalog.indexes()
         second_pass = {}
 
-        def rootAtNavigationRoot(query):
-            if 'path' not in query:
-                query['path'] = getNavigationRoot(context)
-
         # Avoid creating a session implicitly.
         for k in request.keys():
             if k in ('SESSION',):
@@ -87,8 +83,10 @@ class Search(BrowserView):
         query['portal_type'] = self.filter_types(types)
         # respect effective/expiration date
         query['show_inactive'] = False
+        # respect navigation root
+        if 'path' not in query:
+            query['path'] = getNavigationRoot(context)
 
-        rootAtNavigationRoot(query)
         try:
             results = catalog(**query)
         except ParseError:
