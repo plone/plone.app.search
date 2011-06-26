@@ -42,10 +42,18 @@ class Search(BrowserView):
             query = {}
         query['b_start'] = b_start = int(b_start)
         query['b_size'] = b_size + orphan
-        results = IContentListing(self.query(query))
+        query = self.filter_query(query)
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        try:
+            results = catalog(**query)
+        except ParseError:
+            return []
+
+        results = IContentListing(results)
         return Batch(results, b_size, b_start, orphan=orphan)
 
-    def query(self, query):
+    def filter_query(self, query):
         request = self.request
         text = request.form.get('SearchableText', '')
         if not text:
@@ -68,12 +76,7 @@ class Search(BrowserView):
         if 'path' not in query:
             query['path'] = getNavigationRoot(self.context)
 
-        try:
-            results = catalog(**query)
-        except ParseError:
-            return []
-
-        return results
+        return query
 
     def filter_types(self, types):
         plone_utils = getToolByName(self.context, 'plone_utils')
