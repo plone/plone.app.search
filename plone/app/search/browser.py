@@ -34,7 +34,7 @@ class Search(BrowserView):
 
     valid_keys = ('sort_on', 'sort_order', 'sort_limit', 'fq', 'fl', 'facet')
 
-    def results(self, query=None, b_size=10, b_start=0, orphan=1):
+    def results(self, query=None, b_size=10, b_start=0):
         """ Get properly wrapped search results from the catalog.
         Everything in Plone that performs searches should go through this view.
         'query' should be a dictionary of catalog parameters.
@@ -42,7 +42,7 @@ class Search(BrowserView):
         if query is None:
             query = {}
         query['b_start'] = b_start = int(b_start)
-        query['b_size'] = b_size + orphan
+        query['b_size'] = b_size
         query = self.filter_query(query)
 
         if query is None:
@@ -55,7 +55,7 @@ class Search(BrowserView):
                 return []
 
         results = IContentListing(results)
-        return Batch(results, b_size, b_start, orphan=orphan)
+        return Batch(results, b_size, b_start)
 
     def filter_query(self, query):
         request = self.request
