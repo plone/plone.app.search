@@ -52,19 +52,6 @@ class Search(BrowserView):
         indexes = catalog.indexes()
         second_pass = {}
 
-        def ensureFriendlyTypes(query):
-            ploneUtils = getToolByName(context, 'plone_utils')
-            portal_type = query.get('portal_type', [])
-            if not isinstance(portal_type, list):
-                portal_type = [portal_type]
-            Type = query.get('Type', [])
-            if not isinstance(Type, list):
-                Type = [Type]
-            typesList = portal_type + Type
-            if not typesList:
-                friendlyTypes = ploneUtils.getUserFriendlyTypes(typesList)
-                query['portal_type'] = friendlyTypes
-
         def rootAtNavigationRoot(query):
             if 'path' not in query:
                 query['path'] = getNavigationRoot(context)
@@ -97,7 +84,7 @@ class Search(BrowserView):
             query[k] = q = {'query':qs}
             q.update(v)
 
-        ensureFriendlyTypes(query)
+        self.filter_types(query)
         rootAtNavigationRoot(query)
         query['show_inactive'] = False
         try:
@@ -106,6 +93,15 @@ class Search(BrowserView):
             pass
 
         return results
+
+    def filter_types(self, query):
+        plone_utils = getToolByName(self.context, 'plone_utils')
+        portal_type = query.get('portal_type', [])
+        if not isinstance(portal_type, list):
+            portal_type = [portal_type]
+        if not portal_type:
+            friendly = plone_utils.getUserFriendlyTypes(portal_type)
+            query['portal_type'] = friendly
 
     def sort_options(self):
         """ Sorting options for search results view. """
