@@ -45,8 +45,6 @@ class Search(BrowserView):
         context = self.context
         request = self.request
 
-        quote_logic_indexes = ['SearchableText', 'Description', 'Title']
-
         results = []
         catalog = getToolByName(context, 'portal_catalog')
         indexes = catalog.indexes()
@@ -62,7 +60,7 @@ class Search(BrowserView):
                 continue
             v = request.get(k)
             if v and k in indexes:
-                if k in quote_logic_indexes:
+                if k == 'SearchableText':
                     v = quote_bad_chars(v)
                     if MULTISPACE in v:
                         v = v.replace(MULTISPACE, ' ')
