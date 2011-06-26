@@ -84,9 +84,13 @@ class Search(BrowserView):
             query[k] = q = {'query':qs}
             q.update(v)
 
-        self.filter_types(query)
-        rootAtNavigationRoot(query)
+        # respect `types_not_searched` setting
+        types = query.get('portal_type', [])
+        query['portal_type'] = self.filter_types(types)
+        # respect effective/expiration date
         query['show_inactive'] = False
+
+        rootAtNavigationRoot(query)
         try:
             results = catalog(**query)
         except ParseError:
@@ -94,14 +98,17 @@ class Search(BrowserView):
 
         return results
 
-    def filter_types(self, query):
+    def filter_types(self, types):
         plone_utils = getToolByName(self.context, 'plone_utils')
-        portal_type = query.get('portal_type', [])
-        if not isinstance(portal_type, list):
-            portal_type = [portal_type]
-        if not portal_type:
-            friendly = plone_utils.getUserFriendlyTypes(portal_type)
-            query['portal_type'] = friendly
+        if not isinstance(types, list):
+            types = [types]
+        return plone_utils.getUserFriendlyTypes(types)
+
+    def types_list(self):
+        # only show those types that have any content
+        catalog = getToolByName(self.context, 'portal_catalog')
+        used_types = catalog._catalog.getIndex('portal_type').uniqueValues()
+        return self.filter_types(list(used_types))
 
     def sort_options(self):
         """ Sorting options for search results view. """

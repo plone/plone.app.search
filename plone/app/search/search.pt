@@ -116,8 +116,8 @@
 
                                   <div class="field"
                                        tal:define="portal_types portal/portal_types;
-                                                   used_types context/plone_utils/getUserFriendlyTypes;
-                                                   all_checked python:(len(used_types) == len(request.get('portal_type', []))) or first_call;
+                                                   types_list view/types_list;
+                                                   all_checked python:(len(types_list) == len(request.get('portal_type', []))) or first_call;
                                                    toggle_select_state python:all_checked and 'true' or 'false';">
                                       <label i18n:translate="label_item_type">Item type</label>
 
@@ -141,7 +141,7 @@
                                       </span>
                                       <br />
                                       <div style="float:left; margin-right: 2em;"
-                                           tal:define="typeLists python:context.createMultiColumnList(used_types, numCols=2, sort_on='self');"
+                                           tal:define="typeLists python:context.createMultiColumnList(types_list, numCols=2, sort_on='self');"
                                            tal:attributes="style python:isRTL and 'float: right;; margin-left: 2em;;' or 'float: left;; margin-right: 2em;;';"
                                            tal:repeat="sublist typeLists">
                                           <tal:items repeat="type sublist">
