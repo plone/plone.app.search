@@ -2,7 +2,10 @@
 <body tal:define="b_start python:0;
                   b_start request/b_start | b_start;
                   batch python:view.results(b_start=b_start);
-                  st python:request.get('SearchableText', '')">
+                  st python:request.get('SearchableText', '');
+                  here_url context/@@plone_context_state/object_url;
+                  batch_base_url string:${here_url}/@@search;
+                  ">
 
     <span id="updated-search-term" tal:content="st">Search Term</span>
 
