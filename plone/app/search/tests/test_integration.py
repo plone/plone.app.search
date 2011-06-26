@@ -3,6 +3,7 @@ from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
 
+from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 
 from base import SearchTestCase
@@ -25,8 +26,7 @@ class TestSection(SearchTestCase):
     tests the installation of a particular product.
     """
 
-    def test_section(self):
-        """Test retrieving section title for search result item."""
+    def test_breadcrumbs(self):
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
@@ -34,54 +34,33 @@ class TestSection(SearchTestCase):
         portal.invokeFactory('Document', 'first_level_document')
         portal.invokeFactory('Folder', 'first_level_folder',
                              title='First Level Folder')
+        first_level_folder = portal.first_level_folder
+        first_level_folder.invokeFactory('Document', 'second_level_document')
+        first_level_folder.invokeFactory('Folder', 'second_level_folder')
+        second_level_folder = first_level_folder.second_level_folder
+        second_level_folder.invokeFactory('Document', 'third_level_document')
 
         view = portal.restrictedTraverse('@@search')
+
+        def crumbs(item):
+            return view.breadcrumbs(IContentListing([item])[0])
 
         # return None for first_level objects
-        section_title = \
-            view.section('http://nohost/plone/first_level_document')
-        self.assertEquals(section_title, None)
+        title = crumbs(portal.first_level_document)
+        self.assertEquals(title, None)
 
-        section_title = view.section('http://nohost/plone/first_level_folder')
-        self.assertEquals(section_title, None)
+        title = crumbs(first_level_folder)
+        self.assertEquals(title, None)
 
         # return section for objects deeper in the hierarchy
-        fl_path = 'http://nohost/plone/first_level_folder/'
-        section_title = view.section(fl_path + 'second_level_document')
-        self.assertEquals(section_title, 'First Level Folder')
+        title = crumbs(first_level_folder.second_level_document)[0]['Title']
+        self.assertEquals(title, 'First Level Folder')
 
-        sl_path = fl_path + 'second_level_folder/'
-        section_title = view.section(sl_path)
-        self.assertEquals(section_title, 'First Level Folder')
+        title = crumbs(second_level_folder)[0]['Title']
+        self.assertEquals(title, 'First Level Folder')
 
-        section_title = view.section(sl_path + 'third_level_document')
-        self.assertEquals(section_title, 'First Level Folder')
-
-    def test_section_cache(self):
-        """Test that section title is read from sections_cache dict if an entry
-        already exists.
-        """
-
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Manager'])
-        login(portal, TEST_USER_NAME)
-
-        portal.invokeFactory('Folder', 'first_level_folder',
-                             title='First Level Folder')
-        portal.first_level_folder.invokeFactory('Document',
-                                                'second_level_document')
-
-        view = portal.restrictedTraverse('@@search')
-
-        # We input an entry for 'first_level_folder' into sections_cache dict
-        # and this value should be returned by section() instead of the real
-        # title of first_level_folder.
-        view.sections_cache['first_level_folder'] = \
-            "Cached title for first_level_folder"
-
-        fl_path = 'http://nohost/plone/first_level_folder/'
-        section_title = view.section(fl_path + 'second_level_document')
-        self.assertEquals(section_title, 'Cached title for first_level_folder')
+        title = crumbs(second_level_folder.third_level_document)[0]['Title']
+        self.assertEquals(title, 'First Level Folder')
 
     def test_blacklisted_types_in_results(self):
         """Make sure we don't break types' blacklisting in the new search

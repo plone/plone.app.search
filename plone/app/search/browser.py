@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from DateTime import DateTime
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.PloneBatch import Batch
 from Products.ZCTextIndex.ParseTree import ParseError
+from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
 from zope.publisher.browser import BrowserView
 from ZTUtils import make_query
@@ -30,10 +33,6 @@ def quote_chars(s):
 class Search(BrowserView):
 
     valid_keys = ('sort_on', 'sort_order', 'sort_limit', 'fq', 'fl', 'facet')
-
-    def __init__(self, context, request):
-        super(Search, self).__init__(context, request)
-        self.sections_cache = {}
 
     def results(self, query=None, b_size=10, b_start=0, orphan=1):
         """ Get properly wrapped search results from the catalog.
@@ -133,56 +132,20 @@ class Search(BrowserView):
             query = query + '&advanced_search=True'
         return url + '?' + query
 
-    def section(self, url):
-        """ Returns a section in which the object at the passed url is
-        contained. Section is a first-level folder in Plone root.
-
-        For objects that are contained in Plone root object, we just return
-        None as we don't want to display anything on the template.
-
-        It does that by first removing the portal url part from the object's
-        url, including the Plone instance id in non-virtual-hostname
-        environments.
-
-        Then it splits the path with '/', taking the second item which is
-        the section's id.
-
-        Lastly an object is retrieved from the Plone root object that has
-        the id of the section we are looking for.
-
-        Simple caching is put in place to prevent waking up section object for
-        objects under the same section.
-
+    def breadcrumbs(self, item):
+        """
         TODO: Review how this interacts with navigation root and virtual
         hosting (hannosch)
         """
-        # plone root object
-        url_tool = getToolByName(self.context, "portal_url")
-        portal = url_tool.getPortalObject()
-
-        # truncate away http, domain and plone instance id
-        path = url.split(url_tool.getPortalPath())[1]
-
-        # don't show location for first-level objects
-        # -> ['', 'front-page']
-        if len(path.split('/')) < 3:
+        obj = item.getObject()
+        view = getMultiAdapter((obj, self.request), name='breadcrumbs_view')
+        breadcrumbs = list(view.breadcrumbs())
+        if len(breadcrumbs) < 2:
             return None
-
-        # get sections's id
-        section_id = path.split('/')[1]
-
-        # is this section's Title already stored in sections_cache cache
-        # dictionary?
-        section = self.sections_cache.get(section_id, None)
-        if section is not None:
-            return section
-
-        # get section object
-        section = portal[section_id]
-
-        # store title and id in cache
-        self.sections_cache[section_id] = title = section.Title()
-        return title
+        if len(breadcrumbs) > 3:
+            empty = {'absolute_url': '', 'Title': unicode('…', 'utf-8')}
+            breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-2:]
+        return breadcrumbs
 
 
 class SortOption(object):

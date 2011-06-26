@@ -331,11 +331,33 @@
                                       </div>
 
                                       <cite class="documentLocation link-location"
-                                            tal:define="url item/getURL;
-                                                        section_title python: view.section(url);"
-                                            tal:condition='section_title'
-                                            i18n:translate="text_searchitem_location">
-                                           Located in <span i18n:name="label_section_title" tal:content="section_title"/>.
+                                            tal:define="breadcrumbs python: view.breadcrumbs(item);
+                                                        is_rtl context/@@plone_portal_state/is_rtl;"
+                                            tal:condition='breadcrumbs'>
+                                          <span i18n:translate="text_searchitem_location">
+                                              Located in
+                                          </span>
+                                          <span tal:repeat="crumb breadcrumbs"
+                                                tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
+                                              <tal:item tal:define="is_last repeat/crumb/end;
+                                                                    url crumb/absolute_url;
+                                                                    title crumb/Title">
+                                                  <a href="#"
+                                                     tal:omit-tag="not: url"
+                                                     tal:condition="python:not is_last"
+                                                     tal:attributes="href url"
+                                                     tal:content="title">
+                                                      crumb
+                                                  </a>
+                                                  <span class="breadcrumbSeparator" tal:condition="not: is_last">
+                                                      <tal:ltr condition="not: is_rtl">&rsaquo;</tal:ltr>
+                                                      <tal:rtl condition="is_rtl">&lsaquo;</tal:rtl>
+                                                  </span>
+                                                  <span tal:condition="is_last"
+                                                        tal:content="title">crumb</span>
+                                               </tal:item>
+                                          </span>
+
                                       </cite>
 
                                     </dd>
