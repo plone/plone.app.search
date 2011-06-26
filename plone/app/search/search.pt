@@ -207,35 +207,6 @@
                                       <input type="hidden" name="created.range:record" value="min" />
                                   </div>
 
-                                  <div class="field">
-                                      <label for="Creator:ignore_empty"
-                                             i18n:translate="label_author">Author</label>
-
-                                      <div class="formHelp" i18n:translate="help_search_author">
-                                      Return items created by a particular person.
-                                      </div>
-
-                                      <tal:creators tal:define="creators python:portal.portal_catalog.uniqueValuesFor('Creator');
-                                                                selected request/Creator|nothing">
-                                          <select name="Creator:ignore_empty"
-                                                  id="Creator"
-                                                  tal:condition="python: len(creators) &lt;= 30">
-                                              <option value=""
-                                                      class="default_option"
-                                                      i18n:translate="label_any_author">Any Author</option>
-                                              <option tal:repeat="creator creators"
-                                                      value=""
-                                                      tal:attributes="value creator;
-                                                                      selected python:selected == creator and 'selected' or '';"
-                                                      tal:content="creator">username</option>
-                                          </select>
-
-                                          <input name="Creator:ignore_empty"
-                                                 tal:condition="python: len(creators) &gt; 30 "
-                                                 tal:attributes="value selected" />
-                                      </tal:creators>
-                                  </div>
-
                                   <div class="formControls">
                                       <input class="searchPage searchButton allowMultiSubmit"
                                              type="submit"
