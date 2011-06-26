@@ -14,16 +14,20 @@ _ = MessageFactory('plone')
 MULTISPACE = u'\u3000'.encode('utf-8')
 
 
-def quote_bad_chars(s):
+def quote_chars(s):
     # We need to quote parentheses when searching text indices
     if '(' in s:
         s = s.replace('(', '"("')
     if ')' in s:
         s = s.replace(')', '")"')
+    if MULTISPACE in s:
+        s = s.replace(MULTISPACE, ' ')
     return s
 
 
 class Search(BrowserView):
+
+    valid_keys = ('sort_on', 'sort_order', 'sort_limit')
 
     def __init__(self, context, request):
         super(Search, self).__init__(context, request)
@@ -44,23 +48,18 @@ class Search(BrowserView):
     def query(self, query):
         context = self.context
         request = self.request
-
-        results = []
         catalog = getToolByName(context, 'portal_catalog')
-        indexes = catalog.indexes()
+        valid_keys = self.valid_keys + tuple(catalog.indexes())
+
+        text = request.form.get('SearchableText', '')
+        if not text:
+            return []
 
         for k, v in request.form.items():
-            if v and (k in indexes):
+            if v and (k in valid_keys):
                 if k == 'SearchableText':
-                    v = quote_bad_chars(v)
-                    if MULTISPACE in v:
-                        v = v.replace(MULTISPACE, ' ')
+                    v = quote_chars(v)
                 query[k] = v
-            elif k in ('sort_on', 'sort_order', 'sort_limit'):
-                if k == 'sort_limit' and not isinstance(v, int):
-                    query[k] = int(v)
-                else:
-                    query[k] = v
 
         # respect `types_not_searched` setting
         types = query.get('portal_type', [])
@@ -74,7 +73,7 @@ class Search(BrowserView):
         try:
             results = catalog(**query)
         except ParseError:
-            pass
+            return []
 
         return results
 
