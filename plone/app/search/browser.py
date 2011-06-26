@@ -133,16 +133,15 @@ class Search(BrowserView):
         return url + '?' + query
 
     def breadcrumbs(self, item):
-        """
-        TODO: Review how this interacts with navigation root and virtual
-        hosting (hannosch)
-        """
         obj = item.getObject()
         view = getMultiAdapter((obj, self.request), name='breadcrumbs_view')
-        breadcrumbs = list(view.breadcrumbs())
-        if len(breadcrumbs) < 2:
+        # cut off the item itself
+        breadcrumbs = list(view.breadcrumbs())[:-1]
+        if len(breadcrumbs) == 0:
+            # don't show breadcrumbs if we only have a single element
             return None
         if len(breadcrumbs) > 3:
+            # if we have too long breadcrumbs, emit the middle elements
             empty = {'absolute_url': '', 'Title': unicode('…', 'utf-8')}
             breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-2:]
         return breadcrumbs

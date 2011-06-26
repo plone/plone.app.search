@@ -344,7 +344,6 @@
                                                                     title crumb/Title">
                                                   <a href="#"
                                                      tal:omit-tag="not: url"
-                                                     tal:condition="python:not is_last"
                                                      tal:attributes="href url"
                                                      tal:content="title">
                                                       crumb
@@ -353,8 +352,6 @@
                                                       <tal:ltr condition="not: is_rtl">&rsaquo;</tal:ltr>
                                                       <tal:rtl condition="is_rtl">&lsaquo;</tal:rtl>
                                                   </span>
-                                                  <span tal:condition="is_last"
-                                                        tal:content="title">crumb</span>
                                                </tal:item>
                                           </span>
 
