@@ -57,7 +57,7 @@
             <div class="cell width-16 position-0">
                 <h1 class="documentFirstHeading"
                     i18n:translate=""
-                    condition="not:st">
+                    tal:condition="not:st">
                     Search results
                 </h1>
                 <h1 class="documentFirstHeading"
