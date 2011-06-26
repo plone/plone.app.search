@@ -14,6 +14,7 @@ _ = MessageFactory('plone')
 MULTISPACE = u'\u3000'.encode('utf-8')
 TOKENS = ('OR', 'AND', 'NOT')
 S_TOKENS = ('OR', 'AND')
+BAD_CHARS = {'(': '"("', ')': '")"'}
 
 
 def quotestring(s):
@@ -41,8 +42,8 @@ def quotequery(s):
 
 def quote_bad_chars(s):
     # We need to quote parentheses when searching text indices
-    for char in ("(", ")"):
-        s = s.replace(char, quotestring(char))
+    for char, quoted in BAD_CHARS.items():
+        s = s.replace(char, quoted)
     return s
 
 
