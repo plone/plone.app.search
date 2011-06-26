@@ -59,7 +59,9 @@ class Search(BrowserView):
 
     def filter_query(self, query):
         request = self.request
-        text = request.form.get('SearchableText', '')
+        text = query.get('SearchableText', None)
+        if text is None:
+            text = request.form.get('SearchableText', '')
         if not text:
             return None
 
