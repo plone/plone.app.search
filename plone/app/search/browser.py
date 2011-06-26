@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.browser.navtree import getNavigationRoot
@@ -12,6 +13,7 @@ _ = MessageFactory('plone')
 # We should accept both a simple space, unicode u'\u0020 but also a
 # multi-space, so called 'waji-kankaku', unicode u'\u3000'
 MULTISPACE = u'\u3000'.encode('utf-8')
+EVER = DateTime('1970-01-03')
 
 
 def quote_chars(s):
@@ -44,11 +46,14 @@ class Search(BrowserView):
         query['b_size'] = b_size + orphan
         query = self.filter_query(query)
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-        try:
-            results = catalog(**query)
-        except ParseError:
-            return []
+        if query is None:
+            results = []
+        else:
+            catalog = getToolByName(self.context, 'portal_catalog')
+            try:
+                results = catalog(**query)
+            except ParseError:
+                return []
 
         results = IContentListing(results)
         return Batch(results, b_size, b_start, orphan=orphan)
@@ -57,7 +62,7 @@ class Search(BrowserView):
         request = self.request
         text = request.form.get('SearchableText', '')
         if not text:
-            return []
+            return None
 
         catalog = getToolByName(self.context, 'portal_catalog')
         valid_keys = self.valid_keys + tuple(catalog.indexes())
@@ -66,6 +71,13 @@ class Search(BrowserView):
             if v and ((k in valid_keys) or k.startswith('facet.')):
                 query[k] = v
         query['SearchableText'] = quote_chars(text)
+
+        # don't filter on created at all if we want all results
+        created = query.get('created')
+        if created:
+            if created.get('query'):
+                if created['query'][0] <= EVER:
+                    del query['created']
 
         # respect `types_not_searched` setting
         types = query.get('portal_type', [])
@@ -76,6 +88,7 @@ class Search(BrowserView):
         if 'path' not in query:
             query['path'] = getNavigationRoot(self.context)
 
+        print query
         return query
 
     def filter_types(self, types):

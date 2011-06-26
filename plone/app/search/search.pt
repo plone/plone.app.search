@@ -174,7 +174,7 @@
                                                             yesterday python:(today-1).Date();
                                                             lastweek python:(today-7).Date();
                                                             lastmonth python:(today-31).Date();
-                                                            ever string:1970/02/01;
+                                                            ever string:1970-01-02;
                                                             checked python:request.get('created', []);
                                                             checked python:(len(checked) == 1) and checked[0] or ever">
                                           <input type="radio"
