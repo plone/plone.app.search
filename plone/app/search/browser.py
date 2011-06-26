@@ -48,7 +48,6 @@ class Search(BrowserView):
         results = []
         catalog = getToolByName(context, 'portal_catalog')
         indexes = catalog.indexes()
-        second_pass = {}
 
         for k, v in request.form.items():
             if v and k in indexes:
@@ -57,22 +56,11 @@ class Search(BrowserView):
                     if MULTISPACE in v:
                         v = v.replace(MULTISPACE, ' ')
                 query[k] = v
-            elif k.endswith('_usage'):
-                key = k[:-6]
-                param, value = v.split(':')
-                second_pass[key] = {param:value}
             elif k in ('sort_on', 'sort_order', 'sort_limit'):
                 if k == 'sort_limit' and not isinstance(v, int):
                     query[k] = int(v)
                 else:
                     query[k] = v
-
-        for k, v in second_pass.items():
-            qs = query.get(k)
-            if qs is None:
-                continue
-            query[k] = q = {'query':qs}
-            q.update(v)
 
         # respect `types_not_searched` setting
         types = query.get('portal_type', [])
