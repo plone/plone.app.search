@@ -88,7 +88,6 @@ class Search(BrowserView):
         if 'path' not in query:
             query['path'] = getNavigationRoot(self.context)
 
-        print query
         return query
 
     def filter_types(self, types):
