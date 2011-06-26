@@ -43,24 +43,20 @@ class Search(BrowserView):
         return Batch(results, b_size, b_start, orphan=orphan)
 
     def query(self, query):
-        REQUEST=None
-        show_all=1
-        quote_logic=0
-        quote_logic_indexes=['SearchableText','Description','Title']
-        use_types_blacklist=True
-        show_inactive=False
-        use_navigation_root=True
         context = self.context
+        request = self.request
 
-        results=[]
-        catalog=context.portal_catalog
-        indexes=catalog.indexes()
-        query={}
-        show_query=show_all
+        show_query = True
+        quote_logic = False
+        quote_logic_indexes = ['SearchableText', 'Description', 'Title']
+        use_types_blacklist = True
+        show_inactive = False
+        use_navigation_root = True
+
+        results = []
+        catalog = getToolByName(context, 'portal_catalog')
+        indexes = catalog.indexes()
         second_pass = {}
-
-        if REQUEST is None:
-            REQUEST = context.REQUEST
 
         # See http://dev.plone.org/plone/ticket/9422 for
         # an explanation of '\u3000'
@@ -116,10 +112,10 @@ class Search(BrowserView):
                 query['path'] = getNavigationRoot(context)
 
         # Avoid creating a session implicitly.
-        for k in REQUEST.keys():
+        for k in request.keys():
             if k in ('SESSION',):
                 continue
-            v = REQUEST.get(k)
+            v = request.get(k)
             if v and k in indexes:
                 if k in quote_logic_indexes:
                     v = quote_bad_chars(v)
