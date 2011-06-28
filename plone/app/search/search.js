@@ -144,6 +144,15 @@
             e.preventDefault();
         });
 
+        // Handle clicks in the batch navigation bar. Load those with Ajax as
+        // well.
+        $('.listingBar a').live('click', function (e) {
+            data = this.search.split('?')[1];
+            updateResults(data);
+            pushState(data);
+            e.preventDefault();
+        });
+
         // THE HANDLER FOR 'POPSTATE' EVENT IS COPIED FROM PJAX.JS
         // https://github.com/defunkt/jquery-pjax
 
