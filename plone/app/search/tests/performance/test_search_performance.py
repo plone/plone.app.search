@@ -52,7 +52,7 @@ class TestPerformance100(Search100FunctionalTestCase):
         print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
-        self.failUnless((old_time*1.1) >= new_time,
+        self.failUnless(old_time >= new_time,
                         "the new search results page is slower than the old \
                          search results page")
 
@@ -112,7 +112,7 @@ class TestPerformance1000(Search1000FunctionalTestCase):
         print "old search page vs new search page"
         print str(old_time) + " vs " + str(new_time)
         print "*" * 20
-        self.failUnless((old_time*1.1) > new_time,
+        self.failUnless(old_time > new_time,
                         "the new search results page is slower than the old \
                          search results page")
 
