@@ -25,7 +25,7 @@
         name="search"
         class=".browser.Search"
         permission="zope2.View"
-        for="Products.CMFCore.interfaces.IFolderish"
+        for="*"
         template="search.pt"
         />
 

@@ -5,6 +5,22 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Don't make the search view available only on folderish items, since the
+  context is not used within the view and it needs to be available for
+  plone.app.collection.
+  [davisagli]
+
+- Handle a portal_type criterion specified as a dictionary.
+  [davisagli]
+
+- Don't abort the query entirely in filter_query if no SearchableText was
+  specified.
+  [davisagli]
+
+- Re-add unbatched option to the search results method (it is used by
+  plone.app.collection).
+  [davisagli]
+
 - RSS link is being updated after changing search term and updating the
   results with ajax call.
   [spliter]

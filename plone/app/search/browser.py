@@ -34,15 +34,16 @@ class Search(BrowserView):
 
     valid_keys = ('sort_on', 'sort_order', 'sort_limit', 'fq', 'fl', 'facet')
 
-    def results(self, query=None, b_size=10, b_start=0):
+    def results(self, query=None, batch=True, b_size=10, b_start=0):
         """ Get properly wrapped search results from the catalog.
         Everything in Plone that performs searches should go through this view.
         'query' should be a dictionary of catalog parameters.
         """
         if query is None:
             query = {}
-        query['b_start'] = b_start = int(b_start)
-        query['b_size'] = b_size
+        if batch:
+            query['b_start'] = b_start = int(b_start)
+            query['b_size'] = b_size
         query = self.filter_query(query)
 
         if query is None:
@@ -55,15 +56,15 @@ class Search(BrowserView):
                 return []
 
         results = IContentListing(results)
-        return Batch(results, b_size, b_start)
+        if batch:
+            results = Batch(results, b_size, b_start)
+        return results
 
     def filter_query(self, query):
         request = self.request
         text = query.get('SearchableText', None)
         if text is None:
             text = request.form.get('SearchableText', '')
-        if not text:
-            return None
 
         catalog = getToolByName(self.context, 'portal_catalog')
         valid_keys = self.valid_keys + tuple(catalog.indexes())
@@ -71,7 +72,8 @@ class Search(BrowserView):
         for k, v in request.form.items():
             if v and ((k in valid_keys) or k.startswith('facet.')):
                 query[k] = v
-        query['SearchableText'] = quote_chars(text)
+        if text:
+            query['SearchableText'] = quote_chars(text)
 
         # don't filter on created at all if we want all results
         created = query.get('created')
@@ -82,6 +84,8 @@ class Search(BrowserView):
 
         # respect `types_not_searched` setting
         types = query.get('portal_type', [])
+        if 'query' in types:
+            types = types['query']
         query['portal_type'] = self.filter_types(types)
         # respect effective/expiration date
         query['show_inactive'] = False
