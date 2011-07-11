@@ -120,7 +120,7 @@ jQuery(function ($) {
     // search term is being changed. We just alter the current URL to
     // substitue the search term and make a new ajax call to get updated
     // results
-    $('#searchPage input.searchPage').click(function (e) {
+    $('#search-field input.searchButton').click(function (e) {
         var st, query;
         st = $('#search-field input[name="SearchableText"]').val();
         query = location.search.replace(/SearchableText=[^&]*/, 'SearchableText=' + st);
