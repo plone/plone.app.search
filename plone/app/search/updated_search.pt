@@ -10,7 +10,7 @@
     <span id="updated-search-term" tal:content="st">Search Term</span>
 
     <strong id="updated-search-results-number"
-            tal:content="batch/sequence_length">234</strong>
+            tal:content="batch/sequence_length|string:0">234</strong>
 
     <span id="updated-sorting-options">
         <metal:results use-macro="context/@@search/sorting" />

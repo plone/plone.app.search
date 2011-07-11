@@ -3,7 +3,7 @@
 
 jQuery(function ($) {
 
-    var query, pushState, popState,
+    var query, pushState, popState, popped, initialURL,
         Search = {},
         $default_res_container = $('#search-results');
 
@@ -72,47 +72,45 @@ jQuery(function ($) {
         }
     };
 
-    popState = function () {
-        var popped, initialURL;
-        // THE HANDLER FOR 'POPSTATE' EVENT IS COPIED FROM PJAX.JS
-        // https://github.com/defunkt/jquery-pjax
+    // THE HANDLER FOR 'POPSTATE' EVENT IS COPIED FROM PJAX.JS
+    // https://github.com/defunkt/jquery-pjax
 
-        // Used to detect initial (useless) popstate.
-        // If history.state exists, assume browser isn't going to fire initial popstate.
-        popped = ('state' in window.history);
-        initialURL = location.href;
+    // Used to detect initial (useless) popstate.
+    // If history.state exists, assume browser isn't going to fire initial popstate.
+    popped = ('state' in window.history);
+    initialURL = location.href;
 
 
-        // popstate handler takes care of the back and forward buttons
-        //
-        // No need to wrap 'popstate' event handler for window object with
-        // Modernizr check up since popstate event will contain any data only if
-        // a state has been created with history.pushState() that is wrapped in
-        // Modernizr checkup above.
-        $(window).bind('popstate', function (event) {
-            var initialPop, str;
-            // Ignore inital popstate that some browsers fire on page load
-            initialPop = !popped && location.href === initialURL;
-            popped = true;
-            if (initialPop) {
-                return;
-            }
+    // popstate handler takes care of the back and forward buttons
+    //
+    // No need to wrap 'popstate' event handler for window object with
+    // Modernizr check up since popstate event will contain any data only if
+    // a state has been created with history.pushState() that is wrapped in
+    // Modernizr checkup above.
+    $(window).bind('popstate', function (event) {
+        var initialPop, str;
+        // Ignore inital popstate that some browsers fire on page load
+        initialPop = !popped && location.href === initialURL;
+        popped = true;
+        if (initialPop) {
+            return;
+        }
 
-            query = location.search.split('?')[1];
-            // We need to make sure we update the search field with the search
-            // term from previous query when going back in history
-            str = query.match(/SearchableText=[^&]*/)[0];
-            str = str.replace(/\+/g, ' '); // we remove '+' used between words
-            // in search queries.
+        query = location.search.split('?')[1];
+        // We need to make sure we update the search field with the search
+        // term from previous query when going back in history
+        str = query.match(/SearchableText=[^&]*/)[0];
+        str = str.replace(/\+/g, ' '); // we remove '+' used between words
+        // in search queries.
 
-            // Now we have something like 'SearchableText=test' in str
-            // variable. So, we know when the actual search term begins at
-            // position 15 in that string.
-            $('#search-field input[name="SearchableText"], input#searchGadget').val(str.substr(15, str.length));
+        // Now we have something like 'SearchableText=test' in str
+        // variable. So, we know when the actual search term begins at
+        // position 15 in that string.
+        $('#search-field input[name="SearchableText"], input#searchGadget').val(str.substr(15, str.length));
 
-            Search.updateResults(query);
-        });
-    };
+        $default_res_container.fadeOut('fast');
+        $default_res_container.pullSearchResults(query);
+    });
 
     $('#search-filter input.searchPage[type="submit"]').hide();
 
