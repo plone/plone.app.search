@@ -65,6 +65,10 @@ class Search(BrowserView):
         text = query.get('SearchableText', None)
         if text is None:
             text = request.form.get('SearchableText', '')
+        if not text:
+            # if we don't have any text to search on, we cannot get any
+            # meaningful results
+            return
 
         catalog = getToolByName(self.context, 'portal_catalog')
         valid_keys = self.valid_keys + tuple(catalog.indexes())
