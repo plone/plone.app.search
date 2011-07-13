@@ -5,6 +5,10 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Re-structuring the JS actions, happening after successful call to
+  @@updated_search to make the animations smoother.
+  [spliter]
+
 - Labels for the 'New items since' section of the 'Filter the results'
   dropdown are actual labels now.
   References http://dev.plone.org/plone/ticket/12005
