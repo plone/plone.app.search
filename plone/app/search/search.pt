@@ -121,7 +121,6 @@
                                                    types_list view/types_list;
                                                    all_checked python:(len(types_list) == len(request.get('portal_type', []))) or first_call;
                                                    toggle_select_state python:all_checked and 'true' or 'false';">
-                                      <!-- <h3 i18n:translate="label_item_type">Item type</h3> -->
 
                                       <div class="formHelp"></div>
 
@@ -172,7 +171,6 @@
                                   <legend i18n:translate="label_new_items_since">New items since</legend>
 
                                   <div class="field">
-                                      <!-- <h3 i18n:translate="label_new_items_since">New items since</h3> -->
 
                                       <div class="formHelp"></div>
 
