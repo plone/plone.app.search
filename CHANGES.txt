@@ -5,6 +5,11 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Restrict AJAX handling of the batch navigation links to the search results
+  page only and prevent it influencing all of the batch navigations in the
+  site.
+  [spliter]
+
 - Re-structuring the JS actions, happening after successful call to
   @@updated_search to make the animations smoother.
   [spliter]

@@ -180,7 +180,7 @@ jQuery(function ($) {
 
     // Handle clicks in the batch navigation bar. Load those with Ajax as
     // well.
-    $('.listingBar a').live('click', function (e) {
+    $('#search-results .listingBar a').live('click', function (e) {
         query = this.search.split('?')[1];
         $default_res_container.pullSearchResults(query);
         pushState(query);
