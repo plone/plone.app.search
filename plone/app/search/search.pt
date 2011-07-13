@@ -114,12 +114,14 @@
 
                               <fieldset class="noborder">
 
+                                  <legend i18n:translate="label_item_type">Item type</legend>
+
                                   <div class="field"
                                        tal:define="portal_types portal/portal_types;
                                                    types_list view/types_list;
                                                    all_checked python:(len(types_list) == len(request.get('portal_type', []))) or first_call;
                                                    toggle_select_state python:all_checked and 'true' or 'false';">
-                                      <label i18n:translate="label_item_type">Item type</label>
+                                      <!-- <h3 i18n:translate="label_item_type">Item type</h3> -->
 
                                       <div class="formHelp"></div>
 
@@ -163,10 +165,14 @@
                                       </div>
                                       <div class="visualClear"><!-- --></div>
                                   </div>
+                              </fieldset>
+
+                              <fieldset class="noborder">
+
+                                  <legend i18n:translate="label_new_items_since">New items since</legend>
 
                                   <div class="field">
-                                      <label for="created"
-                                             i18n:translate="label_new_items_since">New items since</label>
+                                      <!-- <h3 i18n:translate="label_new_items_since">New items since</h3> -->
 
                                       <div class="formHelp"></div>
 
@@ -178,32 +184,36 @@
                                                             checked python:request.get('created', []);
                                                             checked python:(len(checked) == 1) and checked[0] or ever">
                                           <input type="radio"
+                                                 id="query-date-yesterday"
                                                  name="created.query:record:list:date"
                                                  tal:attributes="value yesterday;
                                                                  checked python:checked==yesterday and 'checked' or '';"
                                                  />
-                                          <span i18n:translate="time_yesterday">Yesterday</span>
+                                          <label for="query-date-yesterday" i18n:translate="time_yesterday">Yesterday</label>
                                           <br />
                                           <input type="radio"
+                                                 id="query-date-lastweek"
                                                  name="created.query:record:list:date"
                                                  tal:attributes="value lastweek;
                                                                  checked python:checked==lastweek and 'checked' or '';"
                                                  />
-                                          <span i18n:translate="time_last_week">Last week</span>
+                                          <label for="query-date-lastweek" i18n:translate="time_last_week">Last week</label>
                                           <br />
                                           <input type="radio"
+                                                 id="query-date-lastmonth"
                                                  name="created.query:record:list:date"
                                                  tal:attributes="value lastmonth;
                                                                  checked python:checked==lastmonth and 'checked' or '';"
                                                  />
-                                          <span i18n:translate="time_last_month">Last month</span>
+                                          <label for="query-date-lastmonth" i18n:translate="time_last_month">Last month</label>
                                           <br />
                                           <input type="radio"
+                                                 id="query-date-ever"
                                                  name="created.query:record:list:date"
                                                  tal:attributes="value ever;
                                                                  checked python:checked==ever and 'checked' or '';"
                                                  />
-                                          <span i18n:translate="time_ever">Ever</span>
+                                          <label for="query-date-ever" i18n:translate="time_ever">Ever</label>
                                       </tal:datetime>
 
                                       <input type="hidden" name="created.range:record" value="min" />

@@ -5,6 +5,11 @@ Changelog
 1.0 (unreleased)
 ----------------
 
+- Labels for the 'New items since' section of the 'Filter the results'
+  dropdown are actual labels now.
+  References http://dev.plone.org/plone/ticket/12005
+  [spliter]
+
 - Don't make the search view available only on folderish items, since the
   context is not used within the view and it needs to be available for
   plone.app.collection.
