@@ -16,18 +16,26 @@ jQuery(function ($) {
                 '@@updated_search',
                 query,
                 function (data) {
+                    $container.hide();
+
                     // Before assigning any variable we need to make sure we
                     // have the returned data available (returned somewhere to
                     // the DOM tree). Otherwise we will not be able to select
                     // elements from the returned HTML.
-                    $container.hide();
-                    $container.html(data);
-                    $container.fadeIn();
+                    if ($('#ajax-search-res').length === 0) {
+                        // Create temporary container for the HTML structure,
+                        // returned by our AJAX request
+                        $('body').append('<div id="ajax-search-res"></div>');
+                    }
+                    $('#ajax-search-res').html(data);
 
-                    var data_res = $('#search-results'),
-                        data_search_term = $('#updated-search-term').text(),
-                        data_res_number = $('#updated-search-results-number').text(),
-                        data_sorting_opt = $('#updated-sorting-options').html();
+                    var $data_res = $('#ajax-search-res #search-results > *'),
+                        data_search_term = $('#ajax-search-res #updated-search-term').text(),
+                        data_res_number = $('#ajax-search-res #updated-search-results-number').text(),
+                        data_sorting_opt = $('#ajax-search-res #updated-sorting-options').html();
+
+                    $container.html($data_res);
+                    $container.fadeIn();
 
                     if ($('#search-term').length === 0) {
                         // Until now we had queries with empty search term. So
@@ -35,21 +43,17 @@ jQuery(function ($) {
                         // result's title.
                         $('h1.documentFirstHeading').append('<strong id="search-term" />');
                     }
-                    $('#search-term').text(function () {
-                        $('#updated-search-term').remove();
-                        return data_search_term;
-                    });
 
-                    $('#search-results-number').text(function () {
-                        $('#updated-search-results-number').remove();
-                        return data_res_number;
-                    });
-                    $('#search-results-bar #sorting-options').html(
-                        function () {
-                            $('#updated-sorting-options').remove();
-                            return data_sorting_opt;
-                        }
-                    );
+                    $('#search-term').text(data_search_term);
+                    $('#search-results-number').text(data_res_number);
+                    $('#search-results-bar #sorting-options').html(data_sorting_opt);
+
+                    // Clean after ourselves — empty the ajax results container.
+                    // No need to remove the item itself — probably there will
+                    // be more search requests for filtering, sorting, etc. So,
+                    // we can avoid re-creating the node every time
+                    $('#ajax-search-res').empty();
+
                     $('#rss-subscription a.link-feed').attr('href', function () {
                         return portal_url + '/search_rss?' + query;
                     });
@@ -108,7 +112,6 @@ jQuery(function ($) {
         // position 15 in that string.
         $('#search-field input[name="SearchableText"], input#searchGadget').val(str.substr(15, str.length));
 
-        $default_res_container.fadeOut('fast');
         $default_res_container.pullSearchResults(query);
     });
 
@@ -123,14 +126,12 @@ jQuery(function ($) {
         st = $('#search-field input[name="SearchableText"]').val();
         query = location.search.replace(/SearchableText=[^&]*/, 'SearchableText=' + st);
         query = query.split('?')[1];
-        $default_res_container.fadeOut('fast');
         $default_res_container.pullSearchResults(query);
         pushState(query);
         e.preventDefault();
     });
     $('form.searchPage').submit(function (e) {
         query = $('form.searchPage').serialize();
-        $default_res_container.fadeOut('fast');
         $default_res_container.pullSearchResults(query);
         pushState(query);
         e.preventDefault();
@@ -154,7 +155,6 @@ jQuery(function ($) {
     $('#search-filter input, #search-filter select').not('input#pt_toggle').live('change',
         function (e) {
             query = $('form.searchPage').serialize();
-            $default_res_container.fadeOut('fast');
             $default_res_container.pullSearchResults(query);
             pushState(query);
             e.preventDefault();
