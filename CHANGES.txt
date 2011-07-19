@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0 (unreleased)
+1.0 (2011-07-19)
 ----------------
 
 - Restrict AJAX handling of the batch navigation links to the search results
