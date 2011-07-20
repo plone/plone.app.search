@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-18 07:42+0000\n"
+"POT-Creation-Date: 2011-07-20 09:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,35 +17,43 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone\n"
 
-#: ../browser.py:66
+#: ../search.pt:58
+msgid "Search results"
+msgstr ""
+
+#: ../search.pt:67
+msgid "Search results for ${term}"
+msgstr ""
+
+#: ../browser.py:123
 msgid "alphabetically"
 msgstr ""
 
 #. Default: "published"
-#: ../search.pt:412
+#: ../search.pt:302
 msgid "box_published"
 msgstr ""
 
-#: ../browser.py:63
+#: ../browser.py:121
 msgid "date (newest first)"
 msgstr ""
 
 #. Default: "Filter the results."
-#: ../search.pt:112
+#: ../search.pt:105
 msgid "narrow_search_options"
 msgstr ""
 
-#: ../browser.py:62
+#: ../browser.py:120
 msgid "relevance"
 msgstr ""
 
 #. Default: "Sort by"
-#: ../search.pt:76
+#: ../search.pt:236
 msgid "sort_by"
 msgstr ""
 
-#. Default: "Located in ${label_section_title}."
-#: ../search.pt:456
+#. Default: "Located in"
+#: ../search.pt:345
 msgid "text_searchitem_location"
 msgstr ""
 
