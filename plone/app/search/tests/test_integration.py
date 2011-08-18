@@ -69,13 +69,15 @@ class TestSection(SearchTestCase):
         portal = self.layer['portal']
         sp = getToolByName(portal, "portal_properties").site_properties
         q = {'SearchableText': 'spam'}
-        res = portal.restrictedTraverse('@@search').results(query=q)
+        res = portal.restrictedTraverse('@@search').results(query=q,
+                                                            batch=False)
         self.failUnless('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
 
         # Now let's exclude 'Document' from the search results:
         sp.types_not_searched += ('Document', )
-        res = portal.restrictedTraverse('@@search').results(query=q)
+        res = portal.restrictedTraverse('@@search').results(query=q,
+                                                            batch=False)
         self.failIf('my-page1' in [r.getId() for r in res],
                     'Blacklisted type "Document" has been found in search \
                      results.')
