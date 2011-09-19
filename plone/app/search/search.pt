@@ -322,7 +322,7 @@
                                         <span tal:define="categories item/Subject|nothing"
                                               tal:condition="categories">
                                           &mdash;
-                                          <tal:filedunder i18n:translate="label_filed_under">filed under:</tal:filedunder>
+                                          <tal:filedunder i18n:translate="">filed under:</tal:filedunder>
                                           <span tal:repeat="category categories">
                                             <a href=""
                                                class="link-category"
