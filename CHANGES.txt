@@ -4,6 +4,10 @@ Changelog
 1.0.1 (Unreleased)
 ------------------
 
+- Translations moved to plone.app.locales.
+  [vincentfretin]
+
+
 1.0 (2011-07-19)
 ----------------
 
