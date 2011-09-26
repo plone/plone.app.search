@@ -4,6 +4,10 @@ Changelog
 1.0.1 (Unreleased)
 ------------------
 
+- Fix @@search view to return results when we are only looking for a Subject.
+  Refs http://dev.plone.org/plone/ticket/12232
+  [ggozad]
+
 - Translations moved to plone.app.locales.
   [vincentfretin]
 

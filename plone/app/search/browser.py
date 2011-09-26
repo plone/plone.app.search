@@ -66,12 +66,14 @@ class Search(BrowserView):
         if text is None:
             text = request.form.get('SearchableText', '')
         if not text:
-            # if we don't have any text to search on, we cannot get any
-            # meaningful results
-            return
-        text = text.strip()
-        if '*' not in text:
-            text += '*'
+            # Without text, the only meaningful case is Subject
+            subjects = request.form.get('Subject')
+            if not subjects:
+                return
+        else:
+            text = text.strip()
+            if '*' not in text:
+                text += '*'
 
         catalog = getToolByName(self.context, 'portal_catalog')
         valid_keys = self.valid_keys + tuple(catalog.indexes())
