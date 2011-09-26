@@ -328,7 +328,7 @@
                                                class="link-category"
                                                rel="tag"
                                                tal:content="category"
-                                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?SearchableText=${st}&amp;Subject%3Alist=${category}">
+                                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?Subject%3Alist=${category}">
                                               Category
                                             </a><tal:separator condition="not: repeat/category/end">,</tal:separator>
                                           </span>
