@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.1 (Unreleased)
+1.0.1 (2011-10-17)
 ------------------
 
 - Fix @@search view to return results when we are only looking for a Subject.
