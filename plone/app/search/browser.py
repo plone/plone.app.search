@@ -70,10 +70,6 @@ class Search(BrowserView):
             subjects = request.form.get('Subject')
             if not subjects:
                 return
-        else:
-            text = text.strip()
-            if '*' not in text:
-                text += '*'
 
         catalog = getToolByName(self.context, 'portal_catalog')
         valid_keys = self.valid_keys + tuple(catalog.indexes())
