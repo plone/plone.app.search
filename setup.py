@@ -31,6 +31,7 @@ setup(name='plone.app.search',
       install_requires=[
           'setuptools',
           'plone.app.contentlisting',
+          'plone.app.modernizr',
           # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,
