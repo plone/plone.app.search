@@ -18,7 +18,7 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
 
         # Is search filter hidden?
         f = sel.find_element_by_id('search-filter')
-        self.failUnless('hiddenStructure' in f.get_attribute('class'))
+        self.failIf(f.is_displayed())
 
         # Is 'relevance' the current/default sorting option and thus
         # is not clickable?
@@ -29,17 +29,17 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         # SearchableText specified in request when accessing the form directly:
         res_num = sel.find_element_by_id('search-results-number')
         res = sel.find_element_by_id('search-results')
-        self.assertEquals(res_num.get_text(), '0')
-        self.assertEquals(res.get_text(), 'No results were found.')
+        self.assertEquals(res_num.text, '0')
+        self.assertEquals(res.text, 'No results were found.')
 
         # Now we want to get results with all elements in the site:
         open(sel, portal.absolute_url() + '/@@search?SearchableText=Foo')
         # We should get our 5 'Foo' elements:
         res_num = sel.find_element_by_id('search-results-number')
-        self.assertEquals(res_num.get_text(), '5')
+        self.assertEquals(res_num.text, '5')
         # Filter should still be hidden:
         f = sel.find_element_by_id('search-filter')
-        self.failUnless('hiddenStructure' in f.get_attribute('class'))
+        self.failIf(f.is_displayed())
 
         # Make sure we have search results returned after clicking main
         # 'Search' button on the search results form:
@@ -63,7 +63,7 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         open(sel, portal.absolute_url() + '/@@search?SearchableText=Foo')
         s = sel.find_element_by_id('sorting-options')
         curr = s.find_element_by_tag_name('strong')
-        self.assert_('relevance' in curr.get_text(),
+        self.assert_('relevance' in curr.text,
                      'Relevance is not default sorting option')
 
         # Now we try to change sorting and come back to 'relevance' to see that
@@ -74,7 +74,7 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         # be finished:
         time.sleep(1)
         curr = s.find_element_by_tag_name('strong')
-        self.assert_('date' in curr.get_text(),
+        self.assert_('date' in curr.text,
                      'Date is not highlighted sorting option after sorting.')
 
         s.find_element_by_partial_link_text('relevance').click()
@@ -83,7 +83,7 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         time.sleep(1)
         try:
             curr = s.find_element_by_tag_name('strong')
-            self.assert_('relevance' in curr.get_text(),
+            self.assert_('relevance' in curr.text,
                          'Relevance is not highlighted sorting option.')
         except NoSuchElementException:
             self.fail("No highlighted element found after ajax call.")

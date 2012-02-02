@@ -4,7 +4,8 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adapt selenium tests for more recent selenium versions.
+  [gaudenz]
 
 
 1.0.1 (2011-10-17)
