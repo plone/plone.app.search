@@ -4,6 +4,7 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
+- Fix @@search if the parameter SearchableText is missing in the URL.
 - Adapt selenium tests for more recent selenium versions.
   [gaudenz]
 

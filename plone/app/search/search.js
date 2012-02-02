@@ -122,12 +122,19 @@ jQuery(function ($) {
     // substitue the search term and make a new ajax call to get updated
     // results
     $('#search-field input.searchButton').click(function (e) {
-        var st, query;
+        var st, queryString = location.search.substring(1),
+        re = /([^&=]+)=([^&]*)/g, m, queryParameters = {};
+
+        // parse query string into hash
+        while (m = re.exec(queryString)) {
+            queryParameters[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+        }
+
         st = $('#search-field input[name="SearchableText"]').val();
-        query = location.search.replace(/SearchableText=[^&]*/, 'SearchableText=' + st);
-        query = query.split('?')[1];
-        $default_res_container.pullSearchResults(query);
-        pushState(query);
+        queryParameters['SearchableText'] = st;
+        queryString = $.param(queryParameters);
+        $default_res_container.pullSearchResults(queryString);
+        pushState(queryString);
         e.preventDefault();
     });
     $('form.searchPage').submit(function (e) {
