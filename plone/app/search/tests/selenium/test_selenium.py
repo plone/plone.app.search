@@ -32,8 +32,19 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         self.assertEquals(res_num.text, '0')
         self.assertEquals(res.text, 'No results were found.')
 
-        # Now we want to get results with all elements in the site:
-        open(sel, portal.absolute_url() + '/@@search?SearchableText=Foo')
+        # Now we want to get results with all elements in the site.
+        # we use the main search form for this search
+        content = sel.find_element_by_id('content')
+        main_search_form = content.find_element_by_name('searchform')
+        search_field = main_search_form.find_element_by_name('SearchableText')
+        search_button = main_search_form.find_element_by_css_selector('.searchButton')
+        search_field.send_keys('Foo')
+        search_button.click()
+
+        # We should give the view some time in order to finish the animation of
+        # the search results
+        time.sleep(1)
+
         # We should get our 5 'Foo' elements:
         res_num = sel.find_element_by_id('search-results-number')
         self.assertEquals(res_num.text, '5')
