@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.2 (unreleased)
+1.0.2 (2012-02-07)
 ------------------
 
 - Fix @@search if the parameter SearchableText is missing in the URL.
