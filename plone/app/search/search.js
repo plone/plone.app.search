@@ -99,6 +99,10 @@ jQuery(function ($) {
         if (initialPop) {
             return;
         }
+        
+        if (!location.search){
+            return;
+        }
 
         query = location.search.split('?')[1];
         // We need to make sure we update the search field with the search
