@@ -4,7 +4,9 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Change breadcrumb separator to / (slash character) for accessibility, and added SEO benefits. 
+  see https://dev.plone.org/ticket/12904
+  [polyester]
 
 
 1.0.2 (2012-02-07)
