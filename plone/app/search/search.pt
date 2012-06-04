@@ -70,7 +70,7 @@
                 </h1>
 
                 <p id="rss-subscription" i18n:domain="plone"
-                   tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
+                   tal:condition="context/@@syndication-tool/search_rss_enabled">
                       <img src="" alt="RSS"
                            tal:attributes="src string:${portal_url}/rss.gif"/>
                     <a href=""
