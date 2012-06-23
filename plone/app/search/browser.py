@@ -10,6 +10,7 @@ from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
 from zope.publisher.browser import BrowserView
 from ZTUtils import make_query
+from Products.PortalTransforms.transforms.safe_html import scrubHTML
 
 _ = MessageFactory('plone')
 
@@ -33,6 +34,9 @@ def quote_chars(s):
 class Search(BrowserView):
 
     valid_keys = ('sort_on', 'sort_order', 'sort_limit', 'fq', 'fl', 'facet')
+
+    def scrub(self, text):
+        return scrubHTML(text, raise_error=False)
 
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """ Get properly wrapped search results from the catalog.
