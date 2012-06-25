@@ -2,7 +2,6 @@ import unittest2 as unittest
 from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
-from plone.testing.z2 import Browser
 
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
@@ -82,30 +81,6 @@ class TestSection(SearchTestCase):
         self.failIf('my-page1' in [r.getId() for r in res],
                     'Blacklisted type "Document" has been found in search \
                      results.')
-
-    def test_not_filter_plain_query_in_search_value_render(self):
-        portal_url = self.layer['portal'].absolute_url()
-        browser = Browser(self.layer['app'])
-        browser.open('%s/@@search?%s' % (
-            portal_url,
-            'SearchableText=spam'))
-        assert '<strong id="search-term">spam</strong>' in browser.contents
-
-    def test_filter_html_query_in_search_value_render(self):
-        portal_url = self.layer['portal'].absolute_url()
-        browser = Browser(self.layer['app'])
-        browser.open('%s/@@search?%s' % (
-            portal_url,
-            'SearchableText=<script>alert%28%27ops!%27%29</script>'))
-        assert '<strong id="search-term">' not in browser.contents
-
-    def test_filter_html_query_leave_non_html_alone(self):
-        portal_url = self.layer['portal'].absolute_url()
-        browser = Browser(self.layer['app'])
-        browser.open('%s/@@search?%s' % (
-            portal_url,
-            'SearchableText=foobar<script>alert%28%27ops!%27%29</script>'))
-        assert '<strong id="search-term">foobar</strong>' in browser.contents
 
 
 def test_suite():

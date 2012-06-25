@@ -8,9 +8,6 @@ Changelog
   see https://dev.plone.org/ticket/12904
   [polyester]
 
-- filter out unsafe html from search that is displayed back to user.
-  [vangheem]
-
 
 1.0.2 (2012-02-07)
 ------------------
