@@ -8,6 +8,10 @@ Changelog
   see https://dev.plone.org/ticket/12904
   [polyester]
 
+- Use convenience class ``width-full`` instead of grid class ``width-16`` in 
+  search.pt, see https://dev.plone.org/ticket/13054
+  [saily]
+
 
 1.0.2 (2012-02-07)
 ------------------
