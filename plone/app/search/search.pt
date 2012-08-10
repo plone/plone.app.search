@@ -32,7 +32,8 @@
           tal:define="portal context/@@plone_portal_state/portal;
                       first_call not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '');
-                      DateTime python:modules['DateTime'].DateTime;">
+                      DateTime python:modules['DateTime'].DateTime;
+                      navigation_root_url context/@@plone_portal_state/navigation_root_url;">
 
         <input type="hidden" name="advanced_search" value="False" />
         <input type="hidden" name="sort_on" value="" />
@@ -288,7 +289,7 @@
                                             <tal:block tal:condition="item/Creator"
                                                 tal:define="author python:context.portal_membership.getMemberInfo(item.Creator())">
                                               <a href="#"
-                                                 tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${item/Creator}"
+                                                 tal:attributes="href string:$navigation_root_url/author/${item/Creator}"
                                                  tal:content="python:author and author['fullname'] or item.Creator()"
                                                  tal:omit-tag="not:item/Creator"
                                                  i18n:name="author">
@@ -331,7 +332,7 @@
                                                class="link-category"
                                                rel="tag"
                                                tal:content="category"
-                                               tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/@@search?Subject%3Alist=${category}">
+                                               tal:attributes="href string:$navigation_root_url/@@search?Subject%3Alist=${category}">
                                               Category
                                             </a><tal:separator condition="not: repeat/category/end">,</tal:separator>
                                           </span>
