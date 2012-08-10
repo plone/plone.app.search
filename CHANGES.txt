@@ -4,11 +4,14 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Change breadcrumb separator to / (slash character) for accessibility, and added SEO benefits. 
+- Check if type uses view action in listing in search results.
+  [thomasdesvenain]
+
+- Change breadcrumb separator to / (slash character) for accessibility, and added SEO benefits.
   see https://dev.plone.org/ticket/12904
   [polyester]
 
-- Use convenience class ``width-full`` instead of grid class ``width-16`` in 
+- Use convenience class ``width-full`` instead of grid class ``width-16`` in
   search.pt, see https://dev.plone.org/ticket/13054
   [saily]
 
@@ -109,7 +112,7 @@ Changelog
 - 'Close' button for advanced search filter column
   [spliter]
 
-- Moved the duplicate of the search button in search form to the 
+- Moved the duplicate of the search button in search form to the
   bottom of the "filter" column in order to have better accessibility
   when JS is disabled.
   Referencese http://dev.plone.org/plone/ticket/9352
@@ -119,8 +122,8 @@ Changelog
   Referencese http://dev.plone.org/plone/ticket/9352
   [spliter]
 
-- Replaced url in search results with a Location -> it displays 
-  the search results item's first-level folder aka. a section. 
+- Replaced url in search results with a Location -> it displays
+  the search results item's first-level folder aka. a section.
   For first-level items, nothing is displayed.
   [zupo]
 
@@ -128,7 +131,7 @@ Changelog
   Referencese http://dev.plone.org/plone/ticket/9352
   [spliter, witsch]
 
-- Advanced search form a.k.a. Search filter is being merged into 
+- Advanced search form a.k.a. Search filter is being merged into
   search result with JS hide/show.
   [spliter]
 
@@ -136,7 +139,7 @@ Changelog
   long.
   [zupo]
 
-- Added condition to only display modification date if it is 
+- Added condition to only display modification date if it is
   different than publication date.
   [zupo]
 
@@ -146,14 +149,14 @@ Changelog
 - Added publication date to a search result.
   [zupo]
 
-- Styling the author and modification date of a search result to 
+- Styling the author and modification date of a search result to
   look like it was proposed in PLIP #9352.
-  [zupo] 
+  [zupo]
 
 - Add RSS icon to the search feed results and clarify associated text.
   [dukebody]
 
-- Display a short modification date using toLocalizedTime with 
+- Display a short modification date using toLocalizedTime with
   long_format parameter set to false.
   [zupo]
 

@@ -265,6 +265,7 @@
                                        tal:define="isAnon context/@@plone_portal_state/anonymous;
                                                    toLocalizedTime nocall: context/@@plone/toLocalizedTime;
                                                    site_properties context/portal_properties/site_properties;
+                                                   use_view_action site_properties/typesUseViewActionInListings|python:();
                                                    allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
                                                    show_about python:not isAnon or allowAnonymousViewAbout;">
                           <dl class="searchResults">
@@ -272,7 +273,9 @@
                                     <dt tal:attributes="class item/ContentTypeClass">
                                       <img tal:replace="structure item/getIcon" />
                                       <a href="#"
-                                         tal:attributes="href item/getURL;
+                                         tal:define="item_url item/getURL;
+                                                     item_type item/portal_type"
+                                         tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
                                                          class string:state-${item/review_state}"
                                          tal:content="item/Title" />
                                     </dt>
