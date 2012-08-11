@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.3 (unreleased)
+1.0.3 (2012-08-11)
 ------------------
 
 - Check if type uses view action in listing in search results.
