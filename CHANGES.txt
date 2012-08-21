@@ -4,7 +4,9 @@ Changelog
 1.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Define navigation_root_url in search.pt when used in search-results
+  macro.
+  [seanupton]
 
 
 1.0.3 (2012-08-11)
