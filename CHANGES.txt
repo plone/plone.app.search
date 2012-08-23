@@ -6,7 +6,9 @@ Changelog
 
 - Fixed regression when using search_results macro from outside template.
   [thomasdesvenain]
-
+- Don't assume that SearchableText is going to be in any url with a GET
+  request. 
+  [eleddy]
 
 1.0.3 (2012-08-11)
 ------------------
