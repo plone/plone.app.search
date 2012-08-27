@@ -4,7 +4,17 @@ Changelog
 1.0.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Search.filter_query() checks for any valid indexes specified in request
+  to prevent empty catalog searches, instead of limiting searches to 
+  require either SearchableText or Subject query.  This is more permissive,
+  but accomplishes the same goal with better generality (possibly allowing
+  various cases including the calendar portlet using to @@search, instead
+  of deprecated search.pt in Products.CMFPlone).
+  [seanupton]
+
+- Define navigation_root_url in search.pt when used in search-results
+  macro.
+  [seanupton]
 
 
 1.0.4 (2012-08-23)

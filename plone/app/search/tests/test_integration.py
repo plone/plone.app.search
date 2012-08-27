@@ -1,12 +1,14 @@
 import unittest2 as unittest
+
 from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
+from zope.component import getMultiAdapter
 
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 
-from base import SearchTestCase
+from base import SearchTestCase, test_request
 
 
 class TestIntegration(SearchTestCase):
@@ -81,6 +83,32 @@ class TestSection(SearchTestCase):
         self.failIf('my-page1' in [r.getId() for r in res],
                     'Blacklisted type "Document" has been found in search \
                      results.')
+ 
+    def test_filter_empty(self):
+        """Test filtering for empty query"""
+        portal = self.layer['portal']
+        req = test_request()
+        # Search.filter_query() will get SearchableText from form if not
+        # passed in explicit query argument:
+        req.form['SearchableText'] = 'spam'
+        view = getMultiAdapter((portal, req), name=u'search')
+        res = view.results(batch=False)
+        self.failUnless('my-page1' in [r.getId() for r in res],
+                        'Test document is not found in the results.')
+        # filter_query() will return None on invalid query (no real indexes):
+        req = test_request()
+        req.form['garbanzo'] = 'chickpea'  # just noise, no index for this
+        view = getMultiAdapter((portal, req), name=u'search')
+        self.assertIsNone(view.filter_query({'b_start':0, 'b_size':10}))
+        # resulting empty query, ergo no search performed, empty result:
+        self.assertFalse(view.results(batch=False))
+        # filter_query() succeeds if 1+ real index name added to request:
+        req.form['portal_type'] = 'Document'
+        self.assertIsNotNone(view.filter_query({'b_start':0, 'b_size':10}))
+        res = view.results(batch=False)
+        self.failUnless('my-page1' in [r.getId() for r in res],
+                        'Test document is not found in the results.')
+
 
 
 def test_suite():
