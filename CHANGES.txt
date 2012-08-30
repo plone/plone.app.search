@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.5 (unreleased)
+1.0.5 (2012-08-30)
 ------------------
 
 - Search.filter_query() checks for any valid indexes specified in request
