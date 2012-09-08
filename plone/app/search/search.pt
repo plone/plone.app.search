@@ -11,7 +11,7 @@
 
     <link rel="alternate" title="RSS 1.0" type="application/rss+xml"
           tal:define="here_url context/@@plone_context_state/object_url;
-                      search_enabled context/@@syndication-util/search_rss_enabled;"
+                      search_enabled context/@@syndication-util/search_rss_enabled|nothing;"
           tal:condition="python: search_enabled and request.get('SearchableText')"
           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
 
@@ -72,7 +72,7 @@
                 </h1>
 
                 <p id="rss-subscription" i18n:domain="plone"
-                   tal:condition="context/@@syndication-util/search_rss_enabled">
+                   tal:condition="context/@@syndication-util/search_rss_enabled|nothing">
                       <img src="" alt="RSS"
                            tal:attributes="src string:${portal_url}/rss.png"/>
                     <a href=""
