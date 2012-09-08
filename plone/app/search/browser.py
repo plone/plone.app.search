@@ -62,17 +62,19 @@ class Search(BrowserView):
 
     def filter_query(self, query):
         request = self.request
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        valid_indexes = tuple(catalog.indexes())
+        valid_keys = self.valid_keys + valid_indexes
+
         text = query.get('SearchableText', None)
         if text is None:
             text = request.form.get('SearchableText', '')
         if not text:
-            # Without text, the only meaningful case is Subject
-            subjects = request.form.get('Subject')
-            if not subjects:
+            # Without text, must provide a meaningful non-empty search
+            valid = set(valid_indexes).intersection(request.form.keys())
+            if not valid:
                 return
-
-        catalog = getToolByName(self.context, 'portal_catalog')
-        valid_keys = self.valid_keys + tuple(catalog.indexes())
 
         for k, v in request.form.items():
             if v and ((k in valid_keys) or k.startswith('facet.')):
@@ -117,7 +119,7 @@ class Search(BrowserView):
         return (
             SortOption(self.request, _(u'relevance'), ''),
             SortOption(self.request, _(u'date (newest first)'),
-                'Date', reverse=True),
+                       'Date', reverse=True),
             SortOption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
 

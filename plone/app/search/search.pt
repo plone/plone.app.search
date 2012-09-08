@@ -34,7 +34,7 @@
                       first_call not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '');
                       DateTime python:modules['DateTime'].DateTime;
-                      navigation_root_url context/@@plone_portal_state/navigation_root_url;">
+                      ">
 
         <input type="hidden" name="advanced_search" value="False" />
         <input type="hidden" name="sort_on" value="" />
@@ -257,7 +257,8 @@
                 <div class="visualClear"><!-- --></div>
 
                 <metal:searchresults define-macro="search_results">
-                    <div id="search-results">
+                    <div id="search-results"
+                         tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;">
 
                         <metal:noresults tal:condition="not: batch">
                           <p i18n:domain="plone"><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
