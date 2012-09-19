@@ -14,6 +14,8 @@
           tal:condition="request/SearchableText|nothing"
           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
 
+    <meta name="navigation_root_url" tal:attributes="content view/navroot_url" />
+
   </metal:block>
 
   <metal:block fill-slot="top_slot"
@@ -33,7 +35,7 @@
                       first_call not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '');
                       DateTime python:modules['DateTime'].DateTime;
-                      navigation_root_url context/@@plone_portal_state/navigation_root_url;">
+                      navigation_root_url view/navroot_url;"> 
 
         <input type="hidden" name="advanced_search" value="False" />
         <input type="hidden" name="sort_on" value="" />
