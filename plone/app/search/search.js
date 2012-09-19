@@ -5,7 +5,8 @@ jQuery(function ($) {
 
     var query, pushState, popState, popped, initialURL,
         Search = {},
-        $default_res_container = $('#search-results');
+        $default_res_container = $('#search-results'),
+        navigation_root_url = $('meta[name=navigation_root_url]').attr('content') || window.navigation_root_url || window.portal_url;
 
     // The globally available method to pull the search results for the
     // 'query' into the element, on which the method is invoked
@@ -55,7 +56,7 @@ jQuery(function ($) {
                     $('#ajax-search-res').empty();
 
                     $('#rss-subscription a.link-feed').attr('href', function () {
-                        return portal_url + '/search_rss?' + query;
+                        return navigation_root_url + '/search_rss?' + query;
                     });
                 });
         });
@@ -69,9 +70,7 @@ jQuery(function ($) {
         // API natively or it needs a polyfill, that provides
         // hash-change events to the older browser
         if (Modernizr.history) {
-            // portal_url is the global JS variable available
-            // everywhere in Plone
-            var url = portal_url + '/@@search?' + query;
+            var url = navigation_root_url + '/@@search?' + query;
             history.pushState(null, null, url);
         }
     };

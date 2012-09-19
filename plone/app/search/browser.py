@@ -159,6 +159,12 @@ class Search(BrowserView):
             breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-2:]
         return breadcrumbs
 
+    def navroot_url(self):
+        if not hasattr(self, '_navroot_url'):
+            state = self.context.unrestrictedTraverse('@@plone_portal_state')
+            self._navroot_url = state.navigation_root_url()
+        return self._navroot_url
+
 
 class SortOption(object):
 
