@@ -1,7 +1,15 @@
 Changelog
 =========
 
-1.0.4 (unreleased)
+1.0.6 (unreleased)
+------------------
+
+- Define navigation_root_url in search.pt when used in search-results
+  macro.
+  [seanupton]
+
+
+1.0.5 (2012-08-30)
 ------------------
 
 - Search.filter_query() checks for any valid indexes specified in request
@@ -12,9 +20,16 @@ Changelog
   of deprecated search.pt in Products.CMFPlone).
   [seanupton]
 
-- Define navigation_root_url in search.pt when used in search-results
-  macro.
-  [seanupton]
+
+1.0.4 (2012-08-23)
+------------------
+
+- Fixed regression when using search_results macro from outside template.
+  [thomasdesvenain]
+
+- Don't assume that SearchableText is going to be in any url with a GET
+  request. 
+  [eleddy]
 
 
 1.0.3 (2012-08-11)
