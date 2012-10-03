@@ -10,10 +10,11 @@
   <metal:block metal:fill-slot="head_slot">
 
     <link rel="alternate" title="RSS 1.0" type="application/rss+xml"
-          tal:define="here_url context/@@plone_context_state/object_url;
-                      search_enabled context/@@syndication-util/search_rss_enabled|nothing;"
-          tal:condition="python: search_enabled and request.get('SearchableText')"
+          tal:define="here_url context/@@plone_context_state/object_url;"
+          tal:condition="request/SearchableText|nothing"
           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
+
+    <meta name="navigation_root_url" tal:attributes="content view/navroot_url" />
 
   </metal:block>
 
@@ -34,7 +35,7 @@
                       first_call not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '');
                       DateTime python:modules['DateTime'].DateTime;
-                      ">
+                      navigation_root_url view/navroot_url;"> 
 
         <input type="hidden" name="advanced_search" value="False" />
         <input type="hidden" name="sort_on" value="" />
@@ -72,9 +73,9 @@
                 </h1>
 
                 <p id="rss-subscription" i18n:domain="plone"
-                   tal:condition="context/@@syndication-util/search_rss_enabled|nothing">
+                   tal:condition="context/portal_syndication/isSiteSyndicationAllowed">
                       <img src="" alt="RSS"
-                           tal:attributes="src string:${portal_url}/rss.png"/>
+                           tal:attributes="src string:${portal_url}/rss.gif"/>
                     <a href=""
                        class="link-feed"
                        tal:define="here_url context/@@plone_context_state/object_url"

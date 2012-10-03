@@ -62,7 +62,7 @@ class Search(BrowserView):
 
     def filter_query(self, query):
         request = self.request
-
+ 
         catalog = getToolByName(self.context, 'portal_catalog')
         valid_indexes = tuple(catalog.indexes())
         valid_keys = self.valid_keys + valid_indexes
@@ -72,7 +72,7 @@ class Search(BrowserView):
             text = request.form.get('SearchableText', '')
         if not text:
             # Without text, must provide a meaningful non-empty search
-            valid = set(valid_indexes).intersection(request.form.keys())
+            valid = set(valid_indexes).intersection(request.form.keys()) 
             if not valid:
                 return
 
@@ -119,7 +119,7 @@ class Search(BrowserView):
         return (
             SortOption(self.request, _(u'relevance'), ''),
             SortOption(self.request, _(u'date (newest first)'),
-                       'Date', reverse=True),
+                'Date', reverse=True),
             SortOption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
 
@@ -158,6 +158,12 @@ class Search(BrowserView):
             empty = {'absolute_url': '', 'Title': unicode('…', 'utf-8')}
             breadcrumbs = [breadcrumbs[0], empty] + breadcrumbs[-2:]
         return breadcrumbs
+
+    def navroot_url(self):
+        if not hasattr(self, '_navroot_url'):
+            state = self.context.unrestrictedTraverse('@@plone_portal_state')
+            self._navroot_url = state.navigation_root_url()
+        return self._navroot_url
 
 
 class SortOption(object):
