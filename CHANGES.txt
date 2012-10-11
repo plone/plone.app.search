@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.6 (unreleased)
+1.0.6 (2012-10-11)
 ------------------
 
 - JavaScript now correctly obeys navigation root for searches, obtained via
