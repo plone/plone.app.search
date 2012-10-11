@@ -4,7 +4,9 @@ Changelog
 1.0.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- JavaScript now correctly obeys navigation root for searches, obtained via
+  meta tag set in search.pt.
+  [seanupton]
 
 
 1.0.5 (2012-08-30)
