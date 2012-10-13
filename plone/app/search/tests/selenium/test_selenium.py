@@ -1,3 +1,4 @@
+# coding: utf-8
 from selenium.common.exceptions import NoSuchElementException
 
 from plone.app.search.tests.base import SearchSeleniumTestCase
@@ -125,3 +126,25 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
         for link in adv:
             href = link.get_attribute('href')
             self.assert_(href == 'http://localhost:55001/plone/@@search')
+
+    def test_search_box(self):
+        """We need to make sure word in search box are updated and getting to
+           same words
+        """
+
+        portal = self.layer['portal']
+        sel = self.layer['selenium']
+        open(sel, portal.absolute_url())
+
+        search_form = sel.find_element_by_id('portal-searchbox')
+        search_field = search_form.find_element_by_id('searchGadget')
+        search_button = search_form.find_element_by_css_selector('.searchButton')
+
+        word = u'検索' # for Japanese test
+        search_field.send_keys(word)
+        search_button.click()
+        time.sleep(1)
+        content = sel.find_element_by_id('content')
+        main_search_form = content.find_element_by_name('searchform')
+        main_search_field = main_search_form.find_element_by_name('SearchableText')
+        self.assert_(main_search_field.get_attribute('value') == word)
