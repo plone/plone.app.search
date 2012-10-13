@@ -109,7 +109,7 @@ jQuery(function ($) {
         var results = query.match(/SearchableText=[^&]*/);
         if (results){ // not all pages have results
             str = results[0];
-            str = str.replace(/\+/g, ' '); // we remove '+' used between words
+            str = decodeURIComponent(str.replace(/\+/g, ' ')); // we remove '+' used between words
             // in search queries.
 
             // Now we have something like 'SearchableText=test' in str
