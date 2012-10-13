@@ -4,7 +4,9 @@ Changelog
 1.1.dev0 (Unreleased)
 ---------------------
 
-- No changes yet.
+- Fixed Google Chrome and Safari search compatibility problem
+  https://dev.plone.org/ticket/13249
+  [Manabu TERADA]
 
 
 1.0.6 (2012-10-11)

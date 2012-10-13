@@ -107,7 +107,7 @@ jQuery(function ($) {
         // We need to make sure we update the search field with the search
         // term from previous query when going back in history
         str = query.match(/SearchableText=[^&]*/)[0];
-        str = str.replace(/\+/g, ' '); // we remove '+' used between words
+        str = decodeURIComponent(str.replace(/\+/g, ' ')); // we remove '+' used between words
         // in search queries.
 
         // Now we have something like 'SearchableText=test' in str
