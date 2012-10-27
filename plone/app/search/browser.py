@@ -62,7 +62,7 @@ class Search(BrowserView):
 
     def filter_query(self, query):
         request = self.request
- 
+
         catalog = getToolByName(self.context, 'portal_catalog')
         valid_indexes = tuple(catalog.indexes())
         valid_keys = self.valid_keys + valid_indexes
@@ -72,7 +72,7 @@ class Search(BrowserView):
             text = request.form.get('SearchableText', '')
         if not text:
             # Without text, must provide a meaningful non-empty search
-            valid = set(valid_indexes).intersection(request.form.keys()) 
+            valid = set(valid_indexes).intersection(request.form.keys())
             if not valid:
                 return
 
@@ -118,8 +118,10 @@ class Search(BrowserView):
         """ Sorting options for search results view. """
         return (
             SortOption(self.request, _(u'relevance'), ''),
-            SortOption(self.request, _(u'date (newest first)'),
-                'Date', reverse=True),
+            SortOption(
+                self.request, _(u'date (newest first)'),
+                'Date', reverse=True
+            ),
             SortOption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
 
