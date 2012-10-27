@@ -19,7 +19,7 @@ from plone.app.testing.selenium_layers import SELENIUM_PLONE_FUNCTIONAL_TESTING
 
 
 def test_request():
-    """ 
+    """
     make request suitable for browser views and Zope2 security.
     """
     response = HTTPResponse(stdout=sys.stdout)
