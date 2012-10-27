@@ -83,7 +83,7 @@ class TestSection(SearchTestCase):
         self.failIf('my-page1' in [r.getId() for r in res],
                     'Blacklisted type "Document" has been found in search \
                      results.')
- 
+
     def test_filter_empty(self):
         """Test filtering for empty query"""
         portal = self.layer['portal']
