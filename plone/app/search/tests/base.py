@@ -23,14 +23,18 @@ def test_request():
     make request suitable for browser views and Zope2 security.
     """
     response = HTTPResponse(stdout=sys.stdout)
-    request = HTTPRequest(sys.stdin,
-                      {'SERVER_NAME'    : 'localhost',
-                       'SERVER_PORT'    : '80',
-                       'REQUEST_METHOD' : 'GET', },
-                      response)
+    request = HTTPRequest(
+        sys.stdin,
+        {
+            'SERVER_NAME': 'localhost',
+            'SERVER_PORT': '80',
+            'REQUEST_METHOD': 'GET',
+        },
+        response
+    )
     request['ACTUAL_URL'] = 'http://nohost/plone'
     setDefaultSkin(request)
-    alsoProvides(request, IFormLayer) #suitable for testing z3c.form views
+    alsoProvides(request, IFormLayer)  # suitable for testing z3c.form views
     return request
 
 
@@ -53,9 +57,11 @@ class SearchLayer(PloneSandboxLayer):
         setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
         for i in range(0, 100):
-            portal.invokeFactory('Document',
-                                 'my-page'+str(i),
-                                 text='spam spam ham eggs')
+            portal.invokeFactory(
+                'Document',
+                'my-page' + str(i),
+                text='spam spam ham eggs'
+            )
         setRoles(portal, TEST_USER_ID, ['Member'])
 
         # Commit so that the test browser sees these objects
@@ -91,7 +97,7 @@ class SearchPerformance100Layer(SearchLayer):
         portal.invokeFactory('Folder', 'test-folder')
         f = portal['test-folder']
         for i in range(0, 100):
-            f.invokeFactory('Document', 'my-page'+str(i),
+            f.invokeFactory('Document', 'my-page' + str(i),
                             text='spam spam ham eggs')
         setRoles(portal, TEST_USER_ID, ['Member'])
 
@@ -116,7 +122,7 @@ class SearchPerformance1000Layer(SearchLayer):
         portal.invokeFactory('Folder', 'test-folder')
         f = portal['test-folder']
         for i in range(0, 1000):
-            f.invokeFactory('Document', 'my-page'+str(i),
+            f.invokeFactory('Document', 'my-page' + str(i),
                             text='spam spam ham eggs')
         setRoles(portal, TEST_USER_ID, ['Member'])
 
