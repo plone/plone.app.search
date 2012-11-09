@@ -98,7 +98,7 @@ jQuery(function ($) {
         if (initialPop) {
             return;
         }
-        
+
         if (!location.search){
             return;
         }
@@ -167,7 +167,11 @@ jQuery(function ($) {
     // results after any of them has been chosen.
     $('#search-filter input, #search-filter select').not('input#pt_toggle').live('change',
         function (e) {
-            query = $('form.searchPage').serialize();
+            query = ''
+            // only fill query when there is at least one type selected
+            if ($('input[name="portal_type:list"]:checked').length > 0) {
+                query = $('form.searchPage').serialize();
+            }
             $default_res_container.pullSearchResults(query);
             pushState(query);
             e.preventDefault();
