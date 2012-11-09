@@ -8,7 +8,7 @@ Changelog
   [dokai]
 
 - fix search results when having done a seach and switching out some
-  itemsand doing the same search again, refs #12880
+  items and doing the same search again, refs #12880
   [maartenkling, robgietema]
 
 - only fill query when there is at least one type selected
