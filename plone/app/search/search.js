@@ -128,13 +128,12 @@ jQuery(function ($) {
         var st, queryString = location.search.substring(1),
         re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
         st = $('#search-field input[name="SearchableText"]').val();
+        queryParameters.push({"name":"SearchableText", "value": st})
 
         // parse query string into array of hash
         while (m = re.exec(queryString)) {
             key = decodeURIComponent(m[1]);
-            if (key == 'SearchableText') {
-                queryParameters.push({"name":"SearchableText", "value": st})
-            } else {
+            if (key != 'SearchableText') {
                 queryParameters.push({"name": key, "value": decodeURIComponent(m[2])});
             }
         }

@@ -7,6 +7,13 @@ Changelog
 - Fixed translation problem with the @@updated_search responses.
   [dokai]
 
+- fix search results when having done a seach and switching out some
+  itemsand doing the same search again, refs #12880
+  [maartenkling, robgietema]
+
+- only fill query when there is at least one type selected
+  [maartenkling]
+
 - Fixed Google Chrome and Safari search compatibility problem
   https://dev.plone.org/ticket/13249
   [Manabu TERADA]
