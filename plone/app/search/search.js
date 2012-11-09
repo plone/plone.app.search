@@ -129,15 +129,18 @@ jQuery(function ($) {
     // results
     $('#search-field input.searchButton').click(function (e) {
         var st, queryString = location.search.substring(1),
-        re = /([^&=]+)=([^&]*)/g, m, queryParameters = {};
-
-        // parse query string into hash
-        while (m = re.exec(queryString)) {
-            queryParameters[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-        }
-
+        re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
         st = $('#search-field input[name="SearchableText"]').val();
-        queryParameters['SearchableText'] = st;
+
+        // parse query string into array of hash
+        while (m = re.exec(queryString)) {
+            key = decodeURIComponent(m[1]);
+            if (key == 'SearchableText') {
+                queryParameters.push({"name":"SearchableText", "value": st})
+            } else {
+                queryParameters.push({"name": key, "value": decodeURIComponent(m[2])});
+            }
+        }
         queryString = $.param(queryParameters);
         $default_res_container.pullSearchResults(queryString);
         pushState(queryString);
@@ -172,6 +175,7 @@ jQuery(function ($) {
             if ($('input[name="portal_type:list"]:checked').length > 0) {
                 query = $('form.searchPage').serialize();
             }
+            console.info(query);
             $default_res_container.pullSearchResults(query);
             pushState(query);
             e.preventDefault();
