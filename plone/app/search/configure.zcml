@@ -12,6 +12,14 @@
        directory="profiles/default"
        provides="Products.GenericSetup.interfaces.EXTENSION"
        />
+  <genericsetup:upgradeStep
+      source="*"
+      destination="10"
+      title="Install plone.app.modernizr"
+      description=""
+      profile="plone.app.search:default"
+      handler=".upgrades.common"
+      />
 
     <browser:resource
         name="search.js"
