@@ -1,5 +1,8 @@
-<html>
-<body tal:define="b_start python:0;
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<body i18n:domain="plone"
+      tal:define="b_start python:0;
                   b_start request/b_start | b_start;
                   batch python:view.results(b_start=b_start);
                   st python:request.get('SearchableText', '');
