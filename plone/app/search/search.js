@@ -137,7 +137,8 @@ jQuery(function ($) {
         while (m = re.exec(queryString)) {
             key = decodeURIComponent(m[1]);
             if (key != 'SearchableText') {
-                queryParameters.push({"name": key, "value": decodeURIComponent(m[2])});
+                // we remove '+' used between words
+                queryParameters.push({"name": key, "value": decodeURIComponent(m[2].replace(/\+/g, ' '))});
             }
         }
         queryString = $.param(queryParameters);
