@@ -172,7 +172,6 @@ jQuery(function ($) {
             if ($('input[name="portal_type:list"]:checked').length > 0) {
                 query = $('form.searchPage').serialize();
             }
-            console.info(query);
             $default_res_container.pullSearchResults(query);
             pushState(query);
             e.preventDefault();
