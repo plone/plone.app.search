@@ -4,6 +4,13 @@ Changelog
 1.0.7 (unreleased)
 ------------------
 
+- fix search results when having done a seach and switching out some
+  items and doing the same search again, refs #12880
+  [maartenkling, robgietema]
+
+- only fill query when there is at least one type selected
+  [maartenkling]
+
 - Fixed Google Chrome and Safari search compatibility problem
   https://dev.plone.org/ticket/13249
   [Manabu TERADA]
@@ -21,7 +28,7 @@ Changelog
 ------------------
 
 - Search.filter_query() checks for any valid indexes specified in request
-  to prevent empty catalog searches, instead of limiting searches to 
+  to prevent empty catalog searches, instead of limiting searches to
   require either SearchableText or Subject query.  This is more permissive,
   but accomplishes the same goal with better generality (possibly allowing
   various cases including the calendar portlet using to @@search, instead
@@ -40,7 +47,7 @@ Changelog
   [thomasdesvenain]
 
 - Don't assume that SearchableText is going to be in any url with a GET
-  request. 
+  request.
   [eleddy]
 
 
