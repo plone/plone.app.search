@@ -98,7 +98,7 @@ jQuery(function ($) {
         if (initialPop) {
             return;
         }
-        
+
         if (!location.search){
             return;
         }
@@ -129,15 +129,18 @@ jQuery(function ($) {
     // results
     $('#search-field input.searchButton').click(function (e) {
         var st, queryString = location.search.substring(1),
-        re = /([^&=]+)=([^&]*)/g, m, queryParameters = {};
-
-        // parse query string into hash
-        while (m = re.exec(queryString)) {
-            queryParameters[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-        }
-
+        re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
         st = $('#search-field input[name="SearchableText"]').val();
-        queryParameters['SearchableText'] = st;
+        queryParameters.push({"name":"SearchableText", "value": st})
+
+        // parse query string into array of hash
+        while (m = re.exec(queryString)) {
+            key = decodeURIComponent(m[1]);
+            if (key != 'SearchableText') {
+                // we remove '+' used between words
+                queryParameters.push({"name": key, "value": decodeURIComponent(m[2].replace(/\+/g, ' '))});
+            }
+        }
         queryString = $.param(queryParameters);
         $default_res_container.pullSearchResults(queryString);
         pushState(queryString);
@@ -167,7 +170,11 @@ jQuery(function ($) {
     // results after any of them has been chosen.
     $('#search-filter input, #search-filter select').not('input#pt_toggle').live('change',
         function (e) {
-            query = $('form.searchPage').serialize();
+            query = ''
+            // only fill query when there is at least one type selected
+            if ($('input[name="portal_type:list"]:checked').length > 0) {
+                query = $('form.searchPage').serialize();
+            }
             $default_res_container.pullSearchResults(query);
             pushState(query);
             e.preventDefault();
