@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0.7.dev0'
+version = '1.0.7'
 
 tests_require = ['collective.testcaselayer',
                  'plone.app.testing',

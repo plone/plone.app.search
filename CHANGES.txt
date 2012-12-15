@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.7 (unreleased)
+1.0.7 (2012-12-14)
 ------------------
 
 - fix search results when having done a seach and switching out some
