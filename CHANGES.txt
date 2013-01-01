@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.1 (unreleased)
+1.1.1 (2013-01-01)
 ------------------
 
 - Fixed translation problem with the @@updated_search responses.
