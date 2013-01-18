@@ -92,7 +92,7 @@ jQuery(function ($) {
     // Modernizr checkup above.
     $(window).bind('popstate', function (event) {
         var initialPop, str;
-        // Ignore inital popstate that some browsers fire on page load
+        // Ignore initial popstate that some browsers fire on page load
         initialPop = !popped && location.href === initialURL;
         popped = true;
         if (initialPop) {
@@ -122,11 +122,11 @@ jQuery(function ($) {
 
     // We don't submit the whole form with all the fields when only the
     // search term is being changed. We just alter the current URL to
-    // substitue the search term and make a new ajax call to get updated
+    // substitute the search term and make a new ajax call to get updated
     // results
     $('#search-field input.searchButton').click(function (e) {
         var st, queryString = location.search.substring(1),
-        re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
+            re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
         st = $('#search-field input[name="SearchableText"]').val();
         queryParameters.push({"name":"SearchableText", "value": st});
 
@@ -157,7 +157,7 @@ jQuery(function ($) {
     });
 
     // When we click any option in the Filter menu, we need to prevent the
-    // menu from being closed as it is dictaded by dropdown.js for all
+    // menu from being closed as it is dictated by dropdown.js for all
     // dl.actionMenu > dd.actionMenuContent
     $('#search-results-bar dl.actionMenu > dd.actionMenuContent').click(function (e) {
         e.stopImmediatePropagation();
@@ -165,7 +165,7 @@ jQuery(function ($) {
 
     // Now we can handle the actual menu options and update the search
     // results after any of them has been chosen.
-    $('#search-filter input, #search-filter select').not('input#pt_toggle').live('change',
+    $('#search-filter, #search-filter').delegate('select:not("#pt_toggle")', 'change',
         function (e) {
             query = '';
             // only fill query when there is at least one type selected
@@ -179,10 +179,10 @@ jQuery(function ($) {
     );
 
     // Since we replace the whole sorting options with HTML, coming in
-    // AJAX response, we should bind the click event with live() in order
+    // AJAX response, we should bind the click event with delegate() in order
     // for this to keep working with the HTML elements, coming from AJAX
-    // respons
-    $('#sorting-options a').live('click', function (e) {
+    // response
+    $('#sorting-options').delegate('a', 'click', function (e) {
         if ($(this).attr('data-sort')) {
             $("form.searchPage input[name='sort_on']").val($(this).attr('data-sort'));
         }
@@ -197,7 +197,7 @@ jQuery(function ($) {
 
     // Handle clicks in the batch navigation bar. Load those with Ajax as
     // well.
-    $('#search-results .listingBar a').live('click', function (e) {
+    $default_res_container.delegate('.listingBar a', 'click', function (e) {
         query = this.search.split('?')[1];
         $default_res_container.pullSearchResults(query);
         pushState(query);
