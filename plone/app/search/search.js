@@ -80,7 +80,7 @@ jQuery(function ($) {
 
     // Used to detect initial (useless) popstate.
     // If history.state exists, assume browser isn't going to fire initial popstate.
-    popped = ('state' in window.history);
+    popped = (window.history && window.history.hasOwnProperty('state'));
     initialURL = location.href;
 
 
@@ -128,12 +128,12 @@ jQuery(function ($) {
         var st, queryString = location.search.substring(1),
         re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
         st = $('#search-field input[name="SearchableText"]').val();
-        queryParameters.push({"name":"SearchableText", "value": st})
+        queryParameters.push({"name":"SearchableText", "value": st});
 
         // parse query string into array of hash
         while (m = re.exec(queryString)) {
             key = decodeURIComponent(m[1]);
-            if (key != 'SearchableText') {
+            if (key !== 'SearchableText') {
                 // we remove '+' used between words
                 queryParameters.push({"name": key, "value": decodeURIComponent(m[2].replace(/\+/g, ' '))});
             }
@@ -167,7 +167,7 @@ jQuery(function ($) {
     // results after any of them has been chosen.
     $('#search-filter input, #search-filter select').not('input#pt_toggle').live('change',
         function (e) {
-            query = ''
+            query = '';
             // only fill query when there is at least one type selected
             if ($('input[name="portal_type:list"]:checked').length > 0) {
                 query = $('form.searchPage').serialize();
