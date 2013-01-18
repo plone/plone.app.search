@@ -3,8 +3,7 @@
 
 jQuery(function ($) {
 
-    var query, pushState, popState, popped, initialURL,
-        Search = {},
+    var query, pushState, popped, initialURL,
         $default_res_container = $('#search-results'),
         navigation_root_url = $('meta[name=navigation_root_url]').attr('content') || window.navigation_root_url || window.portal_url;
 
