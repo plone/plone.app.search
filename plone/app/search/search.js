@@ -22,17 +22,17 @@ jQuery(function ($) {
                     // have the returned data available (returned somewhere to
                     // the DOM tree). Otherwise we will not be able to select
                     // elements from the returned HTML.
-                    if ($('#ajax-search-res').length === 0) {
+                    if ($("#ajax-search-res").length === 0) {
                         // Create temporary container for the HTML structure,
                         // returned by our AJAX request
                         $('body').append('<div id="ajax-search-res"></div>');
                     }
-                    $('#ajax-search-res').html(data);
+                    $("#ajax-search-res").html(data);
 
-                    var $data_res = $('#ajax-search-res #search-results > *'),
-                        data_search_term = $('#ajax-search-res #updated-search-term').text(),
-                        data_res_number = $('#ajax-search-res #updated-search-results-number').text(),
-                        data_sorting_opt = $('#ajax-search-res #updated-sorting-options').html();
+                    var $data_res = $('#ajax-search-res').find('#search-results > *'),
+                        data_search_term = $('#ajax-search-res').find('#updated-search-term').text(),
+                        data_res_number = $('#ajax-search-res').find('#updated-search-results-number').text(),
+                        data_sorting_opt = $('#ajax-search-res').find('#updated-sorting-options').html();
 
                     $container.html($data_res);
                     $container.fadeIn();
@@ -46,7 +46,7 @@ jQuery(function ($) {
 
                     $('#search-term').text(data_search_term);
                     $('#search-results-number').text(data_res_number);
-                    $('#search-results-bar #sorting-options').html(data_sorting_opt);
+                    $('#search-results-bar').find('#sorting-options').html(data_sorting_opt);
 
                     // Clean after ourselves — empty the ajax results container.
                     // No need to remove the item itself — probably there will
@@ -54,7 +54,7 @@ jQuery(function ($) {
                     // we can avoid re-creating the node every time
                     $('#ajax-search-res').empty();
 
-                    $('#rss-subscription a.link-feed').attr('href', function () {
+                    $('#rss-subscription').find('a.link-feed').attr('href', function () {
                         return navigation_root_url + '/search_rss?' + query;
                     });
                 });
@@ -117,16 +117,16 @@ jQuery(function ($) {
         $default_res_container.pullSearchResults(query);
     });
 
-    $('#search-filter input.searchPage[type="submit"]').hide();
+    $('#search-filter').find('input.searchPage[type="submit"]').hide();
 
     // We don't submit the whole form with all the fields when only the
     // search term is being changed. We just alter the current URL to
     // substitute the search term and make a new ajax call to get updated
     // results
-    $('#search-field input.searchButton').click(function (e) {
+    $('#search-field').find('input.searchButton').click(function (e) {
         var st, queryString = location.search.substring(1),
             re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
-        st = $('#search-field input[name="SearchableText"]').val();
+        st = $('#search-field').find('input[name="SearchableText"]').val();
         queryParameters.push({"name":"SearchableText", "value": st});
 
         // parse query string into array of hash
@@ -151,20 +151,20 @@ jQuery(function ($) {
 
     // We need to update the site-wide search field (at the top right in
     // stock Plone) when the main search field is updated
-    $('#search-field input[name="SearchableText"]').keyup(function () {
+    $('#search-field').find('input[name="SearchableText"]').keyup(function () {
         $('input#searchGadget').val($(this).val());
     });
 
     // When we click any option in the Filter menu, we need to prevent the
     // menu from being closed as it is dictated by dropdown.js for all
     // dl.actionMenu > dd.actionMenuContent
-    $('#search-results-bar dl.actionMenu > dd.actionMenuContent').click(function (e) {
+    $('#search-results-bar').find('dl.actionMenu > dd.actionMenuContent').click(function (e) {
         e.stopImmediatePropagation();
     });
 
     // Now we can handle the actual menu options and update the search
     // results after any of them has been chosen.
-    $('#search-filter, #search-filter').delegate('select:not("#pt_toggle")', 'change',
+    $('#search-filter').delegate('select:not("#pt_toggle")', 'change',
         function (e) {
             query = '';
             // only fill query when there is at least one type selected
