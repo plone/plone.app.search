@@ -47,7 +47,7 @@ jQuery(function ($) {
                         // Until now we had queries with empty search term. So
                         // we need a placeholder for the search term in
                         // result's title.
-                        $('h1.documentFirstHeading').append('<strong id="search-term" />');
+                        $search_term = $('<strong id="search-term" />').appendTo($('h1.documentFirstHeading'));
                     }
 
                     $search_term.text(data_search_term);
