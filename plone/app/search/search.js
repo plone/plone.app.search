@@ -5,6 +5,8 @@ jQuery(function ($) {
 
     var query, pushState, popped, initialURL,
         $default_res_container = $('#search-results'),
+        $search_filter = $('#search-filter'),
+        $search_field = $('#search-field'),
         navigation_root_url = $('meta[name=navigation_root_url]').attr('content') || window.navigation_root_url || window.portal_url;
 
     // The globally available method to pull the search results for the
@@ -17,34 +19,36 @@ jQuery(function ($) {
                 query,
                 function (data) {
                     $container.hide();
+                    var $ajax_search_res = $("#ajax-search-res"),
+                        $search_term = $('#search-term');
 
                     // Before assigning any variable we need to make sure we
                     // have the returned data available (returned somewhere to
                     // the DOM tree). Otherwise we will not be able to select
                     // elements from the returned HTML.
-                    if ($("#ajax-search-res").length === 0) {
+                    if (!$ajax_search_res.length) {
                         // Create temporary container for the HTML structure,
                         // returned by our AJAX request
                         $('body').append('<div id="ajax-search-res"></div>');
                     }
-                    $("#ajax-search-res").html(data);
+                    $ajax_search_res.html(data);
 
-                    var $data_res = $('#ajax-search-res').find('#search-results > *'),
-                        data_search_term = $('#ajax-search-res').find('#updated-search-term').text(),
-                        data_res_number = $('#ajax-search-res').find('#updated-search-results-number').text(),
-                        data_sorting_opt = $('#ajax-search-res').find('#updated-sorting-options').html();
+                    var $data_res = $ajax_search_res.find('#search-results').children(),
+                        data_search_term = $ajax_search_res.find('#updated-search-term').text(),
+                        data_res_number = $ajax_search_res.find('#updated-search-results-number').text(),
+                        data_sorting_opt = $ajax_search_res.find('#updated-sorting-options').html();
 
                     $container.html($data_res);
                     $container.fadeIn();
 
-                    if ($('#search-term').length === 0) {
+                    if (!$search_term.length) {
                         // Until now we had queries with empty search term. So
                         // we need a placeholder for the search term in
                         // result's title.
                         $('h1.documentFirstHeading').append('<strong id="search-term" />');
                     }
 
-                    $('#search-term').text(data_search_term);
+                    $search_term.text(data_search_term);
                     $('#search-results-number').text(data_res_number);
                     $('#search-results-bar').find('#sorting-options').html(data_sorting_opt);
 
@@ -112,21 +116,21 @@ jQuery(function ($) {
         // Now we have something like 'SearchableText=test' in str
         // variable. So, we know when the actual search term begins at
         // position 15 in that string.
-        $('#search-field input[name="SearchableText"], input#searchGadget').val(str.substr(15, str.length));
+        $.merge($search_field.find('input[name="SearchableText"]'), $('input#searchGadget')).val(str.substr(15, str.length));
 
         $default_res_container.pullSearchResults(query);
     });
 
-    $('#search-filter').find('input.searchPage[type="submit"]').hide();
+    $search_filter.find('input.searchPage[type="submit"]').hide();
 
     // We don't submit the whole form with all the fields when only the
     // search term is being changed. We just alter the current URL to
     // substitute the search term and make a new ajax call to get updated
     // results
-    $('#search-field').find('input.searchButton').click(function (e) {
+    $search_field.find('input.searchButton').click(function (e) {
         var st, queryString = location.search.substring(1),
             re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
-        st = $('#search-field').find('input[name="SearchableText"]').val();
+        st = $search_field.find('input[name="SearchableText"]').val();
         queryParameters.push({"name":"SearchableText", "value": st});
 
         // parse query string into array of hash
@@ -151,7 +155,7 @@ jQuery(function ($) {
 
     // We need to update the site-wide search field (at the top right in
     // stock Plone) when the main search field is updated
-    $('#search-field').find('input[name="SearchableText"]').keyup(function () {
+    $search_field.find('input[name="SearchableText"]').keyup(function () {
         $('input#searchGadget').val($(this).val());
     });
 
@@ -164,7 +168,7 @@ jQuery(function ($) {
 
     // Now we can handle the actual menu options and update the search
     // results after any of them has been chosen.
-    $('#search-filter').delegate('select:not("#pt_toggle")', 'change',
+    $search_filter.delegate('select:not("#pt_toggle")', 'change',
         function (e) {
             query = '';
             // only fill query when there is at least one type selected
