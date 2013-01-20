@@ -21,19 +21,8 @@ jQuery(function ($) {
                 query,
                 function (data) {
                     $container.hide();
-                    var $ajax_search_res = $("#ajax-search-res"),
+                    var $ajax_search_res = $('<div id="ajax-search-res"></div>').html(data),
                         $search_term = $('#search-term');
-
-                    // Before assigning any variable we need to make sure we
-                    // have the returned data available (returned somewhere to
-                    // the DOM tree). Otherwise we will not be able to select
-                    // elements from the returned HTML.
-                    if (!$ajax_search_res.length) {
-                        // Create temporary container for the HTML structure,
-                        // returned by our AJAX request
-                        $ajax_search_res = $('<div id="ajax-search-res"></div>').appendTo('body');
-                    }
-                    $ajax_search_res.html(data);
 
                     var $data_res = $ajax_search_res.find('#search-results').children(),
                         data_search_term = $ajax_search_res.find('#updated-search-term').text(),
@@ -53,12 +42,6 @@ jQuery(function ($) {
                     $search_term.text(data_search_term);
                     $('#search-results-number').text(data_res_number);
                     $('#search-results-bar').find('#sorting-options').html(data_sorting_opt);
-
-                    // Clean after ourselves — empty the ajax results container.
-                    // No need to remove the item itself — probably there will
-                    // be more search requests for filtering, sorting, etc. So,
-                    // we can avoid re-creating the node every time
-                    $ajax_search_res.empty();
 
                     $('#rss-subscription').find('a.link-feed').attr('href', function () {
                         return navigation_root_url + '/search_rss?' + query;
