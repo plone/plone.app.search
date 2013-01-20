@@ -170,7 +170,7 @@ jQuery(function ($) {
 
     // Now we can handle the actual menu options and update the search
     // results after any of them has been chosen.
-    $search_filter.delegate('select:not("#pt_toggle")', 'change',
+    $search_filter.delegate('input, select', 'change',
         function (e) {
             query = '';
             // only fill query when there is at least one type selected
