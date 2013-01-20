@@ -4,8 +4,12 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Optimized search.js logic by caching jQuery selectors and removing some
+  uncessesary dom manipulations
+  [ichimdav]
 
+- Fixed incompatibilities of search.js up to jQuery 1.9
+  [ichimdav]
 
 1.1.1 (2013-01-01)
 ------------------
