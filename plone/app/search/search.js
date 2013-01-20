@@ -31,7 +31,7 @@ jQuery(function ($) {
                     if (!$ajax_search_res.length) {
                         // Create temporary container for the HTML structure,
                         // returned by our AJAX request
-                        $('body').append('<div id="ajax-search-res"></div>');
+                        $ajax_search_res = $('<div id="ajax-search-res"></div>').appendTo('body');
                     }
                     $ajax_search_res.html(data);
 
@@ -58,7 +58,7 @@ jQuery(function ($) {
                     // No need to remove the item itself — probably there will
                     // be more search requests for filtering, sorting, etc. So,
                     // we can avoid re-creating the node every time
-                    $('#ajax-search-res').empty();
+                    $ajax_search_res.empty();
 
                     $('#rss-subscription').find('a.link-feed').attr('href', function () {
                         return navigation_root_url + '/search_rss?' + query;
