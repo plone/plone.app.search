@@ -116,7 +116,7 @@ jQuery(function ($) {
         // Now we have something like 'SearchableText=test' in str
         // variable. So, we know when the actual search term begins at
         // position 15 in that string.
-        $.merge($search_field.find('input[name="SearchableText"]'), $('input#searchGadget')).val(str.substr(15, str.length));
+        $.merge($search_field.find('input[name="SearchableText"]'), $('#searchGadget')).val(str.substr(15, str.length));
 
         $default_res_container.pullSearchResults(query);
     });
@@ -156,7 +156,7 @@ jQuery(function ($) {
     // We need to update the site-wide search field (at the top right in
     // stock Plone) when the main search field is updated
     $search_field.find('input[name="SearchableText"]').keyup(function () {
-        $('input#searchGadget').val($(this).val());
+        $('#searchGadget').val($(this).val());
     });
 
     // When we click any option in the Filter menu, we need to prevent the
