@@ -7,6 +7,8 @@ jQuery(function ($) {
         $default_res_container = $('#search-results'),
         $search_filter = $('#search-filter'),
         $search_field = $('#search-field'),
+        $search_gadget =  $('#searchGadget'),
+        $form_search_page = $("form.searchPage"),
         navigation_root_url = $('meta[name=navigation_root_url]').attr('content') || window.navigation_root_url || window.portal_url;
 
     // The globally available method to pull the search results for the
@@ -116,7 +118,7 @@ jQuery(function ($) {
         // Now we have something like 'SearchableText=test' in str
         // variable. So, we know when the actual search term begins at
         // position 15 in that string.
-        $.merge($search_field.find('input[name="SearchableText"]'), $('#searchGadget')).val(str.substr(15, str.length));
+        $.merge($search_field.find('input[name="SearchableText"]'), $search_gadget).val(str.substr(15, str.length));
 
         $default_res_container.pullSearchResults(query);
     });
@@ -146,8 +148,8 @@ jQuery(function ($) {
         pushState(queryString);
         e.preventDefault();
     });
-    $('form.searchPage').submit(function (e) {
-        query = $('form.searchPage').serialize();
+    $form_search_page.submit(function (e) {
+        query = $(this).serialize();
         $default_res_container.pullSearchResults(query);
         pushState(query);
         e.preventDefault();
@@ -156,7 +158,7 @@ jQuery(function ($) {
     // We need to update the site-wide search field (at the top right in
     // stock Plone) when the main search field is updated
     $search_field.find('input[name="SearchableText"]').keyup(function () {
-        $('#searchGadget').val($(this).val());
+        $search_gadget.val($(this).val());
     });
 
     // When we click any option in the Filter menu, we need to prevent the
@@ -172,8 +174,8 @@ jQuery(function ($) {
         function (e) {
             query = '';
             // only fill query when there is at least one type selected
-            if ($('input[name="portal_type:list"]:checked').length > 0) {
-                query = $('form.searchPage').serialize();
+            if ($('input[name="portal_type:list"]:checked').length) {
+                query = $form_search_page.serialize();
             }
             $default_res_container.pullSearchResults(query);
             pushState(query);
@@ -187,10 +189,10 @@ jQuery(function ($) {
     // response
     $('#sorting-options').delegate('a', 'click', function (e) {
         if ($(this).attr('data-sort')) {
-            $("form.searchPage input[name='sort_on']").val($(this).attr('data-sort'));
+            $form_search_page.find("input[name='sort_on']").val($(this).attr('data-sort'));
         }
         else {
-            $("form.searchPage input[name='sort_on']").val('');
+            $form_search_page.find("input[name='sort_on']").val('');
         }
         query = this.search.split('?')[1];
         $default_res_container.pullSearchResults(query);
