@@ -174,7 +174,8 @@ jQuery(function ($) {
         function (e) {
             query = '';
             // only fill query when there is at least one type selected
-            if ($('input[name="portal_type:list"]:checked').length) {
+            // by default we have a checked date radio input button
+            if ($search_filter.find('input:checked').length > 1) {
                 query = $form_search_page.serialize();
             }
             $default_res_container.pullSearchResults(query);
