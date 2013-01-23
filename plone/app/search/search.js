@@ -68,7 +68,10 @@ jQuery(function ($) {
 
     // Used to detect initial (useless) popstate.
     // If history.state exists, assume browser isn't going to fire initial popstate.
-    popped = (window.history && Object.prototype.hasOwnProperty.call(window.history, 'state'));
+    // IE < 9 doesn't support hasOwnProperty on history therefore we need to add
+    // fallback code
+    var history_hasOwnProperty = window.history.hasOwnProperty;
+    popped = (window.history && history_hasOwnProperty ? history_hasOwnProperty('state') : Object.prototype.hasOwnProperty.call(window.history, 'state'));
     initialURL = location.href;
 
 
