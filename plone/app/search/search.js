@@ -68,7 +68,7 @@ jQuery(function ($) {
 
     // Used to detect initial (useless) popstate.
     // If history.state exists, assume browser isn't going to fire initial popstate.
-    popped = (window.history && window.history.hasOwnProperty('state'));
+    popped = (window.history && Object.prototype.hasOwnProperty.call(window.history, 'state'));
     initialURL = location.href;
 
 
