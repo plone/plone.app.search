@@ -165,7 +165,7 @@ jQuery(function ($) {
 
     // Now we can handle the actual menu options and update the search
     // results after any of them has been chosen.
-    $('#search-filter input, #search-filter select').not('input#pt_toggle').live('change',
+    $('#search-filter input:not(#pt_toggle), #search-filter select').live('change',
         function (e) {
             query = '';
             // only fill query when there is at least one type selected
