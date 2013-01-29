@@ -4,12 +4,16 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
+- Fixed incompatibilities of search.js up to and including jQuery 1.9 while
+  maintaining compatibility with jQuery all the way to 1.4.4
+  [ichimdav]
+
 - Optimized search.js logic by caching jQuery selectors and removing some
   uncessesary dom manipulations
   [ichimdav]
 
-- Fixed incompatibilities of search.js up to jQuery 1.9
-  [ichimdav]
+- Fix to make search.js work with jQuery >=1.8.
+  [garbas]
 
 1.1.1 (2013-01-01)
 ------------------
