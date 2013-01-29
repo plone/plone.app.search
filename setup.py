@@ -10,8 +10,8 @@ tests_require = ['collective.testcaselayer',
 setup(name='plone.app.search',
       version=version,
       description="Search user interface for Plone CMS.",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("CHANGES.txt")).read(),
+      long_description=open("README.rst").read() + "\n" +
+                       open(os.path.join("CHANGES.rst")).read(),
       # Get more strings from
       # http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
