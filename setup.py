@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1.2'
+version = '1.1.3'
 
 tests_require = ['collective.testcaselayer',
                  'plone.app.testing',
@@ -22,7 +22,7 @@ setup(name='plone.app.search',
       keywords='',
       author='Denys Mishunov',
       author_email='denys.mishunov@gmail.com',
-      url='http://svn.plone.org/svn/plone/plone.app.search',
+      url='http://github.com/plone/plone.app.search',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['plone', 'plone.app'],
