@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.2 (unreleased)
+1.1.2 (2013-01-30)
 ------------------
 
 - Fix to make search.js work with jQuery >=1.8.
