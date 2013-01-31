@@ -4,7 +4,8 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Restored compatibility with IE <= 8 for search.js broke in previous egg 
+  [ichimdav]
 
 
 1.1.2 (2013-01-30)
