@@ -1,10 +1,19 @@
 Changelog
 =========
 
-1.1.2 (unreleased)
+
+1.1.3 (unreleased)
 ------------------
 
-- Restored compatibility with IE <= 8 for search.js broke in previous egg 
+- Restored compatibility with IE <= 8 for search.js broke in previous egg
+  [ichimdav]
+
+- Fixed incompatibilities of search.js up to and including jQuery 1.9 while
+  maintaining compatibility with jQuery all the way to 1.4.4
+  [ichimdav]
+
+- Optimized search.js logic by caching jQuery selectors and removing some
+  uncessesary dom manipulations
   [ichimdav]
 
 
