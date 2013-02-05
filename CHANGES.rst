@@ -5,6 +5,9 @@ Changelog
 1.1.3 (unreleased)
 ------------------
 
+- Readded fix made by eleddy in 1.0.4 wrongfully removed from 1.1.x 
+  [ichimdav]
+
 - Restored compatibility with IE <= 8 for search.js broke in previous egg
   [ichimdav]
 

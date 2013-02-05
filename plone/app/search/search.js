@@ -94,16 +94,20 @@ jQuery(function ($) {
         query = location.search.split('?')[1];
         // We need to make sure we update the search field with the search
         // term from previous query when going back in history
-        str = query.match(/SearchableText=[^&]*/)[0];
-        str = decodeURIComponent(str.replace(/\+/g, ' ')); // we remove '+' used between words
-        // in search queries.
+        var results = query.match(/SearchableText=[^&]*/);
+        if (results){ // not all pages have results
+            str = results[0];
+            str = decodeURIComponent(str.replace(/\+/g, ' ')); // we remove '+' used between words
+            // in search queries.
 
         // Now we have something like 'SearchableText=test' in str
         // variable. So, we know when the actual search term begins at
         // position 15 in that string.
         $.merge($search_field.find('input[name="SearchableText"]'), $search_gadget).val(str.substr(15, str.length));
 
-        $default_res_container.pullSearchResults(query);
+            $default_res_container.pullSearchResults(query);
+        }
+
     });
 
     $search_filter.find('input.searchPage[type="submit"]').hide();
@@ -193,3 +197,4 @@ jQuery(function ($) {
         e.preventDefault();
     });
 });
+
