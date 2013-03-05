@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1.3 (unreleased)
+1.1.3 (2013-03-05)
 ------------------
 
 - Readded fix made by eleddy in 1.0.4 wrongfully removed from 1.1.x 
