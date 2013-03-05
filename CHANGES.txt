@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.8 (unreleased)
+1.0.8 (2013-03-05)
 ------------------
 
 - Fixed incompatibilities of search.js up to and including jQuery 1.9 while
