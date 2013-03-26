@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.1.1.dev0'
+version = '1.1.4.dev0'
 
 tests_require = ['collective.testcaselayer',
                  'plone.app.testing',
@@ -10,8 +10,8 @@ tests_require = ['collective.testcaselayer',
 setup(name='plone.app.search',
       version=version,
       description="Search user interface for Plone CMS.",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("CHANGES.txt")).read(),
+      long_description=open("README.rst").read() + "\n" +
+                       open(os.path.join("CHANGES.rst")).read(),
       # Get more strings from
       # http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
@@ -22,7 +22,7 @@ setup(name='plone.app.search',
       keywords='',
       author='Denys Mishunov',
       author_email='denys.mishunov@gmail.com',
-      url='http://svn.plone.org/svn/plone/plone.app.search',
+      url='http://github.com/plone/plone.app.search',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['plone', 'plone.app'],

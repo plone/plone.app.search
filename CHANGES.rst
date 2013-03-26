@@ -1,8 +1,50 @@
 Changelog
 =========
 
-1.1.1 (unreleased)
+
+1.1.4 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+1.1.3 (2013-03-05)
+------------------
+
+- Readded fix made by eleddy in 1.0.4 wrongfully removed from 1.1.x 
+  [ichimdav]
+
+- Restored compatibility with IE <= 8 for search.js broke in previous egg
+  [ichimdav]
+
+- Fixed incompatibilities of search.js up to and including jQuery 1.9 while
+  maintaining compatibility with jQuery all the way to 1.4.4
+  [ichimdav]
+
+- Optimized search.js logic by caching jQuery selectors and removing some
+  uncessesary dom manipulations
+  [ichimdav]
+
+
+1.1.2 (2013-01-30)
+------------------
+
+- Fix to make search.js work with jQuery >=1.8.
+  [garbas]
+
+
+1.1.1 (2013-01-01)
+------------------
+
+- Fixed translation problem with the @@updated_search responses.
+  [dokai]
+
+- fix search results when having done a seach and switching out some
+  items and doing the same search again, refs #12880
+  [maartenkling, robgietema]
+
+- only fill query when there is at least one type selected
+  [maartenkling]
 
 - Fixed Google Chrome and Safari search compatibility problem
   https://dev.plone.org/ticket/13249
@@ -28,7 +70,7 @@ Changelog
 ------------------
 
 - Search.filter_query() checks for any valid indexes specified in request
-  to prevent empty catalog searches, instead of limiting searches to 
+  to prevent empty catalog searches, instead of limiting searches to
   require either SearchableText or Subject query.  This is more permissive,
   but accomplishes the same goal with better generality (possibly allowing
   various cases including the calendar portlet using to @@search, instead
@@ -47,7 +89,7 @@ Changelog
   [thomasdesvenain]
 
 - Don't assume that SearchableText is going to be in any url with a GET
-  request. 
+  request.
   [eleddy]
 
 
