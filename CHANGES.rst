@@ -5,7 +5,8 @@ Changelog
 1.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use id if object has no title, this is how folder_listing and others behave.
+  [rpatterson]
 
 
 1.1.3 (2013-03-05)

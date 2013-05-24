@@ -282,7 +282,7 @@
                                                      item_type item/PortalType"
                                          tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
                                                          class string:state-${item/review_state}"
-                                         tal:content="item/Title" />
+                                         tal:content="python:item.getDataOrigin().pretty_title_or_id()" />
                                     </dt>
                                     <dd>
                                       <span class="discreet" i18n:domain="plone"
