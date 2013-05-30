@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1.4 (unreleased)
+1.1.4 (2013-05-30)
 ------------------
 
 - Use id if object has no title, this is how folder_listing and others behave.
