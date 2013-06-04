@@ -5,7 +5,9 @@ Changelog
 1.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Changed navigation_root_url to link-tag instead of meta-tag to ensure HTML5
+  validation.
+  [bosim]
 
 
 1.1.4 (2013-05-30)
@@ -13,10 +15,6 @@ Changelog
 
 - Use id if object has no title, this is how folder_listing and others behave.
   [rpatterson]
-
-- Changed navigation_root_url to link-tag instead of meta-tag to ensure HTML5
-  validation.
-  [bosim]
 
 
 1.1.3 (2013-03-05)
