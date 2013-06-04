@@ -9,7 +9,7 @@ jQuery(function ($) {
         $search_field = $('#search-field'),
         $search_gadget =  $('#searchGadget'),
         $form_search_page = $("form.searchPage"),
-        navigation_root_url = $('meta[name=navigation_root_url]').attr('content') || window.navigation_root_url || window.portal_url;
+        navigation_root_url = $('link[rel="home"]').attr('content') || window.navigation_root_url || window.portal_url;
 
     // The globally available method to pull the search results for the
     // 'query' into the element, on which the method is invoked

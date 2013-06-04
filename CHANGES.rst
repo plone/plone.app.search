@@ -14,6 +14,10 @@ Changelog
 - Use id if object has no title, this is how folder_listing and others behave.
   [rpatterson]
 
+- Changed navigation_root_url to link-tag instead of meta-tag to ensure HTML5
+  validation.
+  [bosim]
+
 
 1.1.3 (2013-03-05)
 ------------------
