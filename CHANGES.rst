@@ -9,6 +9,10 @@ Changelog
   validation.
   [bosim]
 
+- Stop preventDefault on live change handler on types filter.
+  Prevents bug with IE <= 8.
+  [do3cc]
+
 
 1.1.4 (2013-05-30)
 ------------------

@@ -167,7 +167,6 @@ jQuery(function ($) {
             }
             $default_res_container.pullSearchResults(query);
             pushState(query);
-            e.preventDefault();
         }
     );
 
