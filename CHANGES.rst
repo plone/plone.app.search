@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1.5 (unreleased)
+1.1.5 (2013-08-13)
 ------------------
 
 - Changed navigation_root_url to link-tag instead of meta-tag to ensure HTML5
