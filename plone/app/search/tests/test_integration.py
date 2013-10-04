@@ -66,6 +66,56 @@ class TestSection(SearchTestCase):
         title = crumbs(second_level_folder.third_level_document)[0]['Title']
         self.assertEquals(title, 'First Level Folder')
 
+    def test_default_search_order_relevance(self):
+        """Test default order as relevance."""
+        portal = self.layer['portal']
+        sp = getToolByName(portal, 'portal_properties').site_properties
+        self.assertEqual(sp.sort_on, 'relevance')
+
+        q = {'SearchableText': 'spam'}
+        res = portal.restrictedTraverse('@@search').results(query=q)
+        ids = [r.getId() for r in res]
+        expected = [
+            'my-page99', 'my-page98', 'my-page97', 'my-page96', 'my-page95',
+            'my-page94', 'my-page93', 'my-page92', 'my-page91', 'my-page90'
+        ]
+        self.assertEqual(ids, expected)
+
+    def test_default_search_order_date(self):
+        """Test default order as date."""
+        portal = self.layer['portal']
+
+        # Change one object date to see if order change works
+        mp5 = portal['my-page5']
+        mp5.setEffectiveDate(DateTime() + 1)
+        mp5.reindexObject()
+
+        sp = getToolByName(portal, 'portal_properties').site_properties
+        sp.sort_on = 'Date'
+        q = {'SearchableText': 'spam'}
+        res = portal.restrictedTraverse('@@search').results(query=q)
+        ids = [r.getId() for r in res]
+        expected = [
+            'my-page10', 'my-page9', 'my-page8', 'my-page7', 'my-page6',
+            'my-page4', 'my-page3', 'my-page2', 'my-page1', 'my-page0'
+        ]
+        self.assertEqual(ids, expected)
+
+    def test_default_search_order_alphabetic(self):
+        """Test default order as alphabetic."""
+        portal = self.layer['portal']
+
+        sp = getToolByName(portal, 'portal_properties').site_properties
+        sp.sort_on = 'sortable_title'
+        q = {'SearchableText': 'spam'}
+        res = portal.restrictedTraverse('@@search').results(query=q)
+        ids = [r.getId() for r in res]
+        expected = [
+            'my-page0', 'my-page1', 'my-page2', 'my-page3', 'my-page4',
+            'my-page5', 'my-page6', 'my-page7', 'my-page8', 'my-page9'
+        ]
+        self.assertEqual(ids, expected)
+
     def test_blacklisted_types_in_results(self):
         """Make sure we don't break types' blacklisting in the new search
         results view.

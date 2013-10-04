@@ -5,7 +5,8 @@ Changelog
 1.1.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added options to change default search order.
+  [rodfersou]
 
 
 1.1.8 (2014-09-07)
