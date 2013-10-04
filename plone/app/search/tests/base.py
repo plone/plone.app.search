@@ -16,6 +16,7 @@ from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing.selenium_layers import SELENIUM_PLONE_FUNCTIONAL_TESTING
+from plone.testing import z2
 
 
 def test_request():
@@ -50,9 +51,12 @@ class SearchLayer(PloneSandboxLayer):
                        plone.app.contentlisting, context=configurationContext)
         xmlconfig.file('configure.zcml',
                        plone.app.search, context=configurationContext)
+        z2.installProduct(app, 'Products.ATContentTypes')
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
+        if 'Document' not in portal.portal_types:
+            applyProfile(portal, 'Products.ATContentTypes:default')
         applyProfile(portal, 'plone.app.search:default')
         setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
