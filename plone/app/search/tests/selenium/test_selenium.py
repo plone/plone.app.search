@@ -19,19 +19,19 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
 
         # Is search filter hidden?
         f = sel.find_element_by_id('search-filter')
-        self.failIf(f.is_displayed())
+        self.assertFalse(f.is_displayed())
 
         # Is 'relevance' the current/default sorting option and thus
         # is not clickable?
         sorter = sel.find_element_by_id('sorting-options')
-        self.assertEquals(sorter.find_elements_by_link_text('relevance'), [])
+        self.assertEqual(sorter.find_elements_by_link_text('relevance'), [])
 
         # By default there are no search results because there is no
         # SearchableText specified in request when accessing the form directly:
         res_num = sel.find_element_by_id('search-results-number')
         res = sel.find_element_by_id('search-results')
-        self.assertEquals(res_num.text, '0')
-        self.assertEquals(res.text, 'No results were found.')
+        self.assertEqual(res_num.text, '0')
+        self.assertEqual(res.text, 'No results were found.')
 
         # Now we want to get results with all elements in the site.
         # we use the main search form for this search
@@ -48,10 +48,10 @@ class SimpleScenarioTestCase(SearchSeleniumTestCase):
 
         # We should get our 5 'Foo' elements:
         res_num = sel.find_element_by_id('search-results-number')
-        self.assertEquals(res_num.text, '5')
+        self.assertEqual(res_num.text, '5')
         # Filter should still be hidden:
         f = sel.find_element_by_id('search-filter')
-        self.failIf(f.is_displayed())
+        self.assertFalse(f.is_displayed())
 
         # Make sure we have search results returned after clicking main
         # 'Search' button on the search results form:

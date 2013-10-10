@@ -49,20 +49,20 @@ class TestSection(SearchTestCase):
 
         # return None for first_level objects
         title = crumbs(portal.first_level_document)
-        self.assertEquals(title, None)
+        self.assertEqual(title, None)
 
         title = crumbs(first_level_folder)
-        self.assertEquals(title, None)
+        self.assertEqual(title, None)
 
         # return section for objects deeper in the hierarchy
         title = crumbs(first_level_folder.second_level_document)[0]['Title']
-        self.assertEquals(title, 'First Level Folder')
+        self.assertEqual(title, 'First Level Folder')
 
         title = crumbs(second_level_folder)[0]['Title']
-        self.assertEquals(title, 'First Level Folder')
+        self.assertEqual(title, 'First Level Folder')
 
         title = crumbs(second_level_folder.third_level_document)[0]['Title']
-        self.assertEquals(title, 'First Level Folder')
+        self.assertEqual(title, 'First Level Folder')
 
     def test_blacklisted_types_in_results(self):
         """Make sure we don't break types' blacklisting in the new search
@@ -73,14 +73,14 @@ class TestSection(SearchTestCase):
         q = {'SearchableText': 'spam'}
         res = portal.restrictedTraverse('@@search').results(query=q,
                                                             batch=False)
-        self.failUnless('my-page1' in [r.getId() for r in res],
+        self.assertTrue('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
 
         # Now let's exclude 'Document' from the search results:
         sp.types_not_searched += ('Document', )
         res = portal.restrictedTraverse('@@search').results(query=q,
                                                             batch=False)
-        self.failIf('my-page1' in [r.getId() for r in res],
+        self.assertFalse('my-page1' in [r.getId() for r in res],
                     'Blacklisted type "Document" has been found in search \
                      results.')
 
@@ -93,7 +93,7 @@ class TestSection(SearchTestCase):
         req.form['SearchableText'] = 'spam'
         view = getMultiAdapter((portal, req), name=u'search')
         res = view.results(batch=False)
-        self.failUnless('my-page1' in [r.getId() for r in res],
+        self.assertTrue('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
         # filter_query() will return None on invalid query (no real indexes):
         req = test_request()
@@ -106,7 +106,7 @@ class TestSection(SearchTestCase):
         req.form['portal_type'] = 'Document'
         self.assertIsNotNone(view.filter_query({'b_start':0, 'b_size':10}))
         res = view.results(batch=False)
-        self.failUnless('my-page1' in [r.getId() for r in res],
+        self.assertTrue('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
 
 
