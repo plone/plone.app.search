@@ -5,7 +5,9 @@ Changelog
 1.1.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- When the request has no valid form keys but the query does, it is
+  still valid.
+  [maurits]
 
 
 1.1.5 (2013-08-13)
