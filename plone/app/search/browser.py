@@ -72,7 +72,8 @@ class Search(BrowserView):
             text = request.form.get('SearchableText', '')
         if not text:
             # Without text, must provide a meaningful non-empty search
-            valid = set(valid_indexes).intersection(request.form.keys())
+            valid = set(valid_indexes).intersection(request.form.keys()) or \
+                set(valid_indexes).intersection(query.keys())
             if not valid:
                 return
 
