@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1.6 (unreleased)
+1.1.6 (2013-12-07)
 ------------------
 
 - When the request has no valid form keys but the query does, it is
