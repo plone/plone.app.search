@@ -3,8 +3,7 @@ import os
 
 version = '1.1.6.dev0'
 
-tests_require = ['collective.testcaselayer',
-                 'plone.app.testing',
+tests_require = ['plone.app.testing',
                  'selenium>=2.0a5']
 
 setup(name='plone.app.search',
