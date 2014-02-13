@@ -35,7 +35,7 @@
                       first_call not:request/advanced_search|nothing;
                       st python:request.get('SearchableText', '');
                       DateTime python:modules['DateTime'].DateTime;
-                      navigation_root_url view/navroot_url;"> 
+                      navigation_root_url view/navroot_url;">
 
         <input type="hidden" name="advanced_search" value="False" />
         <input type="hidden" name="sort_on" value="" />
@@ -55,9 +55,9 @@
                    i18n:attributes="value label_search;"/>
         </fieldset>
 
-        <div class="row">
+        <div>
 
-            <div class="cell width-full position-0">
+            <div>
                 <h1 class="documentFirstHeading"
                     i18n:translate=""
                     tal:condition="not:st">
@@ -89,7 +89,6 @@
             </div>
             <div class="visualClear"><!-- --></div>
             <div id="search-results-wrapper"
-                 class="cell width-full position-0"
                  tal:define="b_start python:0;
                              b_start request/b_start | b_start;
                              batch python: view.results(b_start=b_start);
