@@ -2,8 +2,14 @@ Changelog
 =========
 
 
-1.1.6 (unreleased)
+1.2.0 (2014-03-02)
 ------------------
+
+- Remove obsolete cell classes
+  [khink]
+
+- Add ARIA role search.
+  [polyester]
 
 - When the request has no valid form keys but the query does, it is
   still valid.
@@ -32,7 +38,7 @@ Changelog
 1.1.3 (2013-03-05)
 ------------------
 
-- Readded fix made by eleddy in 1.0.4 wrongfully removed from 1.1.x 
+- Readded fix made by eleddy in 1.0.4 wrongfully removed from 1.1.x
   [ichimdav]
 
 - Restored compatibility with IE <= 8 for search.js broke in previous egg
