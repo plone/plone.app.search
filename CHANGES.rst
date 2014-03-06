@@ -5,7 +5,9 @@ Changelog
 1.1.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- (back port) URL bar is not correctly updated after clicking 
+  pagination or updating search. Fixing regression introduced in 1.1.5
+  [anthonygerrard]
 
 
 1.1.6 (2013-12-07)
