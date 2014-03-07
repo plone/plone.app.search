@@ -9,7 +9,14 @@
                   here_url context/@@plone_context_state/object_url;
                   batch_base_url string:${here_url}/@@search;
                   ">
-
+    <h1 id='update-search-header' class="documentFirstHeading"
+        i18n:translate=""
+        tal:condition="st">
+        Search results for
+        <strong id="search-term" tal:content="st" i18n:name="term">
+            Search Term
+        </strong>
+    </h1>
     <span id="updated-search-term" tal:content="st">Search Term</span>
 
     <strong id="updated-search-results-number"

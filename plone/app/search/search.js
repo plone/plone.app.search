@@ -27,19 +27,22 @@ jQuery(function ($) {
                     var $data_res = $ajax_search_res.find('#search-results').children(),
                         data_search_term = $ajax_search_res.find('#updated-search-term').text(),
                         data_res_number = $ajax_search_res.find('#updated-search-results-number').text(),
-                        data_sorting_opt = $ajax_search_res.find('#updated-sorting-options').html();
+                        data_sorting_opt = $ajax_search_res.find('#updated-sorting-options').html(),
+                        new_header = $ajax_search_res.find('#update-search-header');
 
                     $container.html($data_res);
                     $container.fadeIn();
 
                     if (!$search_term.length) {
-                        // Until now we had queries with empty search term. So
-                        // we need a placeholder for the search term in
-                        // result's title.
-                        $search_term = $('<strong id="search-term" />').appendTo('h1.documentFirstHeading');
+                        // Until now we had queries with empty search term. 
+                        // we need to fetch the new header, with proper translations
+                        if(new_header.length){
+                            $('h1.documentFirstHeading').html(new_header.html());
+                        }
+                    } else {
+                        $search_term.text(data_search_term);
                     }
-
-                    $search_term.text(data_search_term);
+                    
                     $('#search-results-number').text(data_res_number);
                     $('#search-results-bar').find('#sorting-options').html(data_sorting_opt);
 
