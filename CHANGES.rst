@@ -5,7 +5,10 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Improve translation for header after going from no searchterm
+  to actually searching for a term. The header wasn't updated
+  with the proper translation but only got the placeholder.
+  [thepjot]
 
 
 1.2.0 (2014-03-02)
