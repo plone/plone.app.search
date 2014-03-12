@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1.7 (unreleased)
+1.1.7 (2014-03-11)
 ------------------
 
 - (back port) URL bar is not correctly updated after clicking 
