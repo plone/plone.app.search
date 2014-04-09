@@ -9,7 +9,9 @@ Changelog
   to actually searching for a term. The header wasn't updated
   with the proper translation but only got the placeholder.
   [thepjot]
-
+  
+- #13999 Do not error if Plone 3 advanced search parameters are used
+  [anthonygerrard]
 
 1.2.0 (2014-03-02)
 ------------------

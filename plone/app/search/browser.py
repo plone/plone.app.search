@@ -86,9 +86,12 @@ class Search(BrowserView):
         # don't filter on created at all if we want all results
         created = query.get('created')
         if created:
-            if created.get('query'):
-                if created['query'][0] <= EVER:
+            try:
+                if created.get('query') and created['query'][0] <= EVER:
                     del query['created']
+            except AttributeError:
+                # created not a mapping
+                del query['created']
 
         # respect `types_not_searched` setting
         types = query.get('portal_type', [])
