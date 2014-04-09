@@ -1,5 +1,7 @@
 import unittest2 as unittest
 
+from DateTime import DateTime
+
 from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -117,6 +119,21 @@ class TestSection(SearchTestCase):
         self.failUnless('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
 
+    def test_filter_with_plone3_query(self):
+        """Filter should ignore obsolete query parameters, not error. """
+        portal = self.layer['portal']
+        req = test_request()
+        # Search.filter_query() will get SearchableText from form if not
+        # passed in explicit query argument:
+        req.form['SearchableText'] = 'jobs'
+        req.form['Title'] = 'Human resource'
+        req.form['Description'] = ''
+        req.form['created'] = [DateTime('1970/02/01 00:00:00 GMT+0')]
+        req.form['created_usage'] = 'range:min'
+        req.form['submit'] = 'Search'
+        view = getMultiAdapter((portal, req), name=u'search')
+        res = view.results(batch=False)
+        self.assertEqual([], [r for r in res])
 
 def test_suite():
     """This sets up a test suite that actually runs the tests in the class

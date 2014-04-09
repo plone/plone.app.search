@@ -5,8 +5,9 @@ Changelog
 1.1.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- (backport) #13999 Do not error if Plone 3 advanced search parameters 
+  are used
+  [anthonygerrard]
 
 1.1.7 (2014-03-11)
 ------------------
