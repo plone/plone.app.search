@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.2.1 (unreleased)
+1.2.1 (2014-04-13)
 ------------------
 
 - Improve translation for header after going from no searchterm
