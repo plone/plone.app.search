@@ -4,12 +4,15 @@ Changelog
 
 1.2.1 (2014-04-13)
 ------------------
+- Do not error if Plone 3 advanced search parameters are used. Fixes
+  https://dev.plone.org/ticket/13999
+  [anthonygerrard]
 
 - Improve translation for header after going from no searchterm
   to actually searching for a term. The header wasn't updated
   with the proper translation but only got the placeholder.
   [thepjot]
-  
+
 - #13999 Do not error if Plone 3 advanced search parameters are used
   [anthonygerrard]
 
