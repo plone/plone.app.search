@@ -82,9 +82,9 @@ class TestSection(SearchTestCase):
         sp.types_not_searched += ('Document', )
         res = portal.restrictedTraverse('@@search').results(query=q,
                                                             batch=False)
-        self.assertFalse('my-page1' in [r.getId() for r in res],
-                    'Blacklisted type "Document" has been found in search \
-                     results.')
+        self.assertFalse(
+            'my-page1' in [r.getId() for r in res],
+            'Blacklisted type "Document" has been found in search results.')
 
     def test_filter_empty(self):
         """Test filtering for empty query"""
@@ -101,22 +101,23 @@ class TestSection(SearchTestCase):
         req = test_request()
         req.form['garbanzo'] = 'chickpea'  # just noise, no index for this
         view = getMultiAdapter((portal, req), name=u'search')
-        self.assertIsNone(view.filter_query({'b_start':0, 'b_size':10}))
+        self.assertIsNone(view.filter_query({'b_start': 0, 'b_size': 10}))
         # resulting empty query, ergo no search performed, empty result:
         self.assertFalse(view.results(batch=False))
         # filter_query() succeeds if 1+ real index name added to request:
         req.form['portal_type'] = 'Document'
-        self.assertIsNotNone(view.filter_query({'b_start':0, 'b_size':10}))
+        self.assertIsNotNone(view.filter_query({'b_start': 0, 'b_size': 10}))
         res = view.results(batch=False)
         self.assertTrue('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
-        # filter_query() also succeeds if 1+ real index name is in the original query:
+        # filter_query() also succeeds if 1+ real index name is in the
+        # original query:
         req = test_request()
         view = getMultiAdapter((portal, req), name=u'search')
         query = {'portal_type': 'Document'}
         self.assertEqual(view.filter_query(query), query)
         res = view.results(query)
-        self.failUnless('my-page1' in [r.getId() for r in res],
+        self.assertTrue('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
 
     def test_filter_with_plone3_query(self):
