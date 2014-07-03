@@ -95,8 +95,10 @@ class TestSection(SearchTestCase):
         req.form['SearchableText'] = 'spam'
         view = getMultiAdapter((portal, req), name=u'search')
         res = view.results(batch=False)
-        self.failUnless('my-page1' in [r.getId() for r in res],
-                        'Test document is not found in the results.')
+        result_ids = [r.getId() for r in res]
+        self.failUnless('my-page1' in result_ids,
+                        'Test document is not found in the results: %r.' %
+                        result_ids)
         # filter_query() will return None on invalid query (no real indexes):
         req = test_request()
         req.form['garbanzo'] = 'chickpea'  # just noise, no index for this
@@ -108,16 +110,20 @@ class TestSection(SearchTestCase):
         req.form['portal_type'] = 'Document'
         self.assertIsNotNone(view.filter_query({'b_start':0, 'b_size':10}))
         res = view.results(batch=False)
-        self.failUnless('my-page1' in [r.getId() for r in res],
-                        'Test document is not found in the results.')
+        result_ids = [r.getId() for r in res]
+        self.failUnless('my-page1' in result_ids,
+                        'Test document is not found in the results: %r.' %
+                        result_ids)
         # filter_query() also succeeds if 1+ real index name is in the original query:
         req = test_request()
         view = getMultiAdapter((portal, req), name=u'search')
         query = {'portal_type': 'Document'}
         self.assertEqual(view.filter_query(query), query)
         res = view.results(query)
-        self.failUnless('my-page1' in [r.getId() for r in res],
-                        'Test document is not found in the results.')
+        result_ids = [r.getId() for r in res]
+        self.failUnless('my-page1' in result_ids,
+                        'Test document is not found in the results: %r' %
+                        result_ids)
 
     def test_filter_with_plone3_query(self):
         """Filter should ignore obsolete query parameters, not error. """
