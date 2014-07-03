@@ -119,7 +119,7 @@ class TestSection(SearchTestCase):
         view = getMultiAdapter((portal, req), name=u'search')
         query = {'portal_type': 'Document'}
         self.assertEqual(view.filter_query(query), query)
-        res = view.results(query)
+        res = view.results(query, batch=False)
         result_ids = [r.getId() for r in res]
         self.failUnless('my-page1' in result_ids,
                         'Test document is not found in the results: %r' %
