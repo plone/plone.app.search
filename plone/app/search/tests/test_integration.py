@@ -6,9 +6,13 @@ from plone.app.testing import TEST_USER_NAME, TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
 from zope.component import getMultiAdapter
+from zope.component import getUtility
+from plone.registry.interfaces import IRegistry
+
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import ISearchSchema
 
 from plone.app.contentlisting.interfaces import IContentListing
-from Products.CMFCore.utils import getToolByName
 
 from base import SearchTestCase, test_request
 
@@ -71,7 +75,8 @@ class TestSection(SearchTestCase):
         results view.
         """
         portal = self.layer['portal']
-        sp = getToolByName(portal, "portal_properties").site_properties
+        registry = getUtility(IRegistry)
+        search_settings = registry.forInterface(ISearchSchema, prefix="plone")
         q = {'SearchableText': 'spam'}
         res = portal.restrictedTraverse('@@search').results(query=q,
                                                             batch=False)
@@ -79,7 +84,7 @@ class TestSection(SearchTestCase):
                         'Test document is not found in the results.')
 
         # Now let's exclude 'Document' from the search results:
-        sp.types_not_searched += ('Document', )
+        search_settings.types_not_searched = ('Document',)
         res = portal.restrictedTraverse('@@search').results(query=q,
                                                             batch=False)
         self.assertFalse(

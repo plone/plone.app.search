@@ -5,11 +5,13 @@ Changelog
 1.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adapt tests to pass with the search settings stored in plone.app.registry.
+  [timo]
 
 
 1.2.1 (2014-04-13)
 ------------------
+
 - Do not error if Plone 3 advanced search parameters are used. Fixes
   https://dev.plone.org/ticket/13999
   [anthonygerrard]
@@ -21,6 +23,7 @@ Changelog
 
 - #13999 Do not error if Plone 3 advanced search parameters are used
   [anthonygerrard]
+
 
 1.2.0 (2014-03-02)
 ------------------
