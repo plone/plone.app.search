@@ -34,7 +34,7 @@ jQuery(function ($) {
                     $container.fadeIn();
 
                     if (!$search_term.length) {
-                        // Until now we had queries with empty search term. 
+                        // Until now we had queries with empty search term.
                         // we need to fetch the new header, with proper translations
                         if(new_header.length){
                             $('h1.documentFirstHeading').html(new_header.html());
@@ -42,7 +42,7 @@ jQuery(function ($) {
                     } else {
                         $search_term.text(data_search_term);
                     }
-                    
+
                     $('#search-results-number').text(data_res_number);
                     $('#search-results-bar').find('#sorting-options').html(data_sorting_opt);
 
