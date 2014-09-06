@@ -7,7 +7,8 @@
                   batch python:view.results(b_start=b_start);
                   st python:request.get('SearchableText', '');
                   here_url context/@@plone_context_state/object_url;
-                  batch_base_url string:${here_url}/@@search;
+                  search_view_name request/search_view_name|string:search;
+                  batch_base_url string:${here_url}/@@${search_view_name};
                   ">
     <h1 id='update-search-header' class="documentFirstHeading"
         i18n:translate=""
@@ -22,11 +23,17 @@
     <strong id="updated-search-results-number"
             tal:content="batch/sequence_length|string:0">234</strong>
 
-    <span id="updated-sorting-options">
-        <metal:results use-macro="context/@@search/sorting" />
-    </span>
+    <tal:block define="search_macros python:path('context/%s/macros | nothing' % search_view_name);
+                       sorting_macro search_macros/sorting;
+                       results_macro search_macros/search_results">
 
-    <metal:results use-macro="context/@@search/search_results" />
+      <span id="updated-sorting-options">
+          <metal:results use-macro="sorting_macro" />
+      </span>
+
+      <metal:results use-macro="results_macro" />
+
+    </tal:block>
 
 </body>
 </html>

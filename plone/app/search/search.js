@@ -9,6 +9,7 @@ jQuery(function ($) {
         $search_field = $('#search-field'),
         $search_gadget =  $('#searchGadget'),
         $form_search_page = $("form.searchPage"),
+        main_search_field = $('input.mainSearchField').attr('name'),
         navigation_root_url = $('link[rel="home"]').attr('href') || window.navigation_root_url || window.portal_url;
 
     // The globally available method to pull the search results for the
@@ -44,7 +45,7 @@ jQuery(function ($) {
                     }
 
                     $('#search-results-number').text(data_res_number);
-                    $('#search-results-bar').find('#sorting-options').html(data_sorting_opt);
+                    $('#sorting-options').html(data_sorting_opt);
 
                     $('#rss-subscription').find('a.link-feed').attr('href', function () {
                         return navigation_root_url + '/search_rss?' + query;
@@ -60,8 +61,13 @@ jQuery(function ($) {
         // library to check whether browser supports HTML5 History
         // API natively or it needs a polyfill, that provides
         // hash-change events to the older browser
+        // var action = '/@@search';
+        var action = $('form[name="searchform"]').attr('action');
+        if (action.substring(0, 1) !='/') {
+            action = '/' + action;
+        }
         if (Modernizr.history) {
-            var url = navigation_root_url + '/@@search?' + query;
+            var url = navigation_root_url + action + '?' + query;
             history.pushState(null, null, url);
         }
     };
@@ -97,7 +103,7 @@ jQuery(function ($) {
         query = location.search.split('?')[1];
         // We need to make sure we update the search field with the search
         // term from previous query when going back in history
-        var results = query.match(/SearchableText=[^&]*/);
+        var results = query.match('/' + main_search_field + '[^&]*/');
         if (results){ // not all pages have results
             str = results[0];
             str = decodeURIComponent(str.replace(/\+/g, ' ')); // we remove '+' used between words
@@ -106,7 +112,7 @@ jQuery(function ($) {
         // Now we have something like 'SearchableText=test' in str
         // variable. So, we know when the actual search term begins at
         // position 15 in that string.
-        $.merge($search_field.find('input[name="SearchableText"]'), $search_gadget).val(str.substr(15, str.length));
+        $.merge($search_field.find('input[name="' + main_search_field+ '"]'), $search_gadget).val(str.substr(15, str.length));
 
             $default_res_container.pullSearchResults(query);
         }
@@ -122,13 +128,13 @@ jQuery(function ($) {
     $search_field.find('input.searchButton').click(function (e) {
         var st, queryString = location.search.substring(1),
             re = /([^&=]+)=([^&]*)/g, m, queryParameters = [], key;
-        st = $search_field.find('input[name="SearchableText"]').val();
-        queryParameters.push({"name":"SearchableText", "value": st});
+        st = $search_field.find('input[name="' + main_search_field+ '"]').val();
+        queryParameters.push({"name": main_search_field, "value": st});
 
         // parse query string into array of hash
         while (m = re.exec(queryString)) {
             key = decodeURIComponent(m[1]);
-            if (key !== 'SearchableText') {
+            if (key !== main_search_field) {
                 // we remove '+' used between words
                 queryParameters.push({"name": key, "value": decodeURIComponent(m[2].replace(/\+/g, ' '))});
             }
@@ -147,7 +153,7 @@ jQuery(function ($) {
 
     // We need to update the site-wide search field (at the top right in
     // stock Plone) when the main search field is updated
-    $search_field.find('input[name="SearchableText"]').keyup(function () {
+    $search_field.find('input[name="' + main_search_field + '"]').keyup(function () {
         $search_gadget.val($(this).val());
     });
 

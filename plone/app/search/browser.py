@@ -33,6 +33,10 @@ def quote_chars(s):
 class Search(BrowserView):
 
     valid_keys = ('sort_on', 'sort_order', 'sort_limit', 'fq', 'fl', 'facet')
+    main_search_field = 'SearchableText'
+    allow_portal_types_filter = True
+    forced_portal_types = ()
+    default_query = {}
 
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """ Get properly wrapped search results from the catalog.
@@ -41,9 +45,16 @@ class Search(BrowserView):
         """
         if query is None:
             query = {}
+
+        if self.default_query:
+            query.update(self.default_query)
+            # this makes also batch nav working
+            self.request.form.update(self.default_query)
+
         if batch:
             query['b_start'] = b_start = int(b_start)
             query['b_size'] = b_size
+
         query = self.filter_query(query)
 
         if query is None:
@@ -67,9 +78,9 @@ class Search(BrowserView):
         valid_indexes = tuple(catalog.indexes())
         valid_keys = self.valid_keys + valid_indexes
 
-        text = query.get('SearchableText', None)
+        text = query.get(self.main_search_field, None)
         if text is None:
-            text = request.form.get('SearchableText', '')
+            text = request.form.get(self.main_search_field, '')
         if not text:
             # Without text, must provide a meaningful non-empty search
             valid = set(valid_indexes).intersection(request.form.keys()) or \
@@ -81,7 +92,7 @@ class Search(BrowserView):
             if v and ((k in valid_keys) or k.startswith('facet.')):
                 query[k] = v
         if text:
-            query['SearchableText'] = quote_chars(text)
+            query[self.main_search_field] = quote_chars(text)
 
         # don't filter on created at all if we want all results
         created = query.get('created')
@@ -98,6 +109,7 @@ class Search(BrowserView):
         if 'query' in types:
             types = types['query']
         query['portal_type'] = self.filter_types(types)
+
         # respect effective/expiration date
         query['show_inactive'] = False
         # respect navigation root
@@ -121,12 +133,25 @@ class Search(BrowserView):
     def sort_options(self):
         """ Sorting options for search results view. """
         return (
-            SortOption(self.request, _(u'relevance'), ''),
             SortOption(
-                self.request, _(u'date (newest first)'),
-                'Date', reverse=True
+                self.request,
+                _(u'relevance'),
+                sortkey='',
+                search_view=self,
             ),
-            SortOption(self.request, _(u'alphabetically'), 'sortable_title'),
+            SortOption(
+                self.request,
+                _(u'date (newest first)'),
+                sortkey='Date',
+                reverse=True,
+                search_view=self,
+            ),
+            SortOption(
+                self.request,
+                _(u'alphabetically'),
+                sortkey='sortable_title',
+                search_view=self,
+            )
         )
 
     def show_advanced_search(self):
@@ -174,11 +199,13 @@ class Search(BrowserView):
 
 class SortOption(object):
 
-    def __init__(self, request, title, sortkey='', reverse=False):
+    def __init__(self, request, title,
+                 sortkey='', reverse=False, search_view=None):
         self.request = request
         self.title = title
         self.sortkey = sortkey
         self.reverse = reverse
+        self.search_view = search_view
 
     def selected(self):
         sort_on = self.request.get('sort_on', '')
@@ -195,10 +222,15 @@ class SortOption(object):
         if self.reverse:
             q['sort_order'] = 'reverse'
 
+        search_view_name = 'search'
+        if self.search_view:
+            search_view_name = self.search_view.__name__
+
         base_url = self.request.URL
         # After the AJAX call the request is changed and thus the URL part of
         # it as well. In this case we need to tweak the URL to point to have
         # correct URLs
         if '@@updated_search' in base_url:
-            base_url = base_url.replace('@@updated_search', '@@search')
+            base_url = base_url.replace('@@updated_search',
+                                        '@@' + search_view_name)
         return base_url + '?' + make_query(q)
