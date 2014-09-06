@@ -10,7 +10,13 @@ from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import ISearchSchema
+
+try:
+    from Products.CMFPlone.interfaces import ISearchSchema
+    HAS_ISearchSchema = True
+except:
+    HAS_ISearchSchema = False
+
 
 from plone.app.contentlisting.interfaces import IContentListing
 
@@ -76,7 +82,13 @@ class TestSection(SearchTestCase):
         """
         portal = self.layer['portal']
         registry = getUtility(IRegistry)
-        search_settings = registry.forInterface(ISearchSchema, prefix="plone")
+        if HAS_ISearchSchema:
+            search_settings = registry.forInterface(ISearchSchema,
+                                                    prefix="plone")
+        else:
+            pprops = getToolByName(portal, "portal_properties")
+            search_settings = pprops.site_properties
+
         q = {'SearchableText': 'spam'}
         res = portal.restrictedTraverse('@@search').results(query=q,
                                                             batch=False)
@@ -140,6 +152,42 @@ class TestSection(SearchTestCase):
         view = getMultiAdapter((portal, req), name=u'search')
         res = view.results(batch=False)
         self.assertEqual([], [r for r in res])
+
+    def test_default_query(self):
+        """Test default_query param (mainly for search view extentions)"""
+        portal = self.layer['portal']
+        catalog = getToolByName(portal, "portal_catalog")
+        req = test_request()
+
+        # 1st: no results
+        view = getMultiAdapter((portal, req), name=u'search')
+        res = view.results(batch=False)
+        self.assertEqual([], [r for r in res])
+
+        # default query for document, we get all the docs by default
+        total_docs = len(catalog(portal_type='Document'))
+        view.default_query = {'portal_type': 'Document'}
+        res = view.results(batch=False)
+        self.assertEqual(len(tuple(res)), total_docs)
+
+        # default query for Folders, no results at first
+        # because no folder is there
+        view.default_query = {'portal_type': 'Folder'}
+        res = view.results(batch=False)
+        self.assertEqual(len(tuple(res)), 0)
+
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+        login(portal, TEST_USER_NAME)
+        for x in xrange(0, 5):
+            portal.invokeFactory(
+                'Folder',
+                'forlder%s' % x,
+                title='Folder %s' % x
+            )
+        total_folders = len(catalog(portal_type='Folder'))
+        res = view.results(batch=False)
+        self.assertEqual(len(tuple(res)), total_folders)
+
 
 def test_suite():
     """This sets up a test suite that actually runs the tests in the class
