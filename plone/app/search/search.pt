@@ -285,7 +285,8 @@
                                                    use_view_action site_properties/typesUseViewActionInListings|python:();
                                                    allowAnonymousViewAbout site_properties/allowAnonymousViewAbout;
                                                    show_about python:not isAnon or allowAnonymousViewAbout;">
-                          <ol class="searchResults">
+                          <ol class="searchResults"
+                              tal:attributes="start python: b_start + 1">
                               <tal:results repeat="item batch">
                                     <li>
                                       <span tal:attributes="class item/ContentTypeClass">
