@@ -8,6 +8,14 @@ Changelog
 - Adapt tests to pass with the search settings stored in plone.app.registry.
   [timo]
 
+- Make easier to create custom search view by inheriting from @@search.
+  Added new params:
+  * main_search_field = 'SearchableText' # allows to change the main search field
+  * allow_portal_types_filter = True # allows to hide portal types filter
+  * forced_portal_types = () # allows to force portal types by default
+  * default_query = {} # allows to pass a default query (shows results with no form submit)
+  [simahawk]
+
 
 1.2.1 (2014-04-13)
 ------------------

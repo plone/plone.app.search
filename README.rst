@@ -7,5 +7,28 @@ plone.app.search also updates main search field (usually located at the top righ
 
 plone.app.search has the aim to give intuitively clear and understandable interface for searching in Plone. But there might be some new things that are not so obvious. Let's see how the search results works now.
 
-Notes
-=====
+Define custom search views
+==========================
+
+You can define custom search views by inheriting from `plone.app.search.browser.Search`.
+
+For simple customization you can define some params, like:
+
+* main_search_field = 'SearchableText' # allows to change the main search field
+* allow_portal_types_filter = True # allows to hide portal types filter
+* forced_portal_types = () # allows to force portal types by default
+* default_query = {} # allows to pass a default query (shows results with no form submit)
+
+Here you get an example of a custom view that: searches only for 'Project' content type,
+allows searching for by `Title` index instead of `SearchableText`, and hides portal types filtering::
+
+    from plone.app.search.browser import Search
+
+
+    class ProjectsOverview(Search):
+
+        main_search_field = 'Title'
+        forced_portal_types = ('Project',)
+        allow_portal_types_filter = False
+        # this allows for results with no query
+        default_query = {'portal_type': 'Project'}
