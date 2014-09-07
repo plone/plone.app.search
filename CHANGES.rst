@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1.8 (unreleased)
+1.1.8 (2014-09-07)
 ------------------
 
 - (backport) #13999 Do not error if Plone 3 advanced search parameters 
