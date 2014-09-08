@@ -37,6 +37,7 @@ class Search(BrowserView):
     allow_portal_types_filter = True
     forced_portal_types = ()
     default_query = {}
+    show_breadcrumbs = True
 
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """ Get properly wrapped search results from the catalog.

@@ -14,6 +14,7 @@ Changelog
   * allow_portal_types_filter = True # allows to hide portal types filter
   * forced_portal_types = () # allows to force portal types by default
   * default_query = {} # allows to pass a default query (shows results with no form submit)
+  * show_breadcrumbs = True # allows to switch off breadcrumbs rendering 
   [simahawk]
 
 
