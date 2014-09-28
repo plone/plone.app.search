@@ -38,6 +38,17 @@ class Search(BrowserView):
     forced_portal_types = ()
     default_query = {}
     show_breadcrumbs = True
+    updated_search_view_name = 'updated_search'
+
+    @property
+    def sort_on(self):
+        default = self.default_query.get('sort_on', '')
+        return self.request.get('sort_on', default)
+
+    @property
+    def sort_order(self):
+        default = self.default_query.get('sort_order', '')
+        return self.request.get('sort_order', default)
 
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """ Get properly wrapped search results from the catalog.
@@ -48,9 +59,16 @@ class Search(BrowserView):
             query = {}
 
         if self.default_query:
-            query.update(self.default_query)
-            # this makes also batch nav working
-            self.request.form.update(self.default_query)
+            # handle default query params
+            default_q = self.default_query.copy()
+            for k in  ('sort_on', 'sort_order'):
+                if k in self.request.keys():
+                    # prevent manual filters override
+                    default_q.pop(k)
+            query.update(default_q)
+            if not self.request.form:
+                # this makes also batch nav working
+                self.request.form.update(default_q)
 
         if batch:
             query['b_start'] = b_start = int(b_start)
@@ -201,7 +219,8 @@ class Search(BrowserView):
 class SortOption(object):
 
     def __init__(self, request, title,
-                 sortkey='', reverse=False, search_view=None):
+                 sortkey='', reverse=False,
+                 search_view=None):
         self.request = request
         self.title = title
         self.sortkey = sortkey
@@ -210,7 +229,15 @@ class SortOption(object):
 
     def selected(self):
         sort_on = self.request.get('sort_on', '')
-        return sort_on == self.sortkey
+        sort_order = self.request.get('sort_order', '')
+        match_on = sort_on == self.sortkey
+        match_order = True
+        if match_on:
+            if self.reverse and sort_order != 'reverse':
+                match_order = False
+            if not self.reverse and sort_order == 'reverse':
+                match_order = False
+        return match_on and match_order
 
     def url(self):
         q = {}
@@ -220,18 +247,24 @@ class SortOption(object):
         if 'sort_order' in q.keys():
             del q['sort_order']
         q['sort_on'] = self.sortkey
+        q['sort_order'] = 'ascending'
         if self.reverse:
             q['sort_order'] = 'reverse'
 
+        if self.search_view.show_breadcrumbs:
+            q['show_breadcrumbs'] = 'yes'
+
         search_view_name = 'search'
+        updated_search_view_name = 'updated_search'
         if self.search_view:
             search_view_name = self.search_view.__name__
+            updated_search_view_name = self.search_view.updated_search_view_name
 
         base_url = self.request.URL
         # After the AJAX call the request is changed and thus the URL part of
         # it as well. In this case we need to tweak the URL to point to have
         # correct URLs
-        if '@@updated_search' in base_url:
-            base_url = base_url.replace('@@updated_search',
+        if '@@' + updated_search_view_name in base_url:
+            base_url = base_url.replace('@@' + updated_search_view_name,
                                         '@@' + search_view_name)
         return base_url + '?' + make_query(q)

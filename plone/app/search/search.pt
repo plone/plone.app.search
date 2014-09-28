@@ -34,7 +34,8 @@
           action="@@search"
           role="search"
           class="searchPage enableAutoFocus"
-          tal:attributes="action string:@@${view/__name__}"
+          tal:attributes="action string:@@${view/__name__};
+                          data-updatedSearchView string:${view/updated_search_view_name}"
           tal:define="portal context/@@plone_portal_state/portal;
                       first_call not:request/advanced_search|nothing;
                       st python:request.get(main_search_field, '');
@@ -44,7 +45,8 @@
         <input type="hidden" name="search_view_name"
                tal:attributes="value view/__name__" />
         <input type="hidden" name="advanced_search" value="False" />
-        <input type="hidden" name="sort_on" value="" />
+        <input type="hidden" name="sort_on" value=""
+               tal:attributes="value view/sort_on" />
         <tal:forced_types repeat="ptype view/forced_portal_types">
           <input type="hidden"
                  name="portal_type:list"
@@ -272,7 +274,8 @@
 
                 <metal:searchresults define-macro="search_results">
                     <div id="search-results"
-                         tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;">
+                         tal:define="navigation_root_url context/@@plone_portal_state/navigation_root_url;
+                                     show_breadcrumbs python: request.get('show_breadcrumbs', view.show_breadcrumbs)">
 
                         <metal:noresults tal:condition="not: batch">
                           <p i18n:domain="plone"><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
@@ -360,7 +363,7 @@
                                         Cropped description
                                       </p>
 
-                                      <tal:breadcrumbs condition="view/show_breadcrumbs">
+                                      <tal:breadcrumbs condition="show_breadcrumbs">
                                         <cite class="documentLocation link-location"
                                               tal:define="breadcrumbs python: view.breadcrumbs(item);
                                                           is_rtl context/@@plone_portal_state/is_rtl;"

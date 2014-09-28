@@ -166,12 +166,14 @@ class TestSection(SearchTestCase):
 
         # default query for document, we get all the docs by default
         total_docs = len(catalog(portal_type='Document'))
+        view.request = test_request()
         view.default_query = {'portal_type': 'Document'}
         res = view.results(batch=False)
         self.assertEqual(len(tuple(res)), total_docs)
 
         # default query for Folders, no results at first
         # because no folder is there
+        view.request = test_request()
         view.default_query = {'portal_type': 'Folder'}
         res = view.results(batch=False)
         self.assertEqual(len(tuple(res)), 0)
@@ -181,10 +183,11 @@ class TestSection(SearchTestCase):
         for x in xrange(0, 5):
             portal.invokeFactory(
                 'Folder',
-                'forlder%s' % x,
+                'folder%s' % x,
                 title='Folder %s' % x
             )
         total_folders = len(catalog(portal_type='Folder'))
+        view.request = test_request()
         res = view.results(batch=False)
         self.assertEqual(len(tuple(res)), total_folders)
 

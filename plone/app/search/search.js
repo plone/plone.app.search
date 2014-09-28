@@ -10,6 +10,7 @@ jQuery(function ($) {
         $search_gadget =  $('#searchGadget'),
         $form_search_page = $("form.searchPage"),
         main_search_field = $('input.mainSearchField').attr('name'),
+        updated_search_view = $form_search_page.data('updatedsearchview'),
         navigation_root_url = $('link[rel="home"]').attr('href') || window.navigation_root_url || window.portal_url;
 
     // The globally available method to pull the search results for the
@@ -18,7 +19,7 @@ jQuery(function ($) {
         return this.each(function () {
             var $container = $(this);
             $.get(
-                '@@updated_search',
+                '@@' + updated_search_view,
                 query,
                 function (data) {
                     $container.hide();
