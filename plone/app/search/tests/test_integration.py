@@ -24,10 +24,11 @@ class TestIntegration(SearchTestCase):
     def test_searchjs_is_available(self):
         """Make sure search.js is available."""
         portal = self.layer['portal']
-        js = getToolByName(portal, 'portal_javascripts')
-        ids = js.getResourcesDict().keys()
-        self.assert_('++resource++search.js' in ids)
-
+        resreg = getattr(portal, 'portal_registry')
+        from Products.CMFPlone.interfaces import IResourceRegistry
+        resources_ids = resreg.collectionOfInterface(IResourceRegistry, prefix="plone.resources").keys()
+        self.assertTrue(
+            'resource-search-js' in resources_ids)
 
 class TestSection(SearchTestCase):
     """The name of the class should be meaningful. This may be a class that
