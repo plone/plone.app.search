@@ -8,6 +8,10 @@ Changelog
 - Adapt tests to pass with the search settings stored in plone.app.registry.
   [timo]
 
+- Integration of the new markup update and CSS for both Plone and Barceloneta
+  theme. This is the work done in the GSOC Barceloneta theme project.
+  [albertcasado, sneridagh]
+
 
 1.2.1 (2014-04-13)
 ------------------
