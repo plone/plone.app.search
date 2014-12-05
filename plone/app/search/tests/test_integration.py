@@ -9,7 +9,6 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
 
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import ISearchSchema
 
 from plone.app.contentlisting.interfaces import IContentListing
@@ -26,9 +25,11 @@ class TestIntegration(SearchTestCase):
         portal = self.layer['portal']
         resreg = getattr(portal, 'portal_registry')
         from Products.CMFPlone.interfaces import IResourceRegistry
-        resources_ids = resreg.collectionOfInterface(IResourceRegistry, prefix="plone.resources").keys()
+        resources_ids = resreg.collectionOfInterface(
+            IResourceRegistry, prefix="plone.resources").keys()
         self.assertTrue(
             'resource-search-js' in resources_ids)
+
 
 class TestSection(SearchTestCase):
     """The name of the class should be meaningful. This may be a class that
@@ -141,6 +142,7 @@ class TestSection(SearchTestCase):
         view = getMultiAdapter((portal, req), name=u'search')
         res = view.results(batch=False)
         self.assertEqual([], [r for r in res])
+
 
 def test_suite():
     """This sets up a test suite that actually runs the tests in the class
