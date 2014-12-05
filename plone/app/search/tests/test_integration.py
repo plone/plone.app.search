@@ -117,15 +117,6 @@ class TestSection(SearchTestCase):
         res = view.results(batch=False)
         self.assertTrue('my-page1' in [r.getId() for r in res],
                         'Test document is not found in the results.')
-        # filter_query() also succeeds if 1+ real index name is in the
-        # original query:
-        req = test_request()
-        view = getMultiAdapter((portal, req), name=u'search')
-        query = {'portal_type': 'Document'}
-        self.assertEqual(view.filter_query(query), query)
-        res = view.results(query)
-        self.assertTrue('my-page1' in [r.getId() for r in res],
-                        'Test document is not found in the results.')
 
     def test_filter_with_plone3_query(self):
         """Filter should ignore obsolete query parameters, not error. """
