@@ -5,7 +5,9 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Read ``allow_anon_views_about`` setting from the registry instead of portal
+  properties (see https://github.com/plone/Products.CMFPlone/issues/216).
+  [jcerjak]
 
 
 1.2.2 (2014-10-23)
