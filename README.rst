@@ -9,3 +9,5 @@ plone.app.search has the aim to give intuitively clear and understandable interf
 
 Notes
 =====
+
+This package is merged into Products.CMFPlone in Plone 5.
