@@ -5,8 +5,8 @@ Changelog
 1.1.9 (unreleased)
 ------------------
 
-- Do not use the 'template' ZCML attribute to register the search and
-  updated_search views. This allows us to override those views.
+- Allow to override the search and updated_search views. Do not use the
+  'template' ZCML attribute to register those views.
   [timo]
 
 
