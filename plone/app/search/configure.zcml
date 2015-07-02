@@ -23,6 +23,7 @@
         class=".browser.Search"
         permission="zope2.View"
         for="*"
+        template="search.pt"
         />
 
     <browser:page
@@ -30,6 +31,7 @@
         class=".browser.Search"
         permission="zope2.View"
         for="Products.CMFCore.interfaces.IFolderish"
+        template="updated_search.pt"
         />
 
 </configure>

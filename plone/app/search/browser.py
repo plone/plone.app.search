@@ -5,7 +5,6 @@ from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.PloneBatch import Batch
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
@@ -34,13 +33,6 @@ def quote_chars(s):
 class Search(BrowserView):
 
     valid_keys = ('sort_on', 'sort_order', 'sort_limit', 'fq', 'fl', 'facet')
-
-    def __init__(self, context, request):
-        super(Search, self).__init__(context, request)
-        if self.__name__ == 'updated_search':
-            self.template = ViewPageTemplateFile('updated_search.pt')
-        else:
-            self.template = ViewPageTemplateFile('search.pt')
 
     def results(self, query=None, batch=True, b_size=10, b_start=0):
         """ Get properly wrapped search results from the catalog.
