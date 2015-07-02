@@ -5,20 +5,23 @@ Changelog
 1.1.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Do not use the 'template' ZCML attribute to register the search and
+  updated_search views. This allows us to override those views.
+  [timo]
 
 
 1.1.8 (2014-09-07)
 ------------------
 
-- (backport) #13999 Do not error if Plone 3 advanced search parameters 
+- (backport) #13999 Do not error if Plone 3 advanced search parameters
   are used
   [anthonygerrard]
+
 
 1.1.7 (2014-03-11)
 ------------------
 
-- (back port) URL bar is not correctly updated after clicking 
+- (back port) URL bar is not correctly updated after clicking
   pagination or updating search. Fixing regression introduced in 1.1.5
   [anthonygerrard]
 
@@ -53,7 +56,7 @@ Changelog
 1.1.3 (2013-03-05)
 ------------------
 
-- Readded fix made by eleddy in 1.0.4 wrongfully removed from 1.1.x 
+- Readded fix made by eleddy in 1.0.4 wrongfully removed from 1.1.x
   [ichimdav]
 
 - Restored compatibility with IE <= 8 for search.js broke in previous egg
