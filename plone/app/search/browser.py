@@ -60,7 +60,7 @@ class Search(BrowserView):
             results = Batch(results, b_size, b_start)
         return results
 
-    def filter_query(self, query):
+    def _filter_query(self, query):
         request = self.request
 
         catalog = getToolByName(self.context, 'portal_catalog')
@@ -106,6 +106,27 @@ class Search(BrowserView):
 
         return query
 
+    def filter_query(self, query):
+        query = self._filter_query(query)
+        if query is None:
+            query = {}
+        # explicitly set a sort; if no `sort_on` is present, the catalog sorts
+        # by relevance
+        if 'sort_on' not in query:
+            site_properties = getToolByName(self.context, 'portal_properties').site_properties
+            sort_on = site_properties.getProperty('sort_on', 'relevance')
+            if sort_on != 'relevance':
+                query['sort_on'] = sort_on
+        elif query['sort_on'] == 'relevance':
+            del query['sort_on']
+        if query.get('sort_on', '') == 'Date':
+            query['sort_order'] = 'reverse'
+        elif 'sort_order' in query:
+            del query['sort_order']
+        if not query:
+            return None
+        return query
+
     def filter_types(self, types):
         plone_utils = getToolByName(self.context, 'plone_utils')
         if not isinstance(types, list):
@@ -120,11 +141,14 @@ class Search(BrowserView):
 
     def sort_options(self):
         """ Sorting options for search results view. """
+        if 'sort_on' not in self.request.form:
+            site_properties = getToolByName(self.context, "portal_properties").site_properties
+            sort_on = site_properties.getProperty('sort_on', 'relevance')
+            self.request.form['sort_on'] = sort_on
         return (
-            SortOption(self.request, _(u'relevance'), ''),
+            SortOption(self.request, _(u'relevance'), 'relevance'),
             SortOption(
-                self.request, _(u'date (newest first)'),
-                'Date', reverse=True
+                self.request, _(u'date (newest first)'), 'Date', reverse=True
             ),
             SortOption(self.request, _(u'alphabetically'), 'sortable_title'),
         )
