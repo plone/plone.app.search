@@ -5,7 +5,8 @@ Changelog
 1.1.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added options to change default search order.
+  [rodfersou]
 
 
 1.1.8 (2014-09-07)
@@ -14,6 +15,7 @@ Changelog
 - (backport) #13999 Do not error if Plone 3 advanced search parameters 
   are used
   [anthonygerrard]
+
 
 1.1.7 (2014-03-11)
 ------------------
