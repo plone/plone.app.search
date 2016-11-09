@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1.9 (unreleased)
+1.1.9 (2016-11-09)
 ------------------
 
 New features:
