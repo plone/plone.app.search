@@ -15,7 +15,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix Search RSS link condition to use search_rss_enabled option and use
+  rss.png instead of rss.gif that doesn't exist anymore.
+  [vincentfretin]
 
 
 1.1.9 (2016-11-09)
