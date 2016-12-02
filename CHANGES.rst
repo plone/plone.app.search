@@ -5,14 +5,6 @@ Changelog
 1.1.10 (unreleased)
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Fix Search RSS link condition to use search_rss_enabled option and use
