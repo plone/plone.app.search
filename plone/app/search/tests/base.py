@@ -1,4 +1,5 @@
 import sys
+import time
 import unittest2 as unittest
 
 from zope.configuration import xmlconfig
@@ -56,12 +57,15 @@ class SearchLayer(PloneSandboxLayer):
         applyProfile(portal, 'plone.app.search:default')
         setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
-        for i in range(0, 100):
+        for i in range(0, 12):
             portal.invokeFactory(
                 'Document',
                 'my-page' + str(i),
                 text='spam spam ham eggs'
             )
+            # Sleep before creating the next one, otherwise ordering by date is
+            # not deterministic.
+            time.sleep(0.1)
         setRoles(portal, TEST_USER_ID, ['Member'])
 
         # Commit so that the test browser sees these objects
