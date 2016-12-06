@@ -15,7 +15,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fixed sometimes failing search order tests.  [maurits]
 
 
 1.1.10 (2016-12-02)

@@ -76,8 +76,8 @@ class TestSection(SearchTestCase):
         res = portal.restrictedTraverse('@@search').results(query=q)
         ids = [r.getId() for r in res]
         expected = [
-            'my-page99', 'my-page98', 'my-page97', 'my-page96', 'my-page95',
-            'my-page94', 'my-page93', 'my-page92', 'my-page91', 'my-page90'
+            'my-page11', 'my-page10', 'my-page9', 'my-page8', 'my-page7',
+            'my-page6', 'my-page5', 'my-page4', 'my-page3', 'my-page2'
         ]
         self.assertEqual(ids, expected)
 
@@ -96,8 +96,8 @@ class TestSection(SearchTestCase):
         res = portal.restrictedTraverse('@@search').results(query=q)
         ids = [r.getId() for r in res]
         expected = [
-            'my-page10', 'my-page9', 'my-page8', 'my-page7', 'my-page6',
-            'my-page4', 'my-page3', 'my-page2', 'my-page1', 'my-page0'
+            'my-page11', 'my-page10', 'my-page9', 'my-page8', 'my-page7',
+            'my-page6', 'my-page4', 'my-page3', 'my-page2', 'my-page1'
         ]
         self.assertEqual(ids, expected)
 
