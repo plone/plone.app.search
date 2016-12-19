@@ -5,14 +5,6 @@ Changelog
 1.1.11 (unreleased)
 -------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Fixed sometimes failing search order tests.  [maurits]
