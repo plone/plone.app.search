@@ -15,7 +15,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Ignore unknown ``sort_on`` indexes.  [maurits]
 
 
 1.1.11 (2016-12-19)

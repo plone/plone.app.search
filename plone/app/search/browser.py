@@ -119,6 +119,13 @@ class Search(BrowserView):
                 query['sort_on'] = sort_on
         elif query['sort_on'] == 'relevance':
             del query['sort_on']
+        else:
+            sort_on = query.get('sort_on')
+            if sort_on:
+                catalog = getToolByName(self.context, 'portal_catalog')
+                if sort_on not in catalog.indexes():
+                    # I get crazy sort_ons like '194' or 'null'.
+                    query.pop('sort_on')
         if query.get('sort_on', '') == 'Date':
             query['sort_order'] = 'reverse'
         elif 'sort_order' in query:
