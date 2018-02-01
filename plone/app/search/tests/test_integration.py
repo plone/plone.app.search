@@ -191,6 +191,18 @@ class TestSection(SearchTestCase):
         res = view.results(batch=False)
         self.assertEqual([], [r for r in res])
 
+    def test_filter_with_unknown_sort_on_query(self):
+        """Filter should ignore unknown sort_on parameters, not error. """
+        portal = self.layer['portal']
+        req = test_request()
+        req.form['SearchableText'] = 'jobs'
+        req.form['sort_on'] = '194'
+        req.form['submit'] = 'Search'
+        view = getMultiAdapter((portal, req), name=u'search')
+        res = view.results(batch=False)
+        self.assertEqual([], [r for r in res])
+
+
 def test_suite():
     """This sets up a test suite that actually runs the tests in the class
     above
