@@ -48,10 +48,10 @@ class TestPerformance100(Search100FunctionalTestCase):
                         in browser2.contents)
 
         new_time = new_end-new_start
-        print "*" * 20
-        print "old search page vs new search page"
-        print str(old_time) + " vs " + str(new_time)
-        print "*" * 20
+        print("*" * 20)
+        print("old search page vs new search page")
+        print(str(old_time) + " vs " + str(new_time))
+        print("*" * 20)
         self.assertTrue(old_time >= new_time,
                         "the new search results page is slower than the old \
                          search results page")
@@ -108,10 +108,10 @@ class TestPerformance1000(Search1000FunctionalTestCase):
                         in browser2.contents)
 
         new_time = new_end-new_start
-        print "*" * 20
-        print "old search page vs new search page"
-        print str(old_time) + " vs " + str(new_time)
-        print "*" * 20
+        print("*" * 20)
+        print("old search page vs new search page")
+        print(str(old_time) + " vs " + str(new_time))
+        print("*" * 20)
         self.assertTrue(old_time > new_time,
                         "the new search results page is slower than the old \
                          search results page")
